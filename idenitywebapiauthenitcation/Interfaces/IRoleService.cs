@@ -1,6 +1,6 @@
 ﻿using EccomerceApi.Model;
 
-namespace EccomerceApi.Services
+namespace EccomerceApi.Interfaces
 {
     public interface IRoleService
     {
