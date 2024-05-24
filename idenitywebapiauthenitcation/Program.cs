@@ -1,4 +1,5 @@
 using EccomerceApi.Data;
+using EccomerceApi.Interfaces;
 using EccomerceApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
