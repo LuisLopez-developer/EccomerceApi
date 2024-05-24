@@ -22,7 +22,6 @@ namespace EccomerceApi.Controllers
         [HttpGet("GetRoles")]
         public async Task<IActionResult> GetRoles()
         {
-
             var list = await _roleService.GetRolesAsync();
             return Ok(list);
         }

@@ -75,5 +75,5 @@ namespace EccomerceApi.Services
         }
 
 
-        }
+    }
 }
