@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EccomerceApi.Entity;
+using Microsoft.AspNetCore.Identity;
 
 namespace EccomerceApi.Data
 {
@@ -10,9 +10,10 @@ namespace EccomerceApi.Data
         public IdentityDbContext(DbContextOptions<IdentityDbContext> dbContextOptions)
             : base(dbContextOptions)
         {
-            
+
         }
 
+        // Entidades existentes
         public virtual DbSet<Entry> Entries { get; set; }
         public virtual DbSet<EntryDetail> EntryDetails { get; set; }
         public virtual DbSet<Loss> Losses { get; set; }
@@ -21,6 +22,7 @@ namespace EccomerceApi.Data
         public virtual DbSet<Sale> Sales { get; set; }
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
         public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,7 +68,16 @@ namespace EccomerceApi.Data
             modelBuilder.Entity<SaleDetail>()
                 .Property(sd => sd.UnitPrice)
                 .HasColumnType("decimal(18,2)");
-        }
 
+            // Configuración para la entidad ProductCategory
+            modelBuilder.Entity<ProductCategory>()
+                .Property(pc => pc.Name)
+                .IsRequired();
+           modelBuilder.Entity<ProductCategory>()
+                .HasMany(pc => pc.Products)
+                .WithOne(p => p.ProductCategory)
+                .HasForeignKey(p => p.IdProductCategory)
+                .IsRequired(false);
+        }
     }
 }
