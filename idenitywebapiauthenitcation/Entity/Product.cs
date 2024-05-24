@@ -14,8 +14,10 @@ namespace EccomerceApi.Entity
         public decimal? Cost { get; set; }
         public int? Existence { get; set; }
 
-        
-        
+
+        public int? ProductBrandId { get; set; }
+        public virtual ProductBrand ProductBrand { get; set; }
+
         public int? IdProductCategory { get; set; }
         public virtual ProductCategory ProductCategory { get; set; }
 
