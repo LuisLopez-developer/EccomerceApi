@@ -3,7 +3,7 @@
 
 2. Clona el repositorio en una carpeta local en tu máquina.
 ```bash
-git clonehttps://github.com/LuisLopez-developer/EccomerceApi.git
+git clone https://github.com/LuisLopez-developer/EccomerceApi.git
 ```
 3. Luego Abre Herramientas -> Administrador de paquetes NuGet -> Consola del Administrador de paquetes
 
