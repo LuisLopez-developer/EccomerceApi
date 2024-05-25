@@ -2,7 +2,7 @@
 {
     public class AddUserModel
     {
-        public string UserEmail { get; set; }
-        public string[] Roles { get; set; }
+        public required string UserEmail { get; set; }
+        public required string[] Roles { get; set; }
     }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EccomerceApi.Interfaces;
+using EccomerceApi.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EccomerceApi.Controllers
@@ -9,10 +12,65 @@ namespace EccomerceApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IUserService _userService;
+
+        public UserController(SignInManager<IdentityUser> signInManager, IUserService userService)
         {
-            return Ok("my user list");
+            _signInManager = signInManager;
+            _userService = userService;
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var userList = await _userService.GetAllUsers();
+            return Ok(userList);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("{emailId}")]
+        public async Task<IActionResult> Get(string emailId)
+        {
+            var userList = await _userService.GetUserByEmail(emailId);
+            return Ok(userList);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("{emailId}")]
+        public async Task<IActionResult> UpdateUser(string emailId, [FromBody] UserModel userModel)
+        {
+            var result = await _userService.UpdateUser(emailId, userModel);
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{emailId}")]
+        public async Task<IActionResult> Delete(string emailId)
+        {
+            var result = await _userService.DeleteUserByEmail(emailId);
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] object empty)
+        {
+            //{}
+            if (empty is not null)
+            {
+                await _signInManager.SignOutAsync();
+            }
+            return Ok();
         }
     }
 }
