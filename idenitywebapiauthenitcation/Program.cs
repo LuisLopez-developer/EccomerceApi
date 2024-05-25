@@ -19,6 +19,7 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>().
     AddEntityFrameworkStores<IdentityDbContext>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
