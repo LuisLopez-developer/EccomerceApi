@@ -20,6 +20,8 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>().
 
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProduct, ProductService>();
+builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
