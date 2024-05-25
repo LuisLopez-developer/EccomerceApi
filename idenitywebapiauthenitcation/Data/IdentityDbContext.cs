@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using EccomerceApi.Entity;
 using Microsoft.AspNetCore.Identity;
+using EccomerceApi.Entity.Configurations;
 
 namespace EccomerceApi.Data
 {
@@ -10,7 +11,6 @@ namespace EccomerceApi.Data
         public IdentityDbContext(DbContextOptions<IdentityDbContext> dbContextOptions)
             : base(dbContextOptions)
         {
-
         }
 
         // Entidades existentes
@@ -73,11 +73,14 @@ namespace EccomerceApi.Data
             modelBuilder.Entity<ProductCategory>()
                 .Property(pc => pc.Name)
                 .IsRequired();
-           modelBuilder.Entity<ProductCategory>()
+            modelBuilder.Entity<ProductCategory>()
                 .HasMany(pc => pc.Products)
                 .WithOne(p => p.ProductCategory)
                 .HasForeignKey(p => p.IdProductCategory)
                 .IsRequired(false);
+
+            // Aplicar la configuración de semillas para ProductCategory
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
         }
     }
 }
