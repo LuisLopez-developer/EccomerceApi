@@ -17,7 +17,7 @@ namespace EccomerceApi.Controllers
             _prodCategoryService = productService;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -32,7 +32,7 @@ namespace EccomerceApi.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -52,7 +52,7 @@ namespace EccomerceApi.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("search")]
         public async Task<IActionResult> SearchByName(string? name)
         {
