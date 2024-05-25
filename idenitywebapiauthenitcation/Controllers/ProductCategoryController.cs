@@ -1,8 +1,8 @@
-﻿using EccomerceApi.Entity;
+﻿using EccomerceBlazorWasm.Models.ViewModel;
 using EccomerceApi.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
+using EccomerceApi.Entity;
 
 namespace EccomerceApi.Controllers
 {
@@ -22,32 +22,79 @@ namespace EccomerceApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var response = await _prodCategoryService.GetAllAsync();
-            return Ok(response);
+            var viewModel = response.Select(pc => new ProductCategoryViewModel
+            {
+                Id = pc.Id,
+                Name = pc.Name
+            });
+
+            return Ok(viewModel);
         }
+
 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var reponse = await _prodCategoryService.GetByIdAsync(id);
-            return Ok(reponse);
+            var response = await _prodCategoryService.GetByIdAsync(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new ProductCategoryViewModel
+            {
+                Id = response.Id,
+                Name = response.Name
+            };
+
+            return Ok(viewModel);
         }
+
 
         [AllowAnonymous]
         [HttpGet("search")]
-        public async Task<IActionResult> SearchByName(string name)
+        public async Task<IActionResult> SearchByName(string? name)
         {
-            var response = await _prodCategoryService.SearchAsync(name);
-            return Ok(response);
+            IEnumerable<ProductCategory> response;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                // Si name es nulo o vacío, obtenemos todas las categorías
+                response = await _prodCategoryService.GetAllAsync();
+            }
+            else
+            {
+                // Si name tiene un valor, realizamos la búsqueda
+                response = await _prodCategoryService.SearchAsync(name);
+            }
+
+            var viewModel = response.Select(pc => new ProductCategoryViewModel
+            {
+                Id = pc.Id,
+                Name = pc.Name
+            });
+
+            return Ok(viewModel);
         }
+
+
 
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Post(ProductCategory productCategory)
         {
-            var respone = await _prodCategoryService.CreateAsync(productCategory);
-            return CreatedAtAction(nameof(GetById), new { id = respone.Id }, respone);
+            var response = await _prodCategoryService.CreateAsync(productCategory);
+
+            var viewModel = new ProductCategoryViewModel
+            {
+                Id = response.Id,
+                Name = response.Name
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = viewModel.Id }, viewModel);
         }
+
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
