@@ -9,14 +9,12 @@ using Swashbuckle.AspNetCore.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<IdentityDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("idenitycs")));
 
-builder.Services.AddDbContext<IdentityDbContext>(option =>
-option.UseSqlServer(builder.Configuration.GetConnectionString("idenitycs")));
-
-
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().
-    AddRoles<IdentityRole>().
-    AddEntityFrameworkStores<IdentityDbContext>();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<IdentityDbContext>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -24,6 +22,7 @@ builder.Services.AddScoped<IProduct, ProductService>();
 builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
@@ -48,7 +47,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 var app = builder.Build();
 
 app.MapIdentityApi<IdentityUser>();
@@ -67,5 +65,21 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Aquí añadimos la inicialización de migraciones
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<IdentityDbContext>();
+        context.Database.Migrate(); // Aplica migraciones
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
+    }
+}
 
 app.Run();
