@@ -20,6 +20,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduct, ProductService>();
 builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
+builder.Services.AddScoped<IProductBrand, ProductBrandService>();
 
 builder.Services.AddControllers();
 
