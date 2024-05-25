@@ -4,6 +4,7 @@ using EccomerceApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EccomerceApi.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525162814_SeedProductCategories")]
+    partial class SeedProductCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,22 +235,17 @@ namespace EccomerceApi.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Gama Baja"
+                            Name = "Electronics"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Gama Media"
+                            Name = "Clothing"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Gama Alta"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Gama Top"
+                            Name = "Home Appliances"
                         });
                 });
 
