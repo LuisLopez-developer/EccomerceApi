@@ -27,7 +27,7 @@ namespace EccomerceApi.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var reponse = await _prodCategoryService.GetByIdAsync(id);
             return Ok(reponse);
@@ -43,7 +43,7 @@ namespace EccomerceApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, ProductCategory productCategory)
+        public async Task<IActionResult> Update(int id, ProductCategory productCategory)
         {
             var existingBlog = await _prodCategoryService.UpdateAsync(id, productCategory);
             if (!existingBlog)
@@ -56,7 +56,7 @@ namespace EccomerceApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var blog = await _prodCategoryService.DeleteAsync(id);
             if (!blog)

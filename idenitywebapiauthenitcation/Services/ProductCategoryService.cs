@@ -20,7 +20,7 @@ namespace EccomerceApi.Services
             return producCategorytList;
         }
 
-        public async Task<ProductCategory> GetByIdAsync(Guid id)
+        public async Task<ProductCategory> GetByIdAsync(int id)
         {
             return await _identityDbContext.ProductCategories.Where(f => f.Id == id).FirstOrDefaultAsync();
         }
@@ -32,7 +32,7 @@ namespace EccomerceApi.Services
             return productCategory;
         }
 
-        public async Task<bool> UpdateAsync(Guid id, ProductCategory productCategory)
+        public async Task<bool> UpdateAsync(int id, ProductCategory productCategory)
         {
             var existingProductCategory = await _identityDbContext.ProductCategories.Where(f => f.Id == id).FirstOrDefaultAsync();
 
@@ -43,10 +43,10 @@ namespace EccomerceApi.Services
 
             await _identityDbContext.SaveChangesAsync();
 
-            return existingProductCategory?.Id != Guid.Empty;
+            return existingProductCategory?.Id > 0;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var productCategory = await _identityDbContext.ProductCategories.Where(f => f.Id == id).FirstOrDefaultAsync();
 
@@ -57,7 +57,7 @@ namespace EccomerceApi.Services
                 id = productCategory.Id;
             }
 
-            return productCategory?.Id != Guid.Empty;
+            return productCategory?.Id > 0;
         }
     }
 }
