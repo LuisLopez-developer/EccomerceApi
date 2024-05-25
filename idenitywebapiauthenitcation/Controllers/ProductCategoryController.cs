@@ -33,6 +33,14 @@ namespace EccomerceApi.Controllers
             return Ok(reponse);
         }
 
+        [AllowAnonymous]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchByName(string name)
+        {
+            var response = await _prodCategoryService.SearchAsync(name);
+            return Ok(response);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Post(ProductCategory productCategory)
@@ -45,8 +53,8 @@ namespace EccomerceApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, ProductCategory productCategory)
         {
-            var existingBlog = await _prodCategoryService.UpdateAsync(id, productCategory);
-            if (!existingBlog)
+            var existingPorductCategory = await _prodCategoryService.UpdateAsync(id, productCategory);
+            if (!existingPorductCategory)
             {
                 return BadRequest();
             }

@@ -14,6 +14,16 @@ namespace EccomerceApi.Services
             _identityDbContext = identityDbContext;
         }
 
+        public async Task<List<ProductCategory>> SearchAsync(string name)
+        {
+            // Filtrar las categorías de productos cuyo nombre contenga la cadena proporcionada
+            var matchedCategories = await _identityDbContext.ProductCategories
+                .Where(category => category.Name.Contains(name))
+                .ToListAsync();
+
+            return matchedCategories;
+        }
+
         public async Task<List<ProductCategory>> GetAllAsync()
         {
             var producCategorytList = await _identityDbContext.ProductCategories.ToListAsync();
