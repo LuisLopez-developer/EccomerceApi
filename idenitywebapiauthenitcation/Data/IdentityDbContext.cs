@@ -23,6 +23,7 @@ namespace EccomerceApi.Data
         public virtual DbSet<SaleDetail> SaleDetails { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductBrand> ProductBrands { get; set; } // Agrega esta línea para ProductBrand
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,8 +80,13 @@ namespace EccomerceApi.Data
                 .HasForeignKey(p => p.IdProductCategory)
                 .IsRequired(false);
 
-            // Aplicar la configuración de semillas para ProductCategory
-            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            // Configuración para la entidad ProductBrand
+            modelBuilder.Entity<ProductBrand>()
+                .Property(pb => pb.Name)
+                .IsRequired();
+
+            // Aplicar la configuración de semillas para ProductBrand
+            modelBuilder.ApplyConfiguration(new ProductBrandConfiguration());
         }
     }
 }
