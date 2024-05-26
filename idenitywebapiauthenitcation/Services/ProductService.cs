@@ -22,6 +22,7 @@ namespace EccomerceApi.Services
         public async Task<List<ProductViewModel>> GetAllAsync()
         {
             var productList = await _identityDbContext.Products
+                .Include(p => p.State) 
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductBrand)
                 .ToListAsync();
@@ -31,9 +32,11 @@ namespace EccomerceApi.Services
                 Id = product.Id,
                 Name = product.Name,
                 Existence = product.Existence,
-                //StateName = product.IdStateNavigation?.Name,
+                StateName = product.State?.Name, 
                 CategoryName = product.ProductCategory?.Name,
-                BrandName = product.ProductBrand?.Name
+                BrandName = product.ProductBrand?.Name,
+                Price = product.Price,
+                Cost = product.Cost
             }).ToList();
 
             return productViewModelList;
@@ -44,17 +47,19 @@ namespace EccomerceApi.Services
         {
             var matchedProducts = await _identityDbContext.Products
                 .Where(product => product.Name.Contains(name))
-                //.Include(p => p.IdStateNavigation)
+                .Include(p => p.State)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductBrand)
                 .Select(product => new ProductViewModel
                 {
                     Id = product.Id,
                     Name = product.Name,
-                    Existence = product.Existence,
-                    //StateName = product.IdStateNavigation.Name,
                     CategoryName = product.ProductCategory.Name,
-                    BrandName = product.ProductBrand.Name
+                    BrandName = product.ProductBrand.Name,
+                    StateName = product.State.Name,
+                    Existence = product.Existence,
+                    Cost = product.Cost,
+                    Price = product.Price
                 })
                 .ToListAsync();
 
@@ -148,7 +153,7 @@ namespace EccomerceApi.Services
                 existingProduct.Cost = product.Cost;
                 existingProduct.Existence = product.Existence;
                 existingProduct.ProductBrandId = product.ProductBrandId;
-                //existingProduct.IdProductCategory = product.IdProductCategory;
+                existingProduct.ProductCategoryId = product.ProductCategoryId;
             }
 
             await _identityDbContext.SaveChangesAsync();
