@@ -23,11 +23,11 @@ namespace EccomerceApi.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var productBrand = await _identityDbContext.ProductBrand.Where(f => f.Id == id).FirstOrDefaultAsync();
+            var productBrand = await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
 
             if (productBrand != null)
             {
-                _identityDbContext.ProductBrand.Remove(productBrand);
+                _identityDbContext.ProductBrands.Remove(productBrand);
                 await _identityDbContext.SaveChangesAsync();
                 id = productBrand.Id;
             }
@@ -37,19 +37,19 @@ namespace EccomerceApi.Services
 
         public async Task<List<ProductBrand>> GetAllAsync()
         {
-            var producBrandsList = await _identityDbContext.ProductBrand.ToListAsync();
+            var producBrandsList = await _identityDbContext.ProductBrands.ToListAsync();
             return producBrandsList;
         }
 
         public async Task<ProductBrand> GetByIdAsync(int id)
         {
-            return await _identityDbContext.ProductBrand.Where(f => f.Id == id).FirstOrDefaultAsync();
+            return await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<ProductBrand>> SearchAsync(string name)
         {
             // Filtrar las marcas de productos cuyo nombre contenga la cadena proporcionada
-            var matchedBrands = await _identityDbContext.ProductBrand
+            var matchedBrands = await _identityDbContext.ProductBrands
                 .Where(brands => brands.Name.Contains(name))
                 .ToListAsync();
 
@@ -58,7 +58,7 @@ namespace EccomerceApi.Services
 
         public  async Task<bool> UpdateAsync(int id, ProductBrand productBrand)
         {
-            var existingProductBrand = await _identityDbContext.ProductBrand.Where(f => f.Id == id).FirstOrDefaultAsync();
+            var existingProductBrand = await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
 
             if (existingProductBrand != null)
             {

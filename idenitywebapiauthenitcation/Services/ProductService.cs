@@ -1,6 +1,7 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services
@@ -14,10 +15,47 @@ namespace EccomerceApi.Services
             _identityDbContext = identityDbContext;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<ProductViewModel>> GetAllAsync()
         {
-            var productList = await _identityDbContext.Products.ToListAsync();
-            return productList;
+            var productList = await _identityDbContext.Products
+                .Include(p => p.IdStateNavigation)
+                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductBrand)
+                .ToListAsync();
+
+            var productViewModelList = productList.Select(product => new ProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Existence = product.Existence,
+                StateName = product.IdStateNavigation?.Name,
+                CategoryName = product.ProductCategory?.Name,
+                BrandName = product.ProductBrand?.Name
+            }).ToList();
+
+            return productViewModelList;
+        }
+
+
+        public async Task<List<ProductViewModel>> SearchAsync(string name)
+        {
+            var matchedProducts = await _identityDbContext.Products
+                .Where(product => product.Name.Contains(name))
+                .Include(p => p.IdStateNavigation)
+                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductBrand)
+                .Select(product => new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Existence = product.Existence,
+                    StateName = product.IdStateNavigation.Name,
+                    CategoryName = product.ProductCategory.Name,
+                    BrandName = product.ProductBrand.Name
+                })
+                .ToListAsync();
+
+            return matchedProducts;
         }
 
         public async Task<Product> GetByIdAsync(int id)
@@ -66,6 +104,7 @@ namespace EccomerceApi.Services
 
             return product?.Id > 0;
         }
+
 
     }
 }

@@ -13,7 +13,7 @@ namespace EccomerceApi.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
     [Migration("20240524151958_apiidenity")]
-    partial class apiidenity
+    partial class Apiidenity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

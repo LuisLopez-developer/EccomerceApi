@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EccomerceApi.Migrations
 {
     /// <inheritdoc />
-    public partial class apiidenity : Migration
+    public partial class Apiidenity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

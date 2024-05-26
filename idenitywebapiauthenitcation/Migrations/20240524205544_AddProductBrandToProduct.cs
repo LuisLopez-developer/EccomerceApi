@@ -17,7 +17,7 @@ namespace EccomerceApi.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "ProductBrand",
+                name: "ProductBrands",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
