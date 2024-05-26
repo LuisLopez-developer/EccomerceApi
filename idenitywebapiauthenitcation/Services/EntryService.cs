@@ -17,22 +17,22 @@ namespace EccomerceApi.Services
         public async Task<List<EntryViewModel>> GetAllAsync()
         {
             var entryList = await _identityDbContext.Entries
-                .Include(e => e.EntryDetails) // Incluye las propiedades de navegación de Entry
-                .ThenInclude(ed => ed.EntryId) // Incluye la entidad Product relacionada con EntryDetail
-                .ToListAsync();
+            .Include(e => e.EntryDetails) // Incluye las propiedades de navegación de Entry
+                .ThenInclude(ed => ed.Product) // Incluye la entidad Product relacionada con EntryDetail
+            .ToListAsync();
 
-            var entryViewModelList = entryList.SelectMany(entry => entry.EntryDetails.Select(entryDetail => new EntryViewModel
-            {
-                IdEntry = entry.Id,
-                Date = entry.Date,
-                Name = entryDetail.Product?.Name,
-                UnitCost = entryDetail.UnitCost,
-                Amount = entryDetail.Amount,
-                Total = entry.Total,
-                Existence = entryDetail.Product?.Existence
-            })).ToList();
+                var entryViewModelList = entryList.SelectMany(entry => entry.EntryDetails.Select(entryDetail => new EntryViewModel
+                {
+                    IdEntry = entry.Id,
+                    Date = entry.Date,
+                    Name = entryDetail.Product?.Name,
+                    UnitCost = entryDetail.UnitCost,
+                    Amount = entryDetail.Amount,
+                    Total = entry.Total,
+                    Existence = entryDetail.Product?.Existence
+                })).ToList();
 
-            return entryViewModelList;
+                return entryViewModelList;
         }
 
         public async Task<EntryCreateModel> CreateAsync(EntryCreateModel entryCreateModel)
