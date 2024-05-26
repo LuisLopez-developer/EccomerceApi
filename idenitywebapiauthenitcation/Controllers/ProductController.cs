@@ -1,4 +1,5 @@
-﻿using EccomerceApi.Interfaces;
+﻿using EccomerceApi.Entity;
+using EccomerceApi.Interfaces;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,17 @@ namespace EccomerceApi.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchByName(string? name)
         {
-            var response = await _product.SearchAsync(name);
+            IEnumerable<ProductViewModel> response;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {  
+                response = await _product.GetAllAsync(); // Si name es nulo o vacío, obtenemos todas las categorías
+            }
+            else
+            {
+                response = await _product.SearchAsync(name);
+            }
+
             return Ok(response);
         }
     }
