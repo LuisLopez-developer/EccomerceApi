@@ -11,9 +11,8 @@ public partial class Entry
 
     public decimal? Total { get; set; }
 
-    public int? IdState { get; set; }
+    public int? StateId { get; set; }
+    public virtual State? State { get; set; }
 
     public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
-
-    public virtual State? IdStateNavigation { get; set; }
 }

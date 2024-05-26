@@ -22,7 +22,6 @@ namespace EccomerceApi.Services
         public async Task<List<ProductViewModel>> GetAllAsync()
         {
             var productList = await _identityDbContext.Products
-                .Include(p => p.IdStateNavigation)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductBrand)
                 .ToListAsync();
@@ -32,7 +31,7 @@ namespace EccomerceApi.Services
                 Id = product.Id,
                 Name = product.Name,
                 Existence = product.Existence,
-                StateName = product.IdStateNavigation?.Name,
+                //StateName = product.IdStateNavigation?.Name,
                 CategoryName = product.ProductCategory?.Name,
                 BrandName = product.ProductBrand?.Name
             }).ToList();
@@ -45,7 +44,7 @@ namespace EccomerceApi.Services
         {
             var matchedProducts = await _identityDbContext.Products
                 .Where(product => product.Name.Contains(name))
-                .Include(p => p.IdStateNavigation)
+                //.Include(p => p.IdStateNavigation)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductBrand)
                 .Select(product => new ProductViewModel
@@ -53,7 +52,7 @@ namespace EccomerceApi.Services
                     Id = product.Id,
                     Name = product.Name,
                     Existence = product.Existence,
-                    StateName = product.IdStateNavigation.Name,
+                    //StateName = product.IdStateNavigation.Name,
                     CategoryName = product.ProductCategory.Name,
                     BrandName = product.ProductBrand.Name
                 })
@@ -76,13 +75,13 @@ namespace EccomerceApi.Services
                 Id = product.Id,
                 Name = product.Name,
                 Code = product.Code,
-                IdState = product.IdState,
+                IdState = product.StateId,
                 Date = product.Date,
                 Price = product.Price,
                 Cost = product.Cost,
                 Existence = product.Existence,
                 ProductBrandId = product.ProductBrandId,
-                IdProductCategory = product.IdProductCategory
+                //IdProductCategory = product.IdProductCategory
             };
 
             return productCreateModel;
@@ -105,13 +104,13 @@ namespace EccomerceApi.Services
             {
                 Name = productCreateModel.Name,
                 Code = productCreateModel.Code,
-                IdState = productCreateModel.IdState,
+                StateId = productCreateModel.IdState,
                 Date = productCreateModel.Date,
                 Price = productCreateModel.Price,
                 Cost = productCreateModel.Cost,
                 Existence = productCreateModel.Existence,
                 ProductBrandId = productCreateModel.ProductBrandId,
-                IdProductCategory = productCreateModel.IdProductCategory
+                ProductCategoryId = productCreateModel.IdProductCategory
             };
 
             // Agregar el nuevo producto a la base de datos
@@ -123,7 +122,7 @@ namespace EccomerceApi.Services
             {
                 Date = productCreateModel.Date,
                 Total = newProduct.Cost * newProduct.Existence,
-                IdState = newProduct.IdState,
+                IdState = newProduct.StateId,
                 UnitCost = newProduct.Cost,
                 Amount = newProduct.Existence,
                 IdProduct = newProduct.Id // Usamos el ID del producto recién creado
@@ -143,13 +142,13 @@ namespace EccomerceApi.Services
             {
                 existingProduct.Name = product.Name;
                 existingProduct.Code = product.Code;
-                existingProduct.IdState = product.IdState;
+                existingProduct.StateId = product.StateId;
                 existingProduct.Date = product.Date;
                 existingProduct.Price = product.Price;
                 existingProduct.Cost = product.Cost;
                 existingProduct.Existence = product.Existence;
                 existingProduct.ProductBrandId = product.ProductBrandId;
-                existingProduct.IdProductCategory = product.IdProductCategory;
+                //existingProduct.IdProductCategory = product.IdProductCategory;
             }
 
             await _identityDbContext.SaveChangesAsync();

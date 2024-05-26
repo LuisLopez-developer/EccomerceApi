@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EccomerceApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Apiidenity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,32 @@ namespace EccomerceApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductBrands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductBrands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,15 +203,14 @@ namespace EccomerceApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IdState = table.Column<int>(type: "int", nullable: true),
-                    IdStateNavigationId = table.Column<int>(type: "int", nullable: true)
+                    StateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Entries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Entries_States_IdStateNavigationId",
-                        column: x => x.IdStateNavigationId,
+                        name: "FK_Entries_States_StateId",
+                        column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id");
                 });
@@ -197,16 +222,15 @@ namespace EccomerceApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdState = table.Column<int>(type: "int", nullable: true),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IdStateNavigationId = table.Column<int>(type: "int", nullable: true)
+                    StateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Losses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Losses_States_IdStateNavigationId",
-                        column: x => x.IdStateNavigationId,
+                        name: "FK_Losses_States_StateId",
+                        column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id");
                 });
@@ -219,19 +243,30 @@ namespace EccomerceApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdState = table.Column<int>(type: "int", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Existence = table.Column<int>(type: "int", nullable: true),
-                    IdStateNavigationId = table.Column<int>(type: "int", nullable: true)
+                    StateId = table.Column<int>(type: "int", nullable: true),
+                    ProductBrandId = table.Column<int>(type: "int", nullable: true),
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_States_IdStateNavigationId",
-                        column: x => x.IdStateNavigationId,
+                        name: "FK_Products_ProductBrands_ProductBrandId",
+                        column: x => x.ProductBrandId,
+                        principalTable: "ProductBrands",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Products_ProductCategories_ProductCategoryId",
+                        column: x => x.ProductCategoryId,
+                        principalTable: "ProductCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Products_States_StateId",
+                        column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id");
                 });
@@ -244,15 +279,14 @@ namespace EccomerceApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdState = table.Column<int>(type: "int", nullable: true),
-                    IdStateNavigationId = table.Column<int>(type: "int", nullable: true)
+                    StateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sales", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sales_States_IdStateNavigationId",
-                        column: x => x.IdStateNavigationId,
+                        name: "FK_Sales_States_StateId",
+                        column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id");
                 });
@@ -263,24 +297,22 @@ namespace EccomerceApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdEntry = table.Column<int>(type: "int", nullable: true),
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
-                    IdProduct = table.Column<int>(type: "int", nullable: true),
-                    IdEntryNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdProductNavigationId = table.Column<int>(type: "int", nullable: true)
+                    EntryId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EntryDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EntryDetails_Entries_IdEntryNavigationId",
-                        column: x => x.IdEntryNavigationId,
+                        name: "FK_EntryDetails_Entries_EntryId",
+                        column: x => x.EntryId,
                         principalTable: "Entries",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_EntryDetails_Products_IdProductNavigationId",
-                        column: x => x.IdProductNavigationId,
+                        name: "FK_EntryDetails_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id");
                 });
@@ -291,24 +323,22 @@ namespace EccomerceApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdLoss = table.Column<int>(type: "int", nullable: true),
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IdProduct = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
-                    IdLossNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdProductNavigationId = table.Column<int>(type: "int", nullable: true)
+                    LossId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LostDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LostDetails_Losses_IdLossNavigationId",
-                        column: x => x.IdLossNavigationId,
+                        name: "FK_LostDetails_Losses_LossId",
+                        column: x => x.LossId,
                         principalTable: "Losses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_LostDetails_Products_IdProductNavigationId",
-                        column: x => x.IdProductNavigationId,
+                        name: "FK_LostDetails_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id");
                 });
@@ -319,25 +349,23 @@ namespace EccomerceApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdSale = table.Column<int>(type: "int", nullable: true),
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
-                    IdProduct = table.Column<int>(type: "int", nullable: true),
-                    IdProductNavigationId = table.Column<int>(type: "int", nullable: true),
-                    IdSaleNavigationId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    SaleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SaleDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SaleDetails_Products_IdProductNavigationId",
-                        column: x => x.IdProductNavigationId,
+                        name: "FK_SaleDetails_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_SaleDetails_Sales_IdSaleNavigationId",
-                        column: x => x.IdSaleNavigationId,
+                        name: "FK_SaleDetails_Sales_SaleId",
+                        column: x => x.SaleId,
                         principalTable: "Sales",
                         principalColumn: "Id");
                 });
@@ -382,54 +410,64 @@ namespace EccomerceApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entries_IdStateNavigationId",
+                name: "IX_Entries_StateId",
                 table: "Entries",
-                column: "IdStateNavigationId");
+                column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntryDetails_IdEntryNavigationId",
+                name: "IX_EntryDetails_EntryId",
                 table: "EntryDetails",
-                column: "IdEntryNavigationId");
+                column: "EntryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntryDetails_IdProductNavigationId",
+                name: "IX_EntryDetails_ProductId",
                 table: "EntryDetails",
-                column: "IdProductNavigationId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Losses_IdStateNavigationId",
+                name: "IX_Losses_StateId",
                 table: "Losses",
-                column: "IdStateNavigationId");
+                column: "StateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LostDetails_IdLossNavigationId",
+                name: "IX_LostDetails_LossId",
                 table: "LostDetails",
-                column: "IdLossNavigationId");
+                column: "LossId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LostDetails_IdProductNavigationId",
+                name: "IX_LostDetails_ProductId",
                 table: "LostDetails",
-                column: "IdProductNavigationId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_IdStateNavigationId",
+                name: "IX_Products_ProductBrandId",
                 table: "Products",
-                column: "IdStateNavigationId");
+                column: "ProductBrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleDetails_IdProductNavigationId",
+                name: "IX_Products_ProductCategoryId",
+                table: "Products",
+                column: "ProductCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_StateId",
+                table: "Products",
+                column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleDetails_ProductId",
                 table: "SaleDetails",
-                column: "IdProductNavigationId");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleDetails_IdSaleNavigationId",
+                name: "IX_SaleDetails_SaleId",
                 table: "SaleDetails",
-                column: "IdSaleNavigationId");
+                column: "SaleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sales_IdStateNavigationId",
+                name: "IX_Sales_StateId",
                 table: "Sales",
-                column: "IdStateNavigationId");
+                column: "StateId");
         }
 
         /// <inheritdoc />
@@ -476,6 +514,12 @@ namespace EccomerceApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sales");
+
+            migrationBuilder.DropTable(
+                name: "ProductBrands");
+
+            migrationBuilder.DropTable(
+                name: "ProductCategories");
 
             migrationBuilder.DropTable(
                 name: "States");

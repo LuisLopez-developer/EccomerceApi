@@ -33,10 +33,7 @@ namespace EccomerceApi.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdState")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdStateNavigationId")
+                    b.Property<int?>("StateId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Total")
@@ -44,7 +41,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdStateNavigationId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Entries");
                 });
@@ -60,16 +57,10 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdEntry")
+                    b.Property<int?>("EntryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdEntryNavigationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProduct")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProductNavigationId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("UnitCost")
@@ -77,9 +68,9 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdEntryNavigationId");
+                    b.HasIndex("EntryId");
 
-                    b.HasIndex("IdProductNavigationId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("EntryDetails");
                 });
@@ -95,10 +86,7 @@ namespace EccomerceApi.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdState")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdStateNavigationId")
+                    b.Property<int?>("StateId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Total")
@@ -106,7 +94,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdStateNavigationId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Losses");
                 });
@@ -122,16 +110,10 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdLoss")
+                    b.Property<int?>("LossId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdLossNavigationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProduct")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdProductNavigationId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("UnitCost")
@@ -139,9 +121,9 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdLossNavigationId");
+                    b.HasIndex("LossId");
 
-                    b.HasIndex("IdProductNavigationId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("LostDetails");
                 });
@@ -166,15 +148,6 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Existence")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdProductCategory")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdState")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdStateNavigationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -184,13 +157,19 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("ProductBrandId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProductCategory");
-
-                    b.HasIndex("IdStateNavigationId");
-
                     b.HasIndex("ProductBrandId");
+
+                    b.HasIndex("ProductCategoryId");
+
+                    b.HasIndex("StateId");
 
                     b.ToTable("Products");
                 });
@@ -240,10 +219,7 @@ namespace EccomerceApi.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdState")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdStateNavigationId")
+                    b.Property<int?>("StateId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Total")
@@ -251,7 +227,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdStateNavigationId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Sales");
                 });
@@ -267,16 +243,10 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdProduct")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdProductNavigationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdSale")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdSaleNavigationId")
+                    b.Property<int?>("SaleId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("UnitCost")
@@ -287,9 +257,9 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProductNavigationId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("IdSaleNavigationId");
+                    b.HasIndex("SaleId");
 
                     b.ToTable("SaleDetails");
                 });
@@ -335,26 +305,6 @@ namespace EccomerceApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "user",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            Name = "manager",
-                            NormalizedName = "MANAGER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -445,56 +395,6 @@ namespace EccomerceApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "ada69a2c-6349-4bd2-9229-9bbec8224eaa",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC6RIaUfSRFTgQJ+Fwy1J3zPiWMahkpR60Owydx6NT9WTasm7GWGPFpe92uUEcHpwQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "8260d058-ab7a-47c2-a0e7-42b4013c8614",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "16de8799-ee30-4e61-a7ca-46036d119375",
-                            Email = "user@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER@GMAIL.COM",
-                            NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMbo2RunlwWX7U2Lf/J3UDTwfjM1ZF2QmfAViCqzw0A6Ptf5p0ukK5+++UHtjN9Xyg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2623cdc3-94c3-491b-b037-308e727d5dfd",
-                            TwoFactorEnabled = false,
-                            UserName = "user"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "07d12fa6-0c53-4837-89a5-f407149ad1ab",
-                            Email = "manager@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MANAGER@GMAIL.COM",
-                            NormalizedUserName = "MANAGER",
-                            PasswordHash = "AQAAAAIAAYagAAAAELiv1Q4dOJx8ZTUDNf/NA/M0DYCNueD+lCZSzPf8nVOJV/IqMF86xE6taKVykxtbZQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "f86cafef-bb94-4ce9-95a9-6ce05bb74f52",
-                            TwoFactorEnabled = false,
-                            UserName = "manager"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -557,23 +457,6 @@ namespace EccomerceApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "1",
-                            RoleId = "1"
-                        },
-                        new
-                        {
-                            UserId = "2",
-                            RoleId = "2"
-                        },
-                        new
-                        {
-                            UserId = "3",
-                            RoleId = "3"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -597,95 +480,95 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.State", "IdStateNavigation")
+                    b.HasOne("EccomerceApi.Entity.State", "State")
                         .WithMany("Entries")
-                        .HasForeignKey("IdStateNavigationId");
+                        .HasForeignKey("StateId");
 
-                    b.Navigation("IdStateNavigation");
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.EntryDetail", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.Entry", "IdEntryNavigation")
+                    b.HasOne("EccomerceApi.Entity.Entry", "Entry")
                         .WithMany("EntryDetails")
-                        .HasForeignKey("IdEntryNavigationId");
+                        .HasForeignKey("EntryId");
 
-                    b.HasOne("EccomerceApi.Entity.Product", "IdProductNavigation")
+                    b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("EntryDetails")
-                        .HasForeignKey("IdProductNavigationId");
+                        .HasForeignKey("ProductId");
 
-                    b.Navigation("IdEntryNavigation");
+                    b.Navigation("Entry");
 
-                    b.Navigation("IdProductNavigation");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Loss", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.State", "IdStateNavigation")
+                    b.HasOne("EccomerceApi.Entity.State", "State")
                         .WithMany("Losses")
-                        .HasForeignKey("IdStateNavigationId");
+                        .HasForeignKey("StateId");
 
-                    b.Navigation("IdStateNavigation");
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.LostDetail", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.Loss", "IdLossNavigation")
+                    b.HasOne("EccomerceApi.Entity.Loss", "Loss")
                         .WithMany("LostDetails")
-                        .HasForeignKey("IdLossNavigationId");
+                        .HasForeignKey("LossId");
 
-                    b.HasOne("EccomerceApi.Entity.Product", "IdProductNavigation")
+                    b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("LostDetails")
-                        .HasForeignKey("IdProductNavigationId");
+                        .HasForeignKey("ProductId");
 
-                    b.Navigation("IdLossNavigation");
+                    b.Navigation("Loss");
 
-                    b.Navigation("IdProductNavigation");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Product", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.ProductCategory", "ProductCategory")
-                        .WithMany("Products")
-                        .HasForeignKey("IdProductCategory");
-
-                    b.HasOne("EccomerceApi.Entity.State", "IdStateNavigation")
-                        .WithMany("Products")
-                        .HasForeignKey("IdStateNavigationId");
-
                     b.HasOne("EccomerceApi.Entity.ProductBrand", "ProductBrand")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ProductBrandId");
 
-                    b.Navigation("IdStateNavigation");
+                    b.HasOne("EccomerceApi.Entity.ProductCategory", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductCategoryId");
+
+                    b.HasOne("EccomerceApi.Entity.State", "State")
+                        .WithMany("Products")
+                        .HasForeignKey("StateId");
 
                     b.Navigation("ProductBrand");
 
                     b.Navigation("ProductCategory");
+
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Sale", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.State", "IdStateNavigation")
+                    b.HasOne("EccomerceApi.Entity.State", "State")
                         .WithMany("Sales")
-                        .HasForeignKey("IdStateNavigationId");
+                        .HasForeignKey("StateId");
 
-                    b.Navigation("IdStateNavigation");
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.SaleDetail", b =>
                 {
-                    b.HasOne("EccomerceApi.Entity.Product", "IdProductNavigation")
+                    b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("SaleDetails")
-                        .HasForeignKey("IdProductNavigationId");
+                        .HasForeignKey("ProductId");
 
-                    b.HasOne("EccomerceApi.Entity.Sale", "IdSaleNavigation")
+                    b.HasOne("EccomerceApi.Entity.Sale", "Sale")
                         .WithMany("SaleDetails")
-                        .HasForeignKey("IdSaleNavigationId");
+                        .HasForeignKey("SaleId");
 
-                    b.Navigation("IdProductNavigation");
+                    b.Navigation("Product");
 
-                    b.Navigation("IdSaleNavigation");
+                    b.Navigation("Sale");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -756,6 +639,11 @@ namespace EccomerceApi.Migrations
                     b.Navigation("LostDetails");
 
                     b.Navigation("SaleDetails");
+                });
+
+            modelBuilder.Entity("EccomerceApi.Entity.ProductBrand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.ProductCategory", b =>

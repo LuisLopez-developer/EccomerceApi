@@ -18,18 +18,18 @@ namespace EccomerceApi.Services
         {
             var entryList = await _identityDbContext.Entries
                 .Include(e => e.EntryDetails) // Incluye las propiedades de navegación de Entry
-                .ThenInclude(ed => ed.IdProductNavigation) // Incluye la entidad Product relacionada con EntryDetail
+                .ThenInclude(ed => ed.EntryId) // Incluye la entidad Product relacionada con EntryDetail
                 .ToListAsync();
 
             var entryViewModelList = entryList.SelectMany(entry => entry.EntryDetails.Select(entryDetail => new EntryViewModel
             {
                 IdEntry = entry.Id,
                 Date = entry.Date,
-                Name = entryDetail.IdProductNavigation?.Name,
+                Name = entryDetail.Product?.Name,
                 UnitCost = entryDetail.UnitCost,
                 Amount = entryDetail.Amount,
                 Total = entry.Total,
-                Existence = entryDetail.IdProductNavigation?.Existence
+                Existence = entryDetail.Product?.Existence
             })).ToList();
 
             return entryViewModelList;
@@ -48,14 +48,14 @@ namespace EccomerceApi.Services
             {
                 Date = entryCreateModel.Date,
                 Total = entryCreateModel.Total,
-                IdState = entryCreateModel.IdState,
+                StateId = entryCreateModel.IdState,
                 EntryDetails = new List<EntryDetail>
                 {
                     new EntryDetail
                     {
                         UnitCost = entryCreateModel.UnitCost,
                         Amount = entryCreateModel.Amount,
-                        IdProduct = entryCreateModel.IdProduct
+                        ProductId = entryCreateModel.IdProduct
                     }
                 }
             };

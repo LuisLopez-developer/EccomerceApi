@@ -5,16 +5,12 @@ namespace EccomerceApi.Entity;
 public partial class LostDetail
 {
     public int Id { get; set; }
-
-    public int? IdLoss { get; set; }
-
     public decimal? UnitCost { get; set; }
-
-    public int? IdProduct { get; set; }
-
     public int? Amount { get; set; }
 
-    public virtual Loss? IdLossNavigation { get; set; }
+    public int? LossId { get; set; }
+    public virtual Loss? Loss { get; set; }
 
-    public virtual Product? IdProductNavigation { get; set; }
+    public int? ProductId { get; set; }
+    public virtual Product? Product { get; set; }
 }

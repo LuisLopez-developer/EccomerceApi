@@ -69,87 +69,92 @@ namespace EccomerceApi.Data
                 .Property(pc => pc.Name)
                 .IsRequired();
 
-            modelBuilder.Entity<ProductCategory>()
-                .HasMany(pc => pc.Products)
-                .WithOne(p => p.ProductCategory)
-                .HasForeignKey(p => p.IdProductCategory)
-                .IsRequired(false);
+            //modelBuilder.Entity<ProductCategory>()
+            //    .HasMany(pc => pc.Products)
+            //    .WithOne(p => p.ProductCategory)
+            //    .HasForeignKey(p => p.IdProductCategory)
+            //    .IsRequired(false);
 
             modelBuilder.Entity<ProductBrand>()
                 .Property(pb => pb.Name)
                 .IsRequired();
 
+            //modelBuilder.Entity<Product>()
+            //    .HasOne(p => p.State)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.IdState)
+            //    .IsRequired(false);
             // Configuración para sembrar datos de roles y usuarios
-            SeedRoles(modelBuilder);
-            SeedUsers(modelBuilder);
+            //SeedRoles(modelBuilder);
+            //SeedUsers(modelBuilder);
         }
 
         // Método para sembrar roles
-        private void SeedRoles(ModelBuilder modelBuilder)
-        {
-            var roleAdmin = new IdentityRole { Id = "1", Name = "admin", NormalizedName = "ADMIN" };
-            var roleUser = new IdentityRole { Id = "2", Name = "user", NormalizedName = "USER" };
-            var roleManager = new IdentityRole { Id = "3", Name = "manager", NormalizedName = "MANAGER" };
+        //private void SeedRoles(ModelBuilder modelBuilder)
+        //{
+        //    var roleAdmin = new IdentityRole { Id = "1", Name = "admin", NormalizedName = "ADMIN" };
+        //    var roleUser = new IdentityRole { Id = "2", Name = "user", NormalizedName = "USER" };
+        //    var roleManager = new IdentityRole { Id = "3", Name = "manager", NormalizedName = "MANAGER" };
 
-            modelBuilder.Entity<IdentityRole>().HasData(
-                roleAdmin,
-                roleUser,
-                roleManager
-            );
-        }
+        //    modelBuilder.Entity<IdentityRole>().HasData(
+        //        roleAdmin,
+        //        roleUser,
+        //        roleManager
+        //    );
+        //}
 
-        // Método para sembrar usuarios
-        private void SeedUsers(ModelBuilder modelBuilder)
-        {
-            var hasher = new PasswordHasher<IdentityUser>();
+        //// Método para sembrar usuarios
+        //private void SeedUsers(ModelBuilder modelBuilder)
+        //{
+        //    var hasher = new PasswordHasher<IdentityUser>();
 
-            // Usuario Admin
-            var adminUser = new IdentityUser
-            {
-                Id = "1",
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
-                Email = "admin@gmail.com",
-                NormalizedEmail = "ADMIN@GMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "Admin@123")
-            };
+        //    // Usuario Admin
+        //    var adminUser = new IdentityUser
+        //    {
+        //        Id = "1",
+        //        UserName = "admin",
+        //        NormalizedUserName = "ADMIN",
+        //        Email = "admin@gmail.com",
+        //        NormalizedEmail = "ADMIN@GMAIL.COM",
+        //        EmailConfirmed = true,
+        //        PasswordHash = hasher.HashPassword(null, "Admin@123")
+        //    };
 
-            // Usuario User
-            var userUser = new IdentityUser
-            {
-                Id = "2",
-                UserName = "user",
-                NormalizedUserName = "USER",
-                Email = "user@gmail.com",
-                NormalizedEmail = "USER@GMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "User@123")
-            };
+        //    // Usuario User
+        //    var userUser = new IdentityUser
+        //    {
+        //        Id = "2",
+        //        UserName = "user",
+        //        NormalizedUserName = "USER",
+        //        Email = "user@gmail.com",
+        //        NormalizedEmail = "USER@GMAIL.COM",
+        //        EmailConfirmed = true,
+        //        PasswordHash = hasher.HashPassword(null, "User@123")
+        //    };
 
-            // Usuario Manager
-            var managerUser = new IdentityUser
-            {
-                Id = "3",
-                UserName = "manager",
-                NormalizedUserName = "MANAGER",
-                Email = "manager@gmail.com",
-                NormalizedEmail = "MANAGER@GMAIL.COM",
-                EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "Manager@123")
-            };
+        //    // Usuario Manager
+        //    var managerUser = new IdentityUser
+        //    {
+        //        Id = "3",
+        //        UserName = "manager",
+        //        NormalizedUserName = "MANAGER",
+        //        Email = "manager@gmail.com",
+        //        NormalizedEmail = "MANAGER@GMAIL.COM",
+        //        EmailConfirmed = true,
+        //        PasswordHash = hasher.HashPassword(null, "Manager@123")
+        //    };
 
-            modelBuilder.Entity<IdentityUser>().HasData(
-                adminUser,
-                userUser,
-                managerUser
-            );
+        //    modelBuilder.Entity<IdentityUser>().HasData(
+        //        adminUser,
+        //        userUser,
+        //        managerUser
+        //    );
 
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string> { RoleId = "1", UserId = "1" }, // Admin es admin
-                new IdentityUserRole<string> { RoleId = "2", UserId = "2" }, // User es user
-                new IdentityUserRole<string> { RoleId = "3", UserId = "3" }  // Manager es manager
-            );
-        }
+        //    modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+        //        new IdentityUserRole<string> { RoleId = "1", UserId = "1" }, // Admin es admin
+        //        new IdentityUserRole<string> { RoleId = "2", UserId = "2" }, // User es user
+        //        new IdentityUserRole<string> { RoleId = "3", UserId = "3" }  // Manager es manager
+        //    );
+        //}
     }
 }

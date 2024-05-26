@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace EccomerceApi.Entity
+﻿namespace EccomerceApi.Entity
 {
     public class ProductCategory
     {
