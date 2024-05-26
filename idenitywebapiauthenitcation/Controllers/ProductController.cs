@@ -1,5 +1,6 @@
 ﻿using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -43,5 +44,32 @@ namespace EccomerceApi.Controllers
 
             return Ok(response);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = await _product.GetByIdAsync(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(ProductCreateModel productCreateModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdProduct = await _product.CreateAsync(productCreateModel);
+            return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+        }
+
     }
 }

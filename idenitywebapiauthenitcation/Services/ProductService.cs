@@ -1,6 +1,7 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,16 +59,64 @@ namespace EccomerceApi.Services
             return matchedProducts;
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<ProductCreateModel> GetByIdAsync(int id)
         {
-            return await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
+            var product = await _identityDbContext.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            var productCreateModel = new ProductCreateModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Code = product.Code,
+                IdState = product.IdState,
+                Date = product.Date,
+                Price = product.Price,
+                Cost = product.Cost,
+                Existence = product.Existence,
+                ProductBrandId = product.ProductBrandId,
+                IdProductCategory = product.IdProductCategory
+            };
+
+            return productCreateModel;
         }
 
-        public async Task<Product> CreateAsync(Product product)
+        public async Task<ProductCreateModel> CreateAsync(ProductCreateModel productCreateModel)
         {
-            await _identityDbContext.AddAsync(product);
+            // Si la fecha es nula, establece la fecha actual
+            if (productCreateModel.Date == null)
+            {
+                // Obtener la hora actual de Perú
+                var peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+                var currentTimePeru = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
+
+                productCreateModel.Date = currentTimePeru;
+            }
+
+            // Crear un nuevo objeto Product a partir de ProductCreateModel
+            var newProduct = new Product
+            {
+                Name = productCreateModel.Name,
+                Code = productCreateModel.Code,
+                IdState = productCreateModel.IdState,
+                Date = productCreateModel.Date,
+                Price = productCreateModel.Price,
+                Cost = productCreateModel.Cost,
+                Existence = productCreateModel.Existence,
+                ProductBrandId = productCreateModel.ProductBrandId,
+                IdProductCategory = productCreateModel.IdProductCategory
+            };
+
+            // Agregar el nuevo producto a la base de datos
+            _identityDbContext.Products.Add(newProduct);
             await _identityDbContext.SaveChangesAsync();
-            return product;
+
+            // Devolver el objeto ProductCreateModel recién creado
+            return productCreateModel;
         }
 
         public async Task<bool> UpdateAsync(int id, Product product)

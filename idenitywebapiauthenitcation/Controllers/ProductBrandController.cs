@@ -78,7 +78,7 @@ namespace EccomerceApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> Post(ProductBrand productBrand)
+        public async Task<IActionResult> Create(ProductBrand productBrand)
         {
             var response = await _productBrand.CreateAsync(productBrand);
 
