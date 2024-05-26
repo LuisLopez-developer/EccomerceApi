@@ -22,6 +22,7 @@ builder.Services.AddScoped<IProduct, ProductService>();
 builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
 builder.Services.AddScoped<IProductBrand, ProductBrandService>();
 builder.Services.AddScoped<IState, StateService>();
+builder.Services.AddScoped<IEntry, EntryService>();
 
 
 builder.Services.AddControllers();
