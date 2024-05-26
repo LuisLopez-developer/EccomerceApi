@@ -344,6 +344,11 @@ namespace EccomerceApi.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -395,6 +400,10 @@ namespace EccomerceApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -476,6 +485,18 @@ namespace EccomerceApi.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("EccomerceApi.Entity.AppUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int?>("StateId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("StateId");
+
+                    b.HasDiscriminator().HasValue("AppUser");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
@@ -622,6 +643,15 @@ namespace EccomerceApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EccomerceApi.Entity.AppUser", b =>
+                {
+                    b.HasOne("EccomerceApi.Entity.State", "State")
+                        .WithMany("AspNetUsers")
+                        .HasForeignKey("StateId");
+
+                    b.Navigation("State");
+                });
+
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
                 {
                     b.Navigation("EntryDetails");
@@ -658,6 +688,8 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.State", b =>
                 {
+                    b.Navigation("AspNetUsers");
+
                     b.Navigation("Entries");
 
                     b.Navigation("Losses");

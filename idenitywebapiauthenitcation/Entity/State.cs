@@ -15,4 +15,6 @@ public partial class State
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
     public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
+
+    public virtual ICollection<AppUser> AspNetUsers { get; set; } = new List<AppUser>();
 }
