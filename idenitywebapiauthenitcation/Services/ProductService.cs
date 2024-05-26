@@ -11,9 +11,12 @@ namespace EccomerceApi.Services
     {
         private readonly IdentityDbContext _identityDbContext;
 
-        public ProductService(IdentityDbContext identityDbContext)
+        private readonly IEntry _entryService;
+
+        public ProductService(IdentityDbContext identityDbContext, IEntry entryService)
         {
             _identityDbContext = identityDbContext;
+            _entryService = entryService;
         }
 
         public async Task<List<ProductViewModel>> GetAllAsync()
@@ -113,7 +116,20 @@ namespace EccomerceApi.Services
 
             // Agregar el nuevo producto a la base de datos
             _identityDbContext.Products.Add(newProduct);
-            await _identityDbContext.SaveChangesAsync();
+            await _identityDbContext.SaveChangesAsync(); // Aquí se asigna el ID del producto nuevo
+
+            // Crear una nueva entrada correspondiente al nuevo producto
+            var entryCreateModel = new EntryCreateModel
+            {
+                Date = productCreateModel.Date,
+                Total = newProduct.Cost * newProduct.Existence,
+                IdState = newProduct.IdState,
+                UnitCost = newProduct.Cost,
+                Amount = newProduct.Existence,
+                IdProduct = newProduct.Id // Usamos el ID del producto recién creado
+            };
+
+            await _entryService.CreateAsync(entryCreateModel);
 
             // Devolver el objeto ProductCreateModel recién creado
             return productCreateModel;
