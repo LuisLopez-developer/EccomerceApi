@@ -11,5 +11,7 @@ namespace EccomerceApi.Interfaces
         Task<bool> UpdateUser(string emailId, UserModel user);
 
         Task<bool> DeleteUserByEmail(string emailId);
+
+        Task<bool> BlockUserAsync(string emailId);
     }
 }

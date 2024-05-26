@@ -97,5 +97,20 @@ namespace EccomerceApi.Services
             return false;
 
         }
+
+        public async Task<bool> BlockUserAsync(string emailId)
+        {
+            var user = await _userManager.FindByEmailAsync(emailId);
+            if (user == null)
+            {
+                return false; // El usuario no existe
+            }
+
+            var lockoutEndDate = DateTimeOffset.MaxValue; // Bloquea al usuario de forma indefinida
+
+            await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+
+            return true; // Usuario bloqueado exitosamente
+        }
     }
 }
