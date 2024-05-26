@@ -7,8 +7,8 @@ namespace EccomerceApi.Data
 {
     public class IdentityDbContext : IdentityDbContext<IdentityUser>
     {
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
-            : base(options)
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> dbContextOptions)
+            : base(dbContextOptions)
         {
         }
 

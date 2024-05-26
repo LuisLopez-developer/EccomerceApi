@@ -21,6 +21,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduct, ProductService>();
 builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
 builder.Services.AddScoped<IProductBrand, ProductBrandService>();
+builder.Services.AddScoped<IState, StateService>();
+
 
 builder.Services.AddControllers();
 
