@@ -80,13 +80,13 @@ namespace EccomerceApi.Services
                 Id = product.Id,
                 Name = product.Name,
                 Code = product.Code,
-                IdState = product.StateId,
+                StateId = product.StateId,
                 Date = product.Date,
                 Price = product.Price,
                 Cost = product.Cost,
                 Existence = product.Existence,
                 ProductBrandId = product.ProductBrandId,
-                //IdProductCategory = product.IdProductCategory
+                ProductCategoryId = product.ProductCategoryId
             };
 
             return productCreateModel;
@@ -109,13 +109,13 @@ namespace EccomerceApi.Services
             {
                 Name = productCreateModel.Name,
                 Code = productCreateModel.Code,
-                StateId = productCreateModel.IdState,
+                StateId = productCreateModel.StateId,
                 Date = productCreateModel.Date,
                 Price = productCreateModel.Price,
                 Cost = productCreateModel.Cost,
                 Existence = productCreateModel.Existence,
                 ProductBrandId = productCreateModel.ProductBrandId,
-                ProductCategoryId = productCreateModel.IdProductCategory
+                ProductCategoryId = productCreateModel.ProductCategoryId
             };
 
             // Agregar el nuevo producto a la base de datos
@@ -139,7 +139,7 @@ namespace EccomerceApi.Services
             return productCreateModel;
         }
 
-        public async Task<bool> UpdateAsync(int id, Product product)
+        public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
         {
             var existingProduct = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
 

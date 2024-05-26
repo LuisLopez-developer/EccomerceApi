@@ -71,5 +71,19 @@ namespace EccomerceApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, ProductCreateModel productCreateModel)
+        {
+            var existingPorduct = await _product.UpdateAsync(id, productCreateModel);
+            if (!existingPorduct)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+
+
     }
 }
