@@ -51,6 +51,24 @@ namespace EccomerceApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdLossReason.Id }, createdLossReason);
         }
 
+        [Authorize]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchByName(string? reason)
+        {
+            IEnumerable<LossReasonViewModel> response;
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                response = await _lossReason.GetAllAsync(); // Si name es nulo o vacío, obtenemos todas las perdidas
+            }
+            else
+            {
+                response = await _lossReason.SearchAsync(reason);
+            }
+
+            return Ok(response);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, LossReasonViewModel lossReasonViewModel)

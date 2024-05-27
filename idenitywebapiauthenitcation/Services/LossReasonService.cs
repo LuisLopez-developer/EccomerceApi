@@ -86,5 +86,20 @@ namespace EccomerceApi.Services
 
             return false;
         }
+
+        public async Task<List<LossReasonViewModel>> SearchAsync(string lossReason)
+        {
+            var lossReasonList = await _identityDbContext.LossReasons
+                .Where(reason => reason.Reason.Contains(lossReason))
+                .ToListAsync();
+
+            var lossReasonViewModelList = lossReasonList.Select(lossReason => new LossReasonViewModel
+            {
+                Id = lossReason.Id,
+                Reason = lossReason.Reason
+            }).ToList();
+
+            return lossReasonViewModelList;
+        }
     }
 }
