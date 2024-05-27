@@ -99,29 +99,33 @@ namespace EccomerceApi.Services
 
         public async Task<LossCreateModel> GetByIdAsync(int id)
         {
-            var loss = await _identityDbContext.Losses.FindAsync(id);
+            var loss = await _identityDbContext.Losses
+                .Include(l => l.LostDetails)
+                .FirstOrDefaultAsync(l => l.Id == id);
 
             if (loss == null)
             {
                 return null;
             }
 
+            var lossDetail = loss.LostDetails.FirstOrDefault();
+
             var lossCreateModel = new LossCreateModel
             {
-                Id =loss.Id,
+                Id = loss.Id,
                 Date = loss.Date,
                 Total = loss.Total,
                 StateId = loss.StateId,
-                UnitCost = loss.LostDetails?.FirstOrDefault()?.UnitCost,
-                Amount = loss.LostDetails?.FirstOrDefault()?.Amount,
-                Description = loss.LostDetails.FirstOrDefault().Description,
-                ProductId = loss.LostDetails?.FirstOrDefault()?.ProductId,
-                LossReasonId = loss.LostDetails?.FirstOrDefault()?.LossReasonId
+                UnitCost = loss.LostDetails.FirstOrDefault()?.UnitCost,
+                Amount = loss.LostDetails.FirstOrDefault()?.Amount,
+                Description = loss.LostDetails.FirstOrDefault()?.Description,
+                ProductId = loss.LostDetails.FirstOrDefault()?.ProductId,
+                LossReasonId = loss.LostDetails.FirstOrDefault()?.LossReasonId
             };
 
             return lossCreateModel;
-
         }
+
 
         public async Task<List<LossesViewModel>> SearchAsync(string name)
         {
@@ -151,51 +155,41 @@ namespace EccomerceApi.Services
 
         public async Task<bool> UpdateAsync(int id, LossCreateModel lossCreateModel)
         {
-            var existingLoss = await _identityDbContext.Losses
-                    .Include(l => l.LostDetails)
-                    .FirstOrDefaultAsync(l => l.Id == id);
+            var loss = await _identityDbContext.Losses
+            .Include(l => l.LostDetails)
+            .FirstOrDefaultAsync(l => l.Id == id);
 
-            if (existingLoss == null)
+            if (loss == null)
             {
-                return false;
+                return false; // No se encontró la pérdida
             }
-
-            // Actualizar las propiedades de la pérdida
-            existingLoss.Date = lossCreateModel.Date ?? existingLoss.Date;
-            existingLoss.Total = lossCreateModel.Total ?? existingLoss.Total;
-            existingLoss.StateId = lossCreateModel.StateId ?? existingLoss.StateId;
 
             // Actualizar los detalles de la pérdida
-            if (existingLoss.LostDetails != null && existingLoss.LostDetails.Any())
+            loss.Date = lossCreateModel.Date ?? loss.Date;
+            loss.Total = lossCreateModel.Total;
+            loss.StateId = lossCreateModel.StateId;
+
+            var lossDetail = loss.LostDetails.FirstOrDefault();
+            if (lossDetail != null)
             {
-                var existingDetail = existingLoss.LostDetails.FirstOrDefault();
-                if (existingDetail != null)
+                var oldAmount = lossDetail.Amount;
+
+                lossDetail.UnitCost = lossCreateModel.UnitCost;
+                lossDetail.Amount = lossCreateModel.Amount;
+                lossDetail.ProductId = lossCreateModel.ProductId;
+                lossDetail.Description = lossCreateModel.Description;
+                lossDetail.LossReasonId = lossCreateModel.LossReasonId;
+
+                // Actualizar la existencia del producto correspondiente
+                var product = await _identityDbContext.Products.FindAsync(lossCreateModel.ProductId);
+                if (product != null)
                 {
-                    existingDetail.UnitCost = lossCreateModel.UnitCost ?? existingDetail.UnitCost;
-                    existingDetail.Amount = lossCreateModel.Amount ?? existingDetail.Amount;
-                    existingDetail.ProductId = lossCreateModel.ProductId ?? existingDetail.ProductId;
-                    existingDetail.Description = lossCreateModel.Description ?? existingDetail.Description;
-                    existingDetail.LossReasonId = lossCreateModel.LossReasonId ?? existingDetail.LossReasonId;
+                    product.Existence += oldAmount; // Revertir la cantidad antigua
+                    product.Existence -= lossCreateModel.Amount; // Restar la nueva cantidad
                 }
             }
 
-            _identityDbContext.Losses.Update(existingLoss);
             await _identityDbContext.SaveChangesAsync();
-
-            // Actualizar la existencia del producto correspondiente
-            var product = await _identityDbContext.Products.FindAsync(lossCreateModel.ProductId);
-            if (product != null)
-            {
-                // Asumiendo que la existencia del producto se actualiza según la diferencia entre la cantidad original y la nueva cantidad
-                var existingDetail = existingLoss.LostDetails.FirstOrDefault();
-                if (existingDetail != null)
-                {
-                    var difference = lossCreateModel.Amount - existingDetail.Amount;
-                    product.Existence -= difference;
-                }
-                await _identityDbContext.SaveChangesAsync();
-            }
-
             return true;
         }
     }
