@@ -65,6 +65,28 @@ namespace EccomerceApi.Services
 
             return entryCreateModel;
         }
+
+        public async Task<List<EntryViewModel>> FilterByDateAsync(DateTime startDate, DateTime endDate)
+        {
+            var entryList = await _identityDbContext.Entries
+                .Include(e => e.EntryDetails)
+                .ThenInclude(ed => ed.Product)
+                .Where(e => e.Date >= startDate && e.Date <= endDate)
+                .ToListAsync();
+
+            var entryViewModelList = entryList.SelectMany(entry => entry.EntryDetails.Select(entryDetail => new EntryViewModel
+            {
+                IdEntry = entry.Id,
+                Date = entry.Date,
+                Name = entryDetail.Product?.Name,
+                UnitCost = entryDetail.UnitCost,
+                Amount = entryDetail.Amount,
+                Total = entry.Total,
+                Existence = entryDetail.Product?.Existence
+            })).ToList();
+
+            return entryViewModelList;
+        }
     }
     
 }
