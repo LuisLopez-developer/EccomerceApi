@@ -10,26 +10,18 @@ namespace EccomerceApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "LossReasonId",
-                table: "LostDetails",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.AddColumn<string>(
-                name: "descripcion",
+                name: "Description",
                 table: "LostDetails",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<int>(
-                name: "reasonId",
+                name: "LossReasonId",
                 table: "LostDetails",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "LossReasons",
@@ -54,8 +46,7 @@ namespace EccomerceApi.Migrations
                 table: "LostDetails",
                 column: "LossReasonId",
                 principalTable: "LossReasons",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -73,15 +64,11 @@ namespace EccomerceApi.Migrations
                 table: "LostDetails");
 
             migrationBuilder.DropColumn(
+                name: "Description",
+                table: "LostDetails");
+
+            migrationBuilder.DropColumn(
                 name: "LossReasonId",
-                table: "LostDetails");
-
-            migrationBuilder.DropColumn(
-                name: "descripcion",
-                table: "LostDetails");
-
-            migrationBuilder.DropColumn(
-                name: "reasonId",
                 table: "LostDetails");
         }
     }

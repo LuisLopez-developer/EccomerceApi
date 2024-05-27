@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EccomerceApi.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20240527012827_LossReasons")]
+    [Migration("20240527053151_LossReasons")]
     partial class LossReasons
     {
         /// <inheritdoc />
@@ -130,10 +130,14 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("LossId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LossReasonId")
+                    b.Property<int?>("LossReasonId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
@@ -141,13 +145,6 @@ namespace EccomerceApi.Migrations
 
                     b.Property<decimal?>("UnitCost")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("reasonId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -572,9 +569,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasOne("EccomerceApi.Entity.LossReason", "LossReason")
                         .WithMany("LostDetails")
-                        .HasForeignKey("LossReasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LossReasonId");
 
                     b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("LostDetails")
