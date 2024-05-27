@@ -13,4 +13,7 @@ public partial class LostDetail
 
     public int? ProductId { get; set; }
     public virtual Product? Product { get; set; }
+
+    public int reasonId { get; set; }
+    public virtual LossReason LossReason { get; set; }
 }

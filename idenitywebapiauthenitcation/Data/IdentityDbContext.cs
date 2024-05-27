@@ -23,6 +23,7 @@ namespace EccomerceApi.Data
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
+        public virtual DbSet<LossReason> LossReasons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
