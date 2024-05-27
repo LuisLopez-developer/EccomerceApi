@@ -1,5 +1,7 @@
 ﻿using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Migrations;
+using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +45,45 @@ namespace EccomerceApi.Controllers
             }
 
             return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = await _loss.GetByIdAsync(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(LossCreateModel lossCreateModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdLossReason = await _loss.CreateAsync(lossCreateModel);
+            return CreatedAtAction(nameof(GetById), new { id = createdLossReason.Id }, createdLossReason);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, LossCreateModel lossCreateModel)
+        {
+            var existingPorduct = await _loss.UpdateAsync(id, lossCreateModel);
+            if (!existingPorduct)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
     }
 }
