@@ -11,11 +11,18 @@ namespace EccomerceApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "LossReasonid",
+                name: "LossReasonId",
                 table: "LostDetails",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "descripcion",
+                table: "LostDetails",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<int>(
                 name: "reasonId",
@@ -28,27 +35,26 @@ namespace EccomerceApi.Migrations
                 name: "LossReasons",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LossReasons", x => x.id);
+                    table.PrimaryKey("PK_LossReasons", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LostDetails_LossReasonid",
+                name: "IX_LostDetails_LossReasonId",
                 table: "LostDetails",
-                column: "LossReasonid");
+                column: "LossReasonId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_LostDetails_LossReasons_LossReasonid",
+                name: "FK_LostDetails_LossReasons_LossReasonId",
                 table: "LostDetails",
-                column: "LossReasonid",
+                column: "LossReasonId",
                 principalTable: "LossReasons",
-                principalColumn: "id",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
 
@@ -56,18 +62,22 @@ namespace EccomerceApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_LostDetails_LossReasons_LossReasonid",
+                name: "FK_LostDetails_LossReasons_LossReasonId",
                 table: "LostDetails");
 
             migrationBuilder.DropTable(
                 name: "LossReasons");
 
             migrationBuilder.DropIndex(
-                name: "IX_LostDetails_LossReasonid",
+                name: "IX_LostDetails_LossReasonId",
                 table: "LostDetails");
 
             migrationBuilder.DropColumn(
-                name: "LossReasonid",
+                name: "LossReasonId",
+                table: "LostDetails");
+
+            migrationBuilder.DropColumn(
+                name: "descripcion",
                 table: "LostDetails");
 
             migrationBuilder.DropColumn(

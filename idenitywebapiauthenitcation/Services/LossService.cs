@@ -33,7 +33,7 @@ namespace EccomerceApi.Services
                 ProductName = loss.LostDetails.FirstOrDefault()?.Product?.Name,
                 Amount = loss.LostDetails.FirstOrDefault()?.Amount,
                 UnitPrice = loss.LostDetails.FirstOrDefault()?.UnitCost,
-                Reason = loss.LostDetails.FirstOrDefault()?.LossReason?.reason
+                Reason = loss.LostDetails.FirstOrDefault()?.LossReason?.Reason
             }).ToList();
 
             return lossViewModelList;
@@ -59,7 +59,7 @@ namespace EccomerceApi.Services
                 ProductName = loss.LostDetails.FirstOrDefault()?.Product?.Name,
                 Amount = loss.LostDetails.FirstOrDefault()?.Amount,
                 UnitPrice = loss.LostDetails.FirstOrDefault()?.UnitCost,
-                Reason = loss.LostDetails.FirstOrDefault()?.LossReason?.reason
+                Reason = loss.LostDetails.FirstOrDefault()?.LossReason?.Reason
             }).ToList();
 
             return lossViewModelList;

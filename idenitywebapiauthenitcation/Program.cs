@@ -1,4 +1,5 @@
 using EccomerceApi.Data;
+using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Services;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IProductBrand, ProductBrandService>();
 builder.Services.AddScoped<IState, StateService>();
 builder.Services.AddScoped<IEntry, EntryService>();
 builder.Services.AddScoped<ILoss, LossService>();
+builder.Services.AddScoped<ILossReason, LossReasonService>();
 
 
 builder.Services.AddControllers();

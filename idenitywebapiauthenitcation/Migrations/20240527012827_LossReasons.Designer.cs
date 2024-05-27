@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EccomerceApi.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20240527003908_LossReasons")]
+    [Migration("20240527012827_LossReasons")]
     partial class LossReasons
     {
         /// <inheritdoc />
@@ -104,21 +104,17 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.LossReason", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("LossReasons");
                 });
@@ -137,7 +133,7 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("LossId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LossReasonid")
+                    b.Property<int>("LossReasonId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
@@ -146,6 +142,10 @@ namespace EccomerceApi.Migrations
                     b.Property<decimal?>("UnitCost")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("reasonId")
                         .HasColumnType("int");
 
@@ -153,7 +153,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasIndex("LossId");
 
-                    b.HasIndex("LossReasonid");
+                    b.HasIndex("LossReasonId");
 
                     b.HasIndex("ProductId");
 
@@ -572,7 +572,7 @@ namespace EccomerceApi.Migrations
 
                     b.HasOne("EccomerceApi.Entity.LossReason", "LossReason")
                         .WithMany("LostDetails")
-                        .HasForeignKey("LossReasonid")
+                        .HasForeignKey("LossReasonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
