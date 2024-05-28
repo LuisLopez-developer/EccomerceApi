@@ -10,6 +10,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Agrega las configuraciones desde los archivos appsettings
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddDbContext<IdentityDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["idenitycs"]));
@@ -48,7 +55,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins("https://eccomerce-blazor.netlify.app")
+        policy.WithOrigins(builder.Configuration.GetSection("Url")["FrontendUrl"] ?? "https://localhost:7033")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -91,19 +98,19 @@ app.UseExceptionHandler(errorApp =>
 });
 
 // Aquí añadimos la inicialización de migraciones
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    try
-//    {
-//        var context = services.GetRequiredService<IdentityDbContext>();
-//        context.Database.Migrate(); // Aplica migraciones
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = services.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
-//    }
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<IdentityDbContext>();
+        context.Database.Migrate(); // Aplica migraciones
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
+    }
+}
 
 app.Run();
