@@ -2,6 +2,7 @@ using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<IdentityDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("idenitycs")));
+    options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["idenitycs"]));
 
 // Generar los endpoints para la gestion de sessiones
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
@@ -27,7 +28,6 @@ builder.Services.AddScoped<IState, StateService>();
 builder.Services.AddScoped<IEntry, EntryService>();
 builder.Services.AddScoped<ILoss, LossService>();
 builder.Services.AddScoped<ILossReason, LossReasonService>();
-
 
 builder.Services.AddControllers();
 
@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins("https://localhost:7033")
+        policy.WithOrigins("https://eccomerce-blazor.netlify.app")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -61,12 +61,8 @@ app.MapIdentityApi<IdentityUser>();
 
 app.UseCors("AllowSpecificOrigin");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -74,20 +70,40 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Aquí añadimos la inicialización de migraciones
-using (var scope = app.Services.CreateScope())
+// Logging para errores no controlados
+app.UseExceptionHandler(errorApp =>
 {
-    var services = scope.ServiceProvider;
-    try
+    errorApp.Run(async context =>
     {
-        var context = services.GetRequiredService<IdentityDbContext>();
-        context.Database.Migrate(); // Aplica migraciones
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
-    }
-}
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (errorFeature != null)
+        {
+            var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+            logger.LogError(errorFeature.Error, "Unhandled exception");
+            await context.Response.WriteAsync(new
+            {
+                error = errorFeature.Error.Message
+            }.ToString());
+        }
+    });
+});
+
+// Aquí añadimos la inicialización de migraciones
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    try
+//    {
+//        var context = services.GetRequiredService<IdentityDbContext>();
+//        context.Database.Migrate(); // Aplica migraciones
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
+//    }
+//}
 
 app.Run();

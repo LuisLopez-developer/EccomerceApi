@@ -1,4 +1,4 @@
-@eccomerceApi_HostAddress = https://localhost:7239
+@eccomerceApi_HostAddress = https://idenitywebapiauthenitcation.fly.dev/
 
 GET {{eccomerceApi_HostAddress}}/weatherforecast/
 Accept: application/json
