@@ -24,6 +24,9 @@ namespace EccomerceApi.Data
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
         public virtual DbSet<LossReason> LossReasons { get; set; }
+        public virtual DbSet<ReasonForExit> ReasonForExits { get; set; }
+        public virtual DbSet<ProductOutput> ProductOutputs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,24 +73,11 @@ namespace EccomerceApi.Data
                 .Property(pc => pc.Name)
                 .IsRequired();
 
-            //modelBuilder.Entity<ProductCategory>()
-            //    .HasMany(pc => pc.Products)
-            //    .WithOne(p => p.ProductCategory)
-            //    .HasForeignKey(p => p.IdProductCategory)
-            //    .IsRequired(false);
 
             modelBuilder.Entity<ProductBrand>()
                 .Property(pb => pb.Name)
                 .IsRequired();
 
-            //modelBuilder.Entity<Product>()
-            //    .HasOne(p => p.State)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.IdState)
-            //    .IsRequired(false);
-            // Configuración para sembrar datos de roles y usuarios
-            //SeedRoles(modelBuilder);
-            //SeedUsers(modelBuilder);
         }
 
         // Método para sembrar roles
