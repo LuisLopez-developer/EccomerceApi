@@ -1,10 +1,15 @@
+using Amazon.S3;
 using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Model;
 using EccomerceApi.Services;
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -17,9 +22,17 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+// Determina si estás en un entorno de desarrollo
+var isDevelopment = builder.Environment.IsDevelopment();
+
+// Obtiene la cadena de conexión basada en el entorno
+var connectionString = isDevelopment ?
+    builder.Configuration.GetSection("ConnectionStrings")["idenitycs"] :
+    Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
 // Add services to the container.
 builder.Services.AddDbContext<IdentityDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["idenitycs"]));
+    options.UseSqlServer(connectionString));
 
 // Generar los endpoints para la gestion de sessiones
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
@@ -36,6 +49,7 @@ builder.Services.AddScoped<IEntry, EntryService>();
 builder.Services.AddScoped<ILoss, LossService>();
 builder.Services.AddScoped<ILossReason, LossReasonService>();
 
+builder.Services.AddScoped<ICloudflare, CloudflareService>();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -66,7 +80,7 @@ var app = builder.Build();
 
 app.MapIdentityApi<IdentityUser>();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -76,6 +90,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 // Logging para errores no controlados
 app.UseExceptionHandler(errorApp =>
