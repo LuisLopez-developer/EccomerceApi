@@ -26,6 +26,7 @@ namespace EccomerceApi.Data
         public virtual DbSet<LossReason> LossReasons { get; set; }
         public virtual DbSet<ReasonForExit> ReasonForExits { get; set; }
         public virtual DbSet<ProductOutput> ProductOutputs { get; set; }
+        public virtual DbSet<People> Peoples { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -77,6 +78,7 @@ namespace EccomerceApi.Data
             modelBuilder.Entity<ProductBrand>()
                 .Property(pb => pb.Name)
                 .IsRequired();
+
 
         }
 
