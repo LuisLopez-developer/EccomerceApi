@@ -70,6 +70,10 @@ namespace EccomerceApi.Data
                 .Property(sd => sd.UnitPrice)
                 .HasColumnType("decimal(18,2)");
 
+            modelBuilder.Entity<SaleDetail>()
+                .Property(sd => sd.Subtotal)
+                .HasColumnType("decimal(18,2)");
+
             modelBuilder.Entity<ProductCategory>()
                 .Property(pc => pc.Name)
                 .IsRequired();
