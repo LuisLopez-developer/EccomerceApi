@@ -17,37 +17,49 @@ namespace EccomerceApi.Services.ProductServices
 
         public async Task<ProductSpecificationViewModel> CreateAsync(int productId, ProductSpecificationViewModel productSpecification)
         {
-            var productSpec = new ProductSpecification
+            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
+
+            try
             {
-                ProductId = productId,
-                Color = productSpecification.Color,
-                Sensor = productSpecification.Sensor,
-                ModelNumber = productSpecification.ModelNumber,
-                ProcessorSpeed = productSpecification.ProcessorSpeed,
-                ScreenSize = productSpecification.ScreenSize,
-                ScreenResolution = productSpecification.ScreenResolution,
-                ScreenTechnology = productSpecification.ScreenTechnology,
-                RearCameraResolution = productSpecification.RearCameraResolution,
-                FrontCameraResolution = productSpecification.FrontCameraResolution,
-                RAM = productSpecification.RAM,
-                InternalStorage = productSpecification.InternalStorage,
-                SimType = productSpecification.SimType,
-                SimCount = productSpecification.SimCount,
-                NFC = productSpecification.NFC,
-                BluetoothVersion = productSpecification.BluetoothVersion,
-                UsbInterface = productSpecification.UsbInterface,
-                OperatingSystem = productSpecification.OperatingSystem,
-                BatteryCapacity = productSpecification.BatteryCapacity,
-                Waterproof = productSpecification.Waterproof,
-                WaterResistanceRating = productSpecification.WaterResistanceRating,
-                SplashResistant = productSpecification.SplashResistant
-            };
+                var productSpec = new ProductSpecification
+                {
+                    ProductId = productId,
+                    Color = productSpecification.Color,
+                    Sensor = productSpecification.Sensor,
+                    ModelNumber = productSpecification.ModelNumber,
+                    ProcessorSpeed = productSpecification.ProcessorSpeed,
+                    ScreenSize = productSpecification.ScreenSize,
+                    ScreenResolution = productSpecification.ScreenResolution,
+                    ScreenTechnology = productSpecification.ScreenTechnology,
+                    RearCameraResolution = productSpecification.RearCameraResolution,
+                    FrontCameraResolution = productSpecification.FrontCameraResolution,
+                    RAM = productSpecification.RAM,
+                    InternalStorage = productSpecification.InternalStorage,
+                    SimType = productSpecification.SimType,
+                    SimCount = productSpecification.SimCount,
+                    NFC = productSpecification.NFC,
+                    BluetoothVersion = productSpecification.BluetoothVersion,
+                    UsbInterface = productSpecification.UsbInterface,
+                    OperatingSystem = productSpecification.OperatingSystem,
+                    BatteryCapacity = productSpecification.BatteryCapacity,
+                    Waterproof = productSpecification.Waterproof,
+                    WaterResistanceRating = productSpecification.WaterResistanceRating,
+                    SplashResistant = productSpecification.SplashResistant
+                };
 
-            _identityDbContext.ProductSpecifications.Add(productSpec);
-            await _identityDbContext.SaveChangesAsync();
+                _identityDbContext.ProductSpecifications.Add(productSpec);
+                await _identityDbContext.SaveChangesAsync();
 
-            productSpecification.ProductId = productSpec.ProductId;
-            return productSpecification;
+                await transaction.CommitAsync();
+
+                productSpecification.ProductId = productSpec.ProductId;
+                return productSpecification;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
