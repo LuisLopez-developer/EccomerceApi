@@ -50,7 +50,7 @@ namespace EccomerceApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        [Route("UploadObject")]
+        [Route("UploadImage")]
         public async Task<IActionResult> UploadObject(IFormFile file)
         {
             try
@@ -61,14 +61,60 @@ namespace EccomerceApi.Controllers
                     return BadRequest("El archivo está vacío o no se proporcionó.");
                 }
 
-                // Validar el tamaño máximo del archivo (por ejemplo, 10 MB)
-                if (file.Length > 10 * 1024 * 1024) // 10 MB en bytes
+                // Validar el tamaño máximo del archivo (por ejemplo, 2 MB)
+                if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
                 {
                     return BadRequest("El tamaño del archivo excede el límite permitido.");
                 }
 
                 var url = await _cloudflare.UploadObjectAsync(file);
                 return Ok(url);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error, {e.Message}");
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        [Route("UploadImages")]
+        public async Task<IActionResult> UploadObjects(List<IFormFile> files)
+        {
+            try
+            {
+                // Validar que se hayan proporcionado archivos
+                if (files == null || files.Count == 0)
+                {
+                    return BadRequest("No se proporcionaron archivos.");
+                }
+
+                var urls = new List<string>();
+
+                foreach (var file in files)
+                {
+                    // Validar que el archivo no sea nulo y tenga contenido
+                    if (file == null || file.Length == 0)
+                    {
+                        return BadRequest("Uno o más archivos están vacíos o no se proporcionaron.");
+                    }
+
+                    // Validar el tamaño máximo del archivo (por ejemplo, 2 MB)
+                    if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
+                    {
+                        return BadRequest($"El tamaño de uno o más archivos excede el límite permitido: {file.FileName}");
+                    }
+
+                    var url = await _cloudflare.UploadObjectAsync(file);
+                    urls.Add(url);
+                }
+
+                return Ok(urls);
             }
             catch (ArgumentException e)
             {
