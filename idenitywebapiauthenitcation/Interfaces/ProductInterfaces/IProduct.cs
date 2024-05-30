@@ -2,7 +2,7 @@
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 
-namespace EccomerceApi.Interfaces.Product
+namespace EccomerceApi.Interfaces.ProductIntefaces
 {
     public interface IProduct
     {

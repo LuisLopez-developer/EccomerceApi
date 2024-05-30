@@ -1,13 +1,12 @@
 ﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
-using EccomerceApi.Interfaces.Product;
+using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace EccomerceApi.Services.Product
+namespace EccomerceApi.Services.ProducServices
 {
     public class ProductService : IProduct
     {
@@ -107,7 +106,7 @@ namespace EccomerceApi.Services.Product
             }
 
             // Crear un nuevo objeto Product a partir de ProductCreateModel
-            var newProduct = new Product
+            var newProduct = new Entity.Product // el entity no deberia ser necesario usando using, pero me marcaba como error de tipo
             {
                 Name = productCreateModel.Name,
                 Code = productCreateModel.Code,

@@ -1,17 +1,12 @@
-using Amazon.S3;
 using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
-using EccomerceApi.Interfaces.Product;
-using EccomerceApi.Model;
+using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Services;
-using EccomerceApi.Services.Product;
-using FluentAssertions.Common;
+using EccomerceApi.Services.ProducServices;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using EccomerceApi.Entity;
 using EccomerceApi.Data;
-using EccomerceApi.Interfaces.Product;
+using EccomerceApi.Interfaces.ProductIntefaces;
 
-namespace EccomerceApi.Services.Product
+namespace EccomerceApi.Services.ProducServices
 {
     public class ProductBrandService : IProductBrand
     {

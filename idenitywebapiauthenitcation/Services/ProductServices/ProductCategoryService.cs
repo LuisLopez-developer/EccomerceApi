@@ -1,9 +1,9 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using Microsoft.EntityFrameworkCore;
-using EccomerceApi.Interfaces.Product;
+using EccomerceApi.Interfaces.ProductIntefaces;
 
-namespace EccomerceApi.Services.Product
+namespace EccomerceApi.Services.ProducServices
 {
     public class ProductCategoryService : IProductCategory
     {
