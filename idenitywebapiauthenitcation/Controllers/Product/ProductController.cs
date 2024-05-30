@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EccomerceApi.Controllers
+namespace EccomerceApi.Controllers.Product
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +34,7 @@ namespace EccomerceApi.Controllers
             IEnumerable<ProductViewModel> response;
 
             if (string.IsNullOrWhiteSpace(name))
-            {  
+            {
                 response = await _product.GetAllAsync(); // Si name es nulo o vacío, obtenemos todas las categorías
             }
             else

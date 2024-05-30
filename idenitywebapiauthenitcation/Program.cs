@@ -5,6 +5,7 @@ using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.Product;
 using EccomerceApi.Model;
 using EccomerceApi.Services;
+using EccomerceApi.Services.Product;
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;

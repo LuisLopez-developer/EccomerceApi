@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces.Product;
 
-namespace EccomerceApi.Controllers
+namespace EccomerceApi.Controllers.Product
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,8 +12,8 @@ namespace EccomerceApi.Controllers
     {
         private readonly IProductCategory _prodCategoryService;
 
-        public ProductCategoryController(IProductCategory productService) 
-        { 
+        public ProductCategoryController(IProductCategory productService)
+        {
             _prodCategoryService = productService;
         }
 

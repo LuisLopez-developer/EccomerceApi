@@ -4,7 +4,7 @@ using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EccomerceApi.Controllers
+namespace EccomerceApi.Controllers.Product
 {
     [Route("api/[controller]")]
     [ApiController]
