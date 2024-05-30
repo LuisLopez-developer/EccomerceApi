@@ -1,4 +1,4 @@
-﻿namespace EccomerceApi.Model.CreateModel
+﻿namespace EccomerceApi.Model.ProductModel.CreateModel
 {
     public class ProductCreateModel
     {

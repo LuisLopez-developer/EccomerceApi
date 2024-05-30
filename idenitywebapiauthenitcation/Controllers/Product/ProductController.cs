@@ -1,7 +1,7 @@
 ﻿using EccomerceApi.Entity;
 using EccomerceApi.Interfaces.Product;
-using EccomerceApi.Model.CreateModel;
-using EccomerceApi.Model.ViewModel;
+using EccomerceApi.Model.ProductModel.CreateModel;
+using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

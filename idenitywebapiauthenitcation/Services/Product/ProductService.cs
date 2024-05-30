@@ -3,7 +3,8 @@ using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.Product;
 using EccomerceApi.Model.CreateModel;
-using EccomerceApi.Model.ViewModel;
+using EccomerceApi.Model.ProductModel.CreateModel;
+using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services.Product
