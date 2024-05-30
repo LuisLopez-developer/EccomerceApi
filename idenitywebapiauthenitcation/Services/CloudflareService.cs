@@ -19,10 +19,13 @@ namespace EccomerceApi.Services
         {
             var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
             var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+            var serviceUrl = Environment.GetEnvironmentVariable("SERVICE_CLOUDFLARE_R2_URL");
+
             var credentials = new BasicAWSCredentials(accessKey, secretKey);
             var s3Client = new AmazonS3Client(credentials, new AmazonS3Config
             {
-                ServiceURL = Environment.GetEnvironmentVariable("SERVICE_CLOUDFLARE_R2_URL"),
+                ServiceURL = serviceUrl,
+
             });
 
             return s3Client;
@@ -61,7 +64,7 @@ namespace EccomerceApi.Services
 
                 await _s3Client.PutObjectAsync(request);
 
-                return "https://eccomerce.teamstarteight.work/" + file.FileName;
+                return "https://teamstarteight.work/" + file.FileName;
             }
             finally
             {

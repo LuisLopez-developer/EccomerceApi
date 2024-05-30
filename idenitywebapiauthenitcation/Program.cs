@@ -69,10 +69,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins(builder.Configuration.GetSection("Url")["FrontendUrl"] ?? "https://localhost:7033")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+        policy.WithOrigins(builder.Configuration.GetSection("Url")["FrontendUrl"] ?? "https://localhost:7033", "https://aa6b07d4f6a02d2f9c053b24b15c5c07.r2.cloudflarestorage.com")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("Content-Length", "X-Custom-Header")
+            .AllowCredentials();
     });
 });
 
@@ -80,7 +81,7 @@ var app = builder.Build();
 
 app.MapIdentityApi<IdentityUser>();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigin");
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -113,19 +114,19 @@ app.UseExceptionHandler(errorApp =>
 });
 
 // Aquí añadimos la inicialización de migraciones
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<IdentityDbContext>();
-        context.Database.Migrate(); // Aplica migraciones
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
-    }
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    try
+//    {
+//        var context = services.GetRequiredService<IdentityDbContext>();
+//        context.Database.Migrate(); // Aplica migraciones
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
+//    }
+//}
 
 app.Run();
