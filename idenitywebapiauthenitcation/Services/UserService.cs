@@ -63,7 +63,6 @@ namespace EccomerceApi.Services
 
         public async Task<bool> UpdateUser(string emailId, UserModel user)
         {
-            //
             // user role - admin,hr
             var userIdentity = await _userManager.FindByEmailAsync(emailId);
             if (userIdentity == null)

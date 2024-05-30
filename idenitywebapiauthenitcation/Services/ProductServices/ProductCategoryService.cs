@@ -3,7 +3,7 @@ using EccomerceApi.Entity;
 using Microsoft.EntityFrameworkCore;
 using EccomerceApi.Interfaces.ProductIntefaces;
 
-namespace EccomerceApi.Services.ProducServices
+namespace EccomerceApi.Services.ProductServices
 {
     public class ProductCategoryService : IProductCategory
     {

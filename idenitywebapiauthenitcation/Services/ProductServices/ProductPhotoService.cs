@@ -4,7 +4,7 @@ using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace EccomerceApi.Services.Product
+namespace EccomerceApi.Services.ProductServices
 {
     public class ProductPhotoService : IProductPhoto
     {

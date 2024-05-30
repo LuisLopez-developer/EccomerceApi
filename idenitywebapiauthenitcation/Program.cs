@@ -2,9 +2,9 @@ using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
+using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Services;
-using EccomerceApi.Services.ProducServices;
-using EccomerceApi.Services.Product;
+using EccomerceApi.Services.ProductServices;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +47,7 @@ builder.Services.AddScoped<IEntry, EntryService>();
 builder.Services.AddScoped<ILoss, LossService>();
 builder.Services.AddScoped<ILossReason, LossReasonService>();
 builder.Services.AddScoped<IProductPhoto, ProductPhotoService>();
+builder.Services.AddScoped<IProductSpecification, ProductSpecificationService>();
 
 
 builder.Services.AddScoped<ICloudflare, CloudflareService>();

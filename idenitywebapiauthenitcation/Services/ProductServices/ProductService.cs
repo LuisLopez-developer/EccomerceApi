@@ -6,7 +6,7 @@ using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace EccomerceApi.Services.ProducServices
+namespace EccomerceApi.Services.ProductServices
 {
     public class ProductService : IProduct
     {

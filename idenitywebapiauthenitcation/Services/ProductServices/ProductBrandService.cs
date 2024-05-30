@@ -3,7 +3,7 @@ using EccomerceApi.Entity;
 using EccomerceApi.Data;
 using EccomerceApi.Interfaces.ProductIntefaces;
 
-namespace EccomerceApi.Services.ProducServices
+namespace EccomerceApi.Services.ProductServices
 {
     public class ProductBrandService : IProductBrand
     {
