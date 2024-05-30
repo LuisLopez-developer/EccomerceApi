@@ -27,6 +27,8 @@ namespace EccomerceApi.Data
         public virtual DbSet<ReasonForExit> ReasonForExits { get; set; }
         public virtual DbSet<ProductOutput> ProductOutputs { get; set; }
         public virtual DbSet<People> Peoples { get; set; }
+        public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public virtual DbSet<ProductPhoto> ProductPhotos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
