@@ -1,8 +1,9 @@
-﻿namespace EccomerceApi.Entity
+﻿namespace EccomerceApi.Model.ProductModel.ViewModel
 {
-    public class ProductSpecification
+    public class ProductSpecificationViewModel
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
+
         public string? Color { get; set; }
         public string? Sensor { get; set; }
         public string? ModelNumber { get; set; }
@@ -23,9 +24,6 @@
         public int? BatteryCapacity { get; set; }
         public bool? Waterproof { get; set; }
         public string? WaterResistanceRating { get; set; }
-        public bool? SplashResistant { get; set; }
-
-        public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        public bool? SplashResistant { get; set; } 
     }
 }
