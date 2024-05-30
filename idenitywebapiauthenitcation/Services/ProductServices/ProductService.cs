@@ -1,6 +1,7 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
+using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
@@ -13,11 +14,15 @@ namespace EccomerceApi.Services.ProductServices
         private readonly IdentityDbContext _identityDbContext;
 
         private readonly IEntry _entryService;
+        private readonly IProductPhoto _productPhotoService;
+        private readonly IProductSpecification _productSpecificationService;
 
-        public ProductService(IdentityDbContext identityDbContext, IEntry entryService)
+        public ProductService(IdentityDbContext identityDbContext, IEntry entryService, IProductPhoto productPhoto, IProductSpecification productSpecification)
         {
             _identityDbContext = identityDbContext;
             _entryService = entryService;
+            _productPhotoService = productPhoto;
+            _productSpecificationService = productSpecification;
         }
 
         public async Task<List<ProductViewModel>> GetAllAsync()
@@ -42,7 +47,6 @@ namespace EccomerceApi.Services.ProductServices
 
             return productViewModelList;
         }
-
 
         public async Task<List<ProductViewModel>> SearchAsync(string name)
         {
@@ -135,6 +139,33 @@ namespace EccomerceApi.Services.ProductServices
             };
 
             await _entryService.CreateAsync(entryCreateModel);
+
+            // Crear las fotos del producto si hay alguna
+            if (productCreateModel.Photos != null && productCreateModel.Photos.Any())
+            {
+                try
+                {
+                    await _productPhotoService.CreateAsync(newProduct.Id, productCreateModel.Photos);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Error al crear fotos del producto: " + ex.Message, ex);
+                }
+            }
+
+            // Crear las especificaciones del producto si existen
+            if (productCreateModel.Specifications != null)
+            {
+                try
+                {
+                    await _productSpecificationService.CreateAsync(newProduct.Id, productCreateModel.Specifications);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Error al crear especificaciones del producto: " + ex.Message, ex);
+                }
+            }
+
 
             // Devolver el objeto ProductCreateModel recién creado
             return productCreateModel;

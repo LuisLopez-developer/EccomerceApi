@@ -1,4 +1,7 @@
-﻿namespace EccomerceApi.Model.ProductModel.CreateModel
+﻿using EccomerceApi.Entity;
+using EccomerceApi.Model.ProductModel.ViewModel;
+
+namespace EccomerceApi.Model.ProductModel.CreateModel
 {
     public class ProductCreateModel
     {
@@ -12,5 +15,8 @@
         public int? Existence { get; set; }
         public int? ProductBrandId { get; set; }
         public int? ProductCategoryId { get; set; }
+
+        public List<ProductPhotoViewModel>? Photos { get; set; }
+        public ProductSpecificationViewModel? Specifications { get; set; }
     }
 }
