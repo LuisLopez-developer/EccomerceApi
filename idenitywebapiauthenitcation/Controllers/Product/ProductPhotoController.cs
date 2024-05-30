@@ -1,5 +1,6 @@
 ﻿using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.ProductModel.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,8 @@ namespace EccomerceApi.Controllers.Product
             _productPhotoService = productPhotoService;
         }
 
-        [HttpPost("{productId}")]
+        [Authorize(Roles = "admin")]
+        [HttpPost("create/{productId}")]
         public async Task<IActionResult> Create(int productId, List<ProductPhotoViewModel> productPhotos)
         {
             try
@@ -38,7 +40,8 @@ namespace EccomerceApi.Controllers.Product
             }
         }
 
-        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _productPhotoService.DeleteAsync(id);
@@ -52,14 +55,16 @@ namespace EccomerceApi.Controllers.Product
             }
         }
 
-        [HttpGet("{productId}")]
+        [Authorize(Roles = "admin")]
+        [HttpGet("getbyproductid/{productId}")]
         public async Task<IActionResult> GetByProductId(int productId)
         {
             var photos = await _productPhotoService.SearchByProductIdAsync(productId);
             return Ok(photos);
         }
 
-        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        [HttpPut("edit/{id}")]
         public async Task<IActionResult> Update(int id, ProductPhotoViewModel productPhoto)
         {
             var updated = await _productPhotoService.UpdateAsync(id, productPhoto);
