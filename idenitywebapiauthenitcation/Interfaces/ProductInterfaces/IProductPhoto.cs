@@ -6,7 +6,7 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
     public interface IProductPhoto
     {
         Task<List<ProductPhotoViewModel>> SearchByProductIdAsync(int productId);
-        Task<ProductPhotoViewModel> CreateAsync(int productId, ProductPhotoViewModel productPhoto);
+        Task<List<ProductPhotoViewModel>> CreateAsync(int productId, List<ProductPhotoViewModel> productPhoto);
         Task<bool> UpdateAsync(int id, ProductPhotoViewModel productPhoto);
         Task<bool> DeleteAsync(int id);
 
