@@ -2,6 +2,7 @@ using Amazon.S3;
 using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Interfaces.Product;
 using EccomerceApi.Model;
 using EccomerceApi.Services;
 using FluentAssertions.Common;

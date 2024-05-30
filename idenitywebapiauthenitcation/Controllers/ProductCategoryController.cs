@@ -1,8 +1,8 @@
 ﻿using EccomerceBlazorWasm.Models.ViewModel;
-using EccomerceApi.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EccomerceApi.Entity;
+using EccomerceApi.Interfaces.Product;
 
 namespace EccomerceApi.Controllers
 {

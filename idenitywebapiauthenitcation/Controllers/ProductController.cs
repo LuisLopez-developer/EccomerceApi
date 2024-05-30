@@ -1,5 +1,5 @@
 ﻿using EccomerceApi.Entity;
-using EccomerceApi.Interfaces;
+using EccomerceApi.Interfaces.Product;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;

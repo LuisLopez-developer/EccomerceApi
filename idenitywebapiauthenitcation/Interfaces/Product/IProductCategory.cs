@@ -1,6 +1,6 @@
 ﻿using EccomerceApi.Entity;
 
-namespace EccomerceApi.Interfaces
+namespace EccomerceApi.Interfaces.Product
 {
     public interface IProductCategory
     {

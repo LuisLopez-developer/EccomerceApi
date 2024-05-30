@@ -1,11 +1,11 @@
-﻿using EccomerceApi.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using EccomerceApi.Entity;
 using EccomerceApi.Data;
+using EccomerceApi.Interfaces.Product;
 
-namespace EccomerceApi.Services
+namespace EccomerceApi.Services.Product
 {
-    public class ProductBrandService :IProductBrand
+    public class ProductBrandService : IProductBrand
     {
         private readonly IdentityDbContext _identityDbContext;
 
@@ -56,7 +56,7 @@ namespace EccomerceApi.Services
             return matchedBrands;
         }
 
-        public  async Task<bool> UpdateAsync(int id, ProductBrand productBrand)
+        public async Task<bool> UpdateAsync(int id, ProductBrand productBrand)
         {
             var existingProductBrand = await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
 

@@ -1,11 +1,12 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
+using EccomerceApi.Interfaces.Product;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace EccomerceApi.Services
+namespace EccomerceApi.Services.Product
 {
     public class ProductService : IProduct
     {
@@ -22,7 +23,7 @@ namespace EccomerceApi.Services
         public async Task<List<ProductViewModel>> GetAllAsync()
         {
             var productList = await _identityDbContext.Products
-                .Include(p => p.State) 
+                .Include(p => p.State)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductBrand)
                 .ToListAsync();
@@ -32,7 +33,7 @@ namespace EccomerceApi.Services
                 Id = product.Id,
                 Name = product.Name,
                 Existence = product.Existence,
-                StateName = product.State?.Name, 
+                StateName = product.State?.Name,
                 CategoryName = product.ProductCategory?.Name,
                 BrandName = product.ProductBrand?.Name,
                 Price = product.Price,
@@ -164,7 +165,7 @@ namespace EccomerceApi.Services
         {
             var product = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
 
-            if(product != null)
+            if (product != null)
             {
                 _identityDbContext.Products.Remove(product);
                 await _identityDbContext.SaveChangesAsync();
