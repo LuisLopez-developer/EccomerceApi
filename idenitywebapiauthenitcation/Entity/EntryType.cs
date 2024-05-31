@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public required string Type { get; set; }
 
-        public virtual List<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
+        public virtual List<Entry> EntryDetails { get; set; } = new List<Entry>();
     }
 }

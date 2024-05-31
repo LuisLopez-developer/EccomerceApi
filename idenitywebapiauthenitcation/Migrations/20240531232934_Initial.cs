@@ -490,8 +490,7 @@ namespace EccomerceApi.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EntryId = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true),
-                    BatchId = table.Column<int>(type: "int", nullable: false),
-                    EntryTypeId = table.Column<int>(type: "int", nullable: true)
+                    BatchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -506,11 +505,6 @@ namespace EccomerceApi.Migrations
                         name: "FK_EntryDetails_Entries_EntryId",
                         column: x => x.EntryId,
                         principalTable: "Entries",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EntryDetails_EntryType_EntryTypeId",
-                        column: x => x.EntryTypeId,
-                        principalTable: "EntryType",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EntryDetails_Products_ProductId",
@@ -642,9 +636,9 @@ namespace EccomerceApi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PeopleId", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "StateId", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "9ceb7150-33a2-442b-a620-75d12dcd9fc5", "AppUser", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAEBAUaKxFIqeqZ04cmAmythvZZ+vAbWKbENXf7Ods3FkEprZcNf3jwQUXzF10lxDHvA==", 1, null, false, "", 1, false, "admin" },
-                    { "2", 0, "5064c4d2-420d-4b3f-81da-7910cf0efe3c", "AppUser", "user@example.com", true, false, null, "USER@EXAMPLE.COM", "USER", "AQAAAAIAAYagAAAAEDMyDe4SJ0Nuv2VOUmmAdukVQf6QH4i0EgETIcZB++Gs+y0xOd6U+e5Sd82Mm25LoQ==", 2, null, false, "", 1, false, "user" },
-                    { "3", 0, "a08d9a32-52cd-4a75-8e90-994fd809adbb", "AppUser", "managed@example.com", true, false, null, "MANAGED@EXAMPLE.COM", "MANAGED", "AQAAAAIAAYagAAAAEGHRA+KpPk3ibw8dbTf5hyJJxgMh5KUzpkgxggzUUSiDXyLQnmHJhrb1JCTTPoI5cg==", 3, null, false, "", 1, false, "managed" }
+                    { "1", 0, "4c20d095-9d33-442e-bcfd-24b2e7118ab3", "AppUser", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAENsGaS33fOeRY6uAzwKASciER2FdoN98iOfMgdvq0+bnWawC3ZnEe2hPKJiHqJj00w==", 1, null, false, "", 1, false, "admin" },
+                    { "2", 0, "660b5030-379f-410c-8301-28a1cf538a8a", "AppUser", "user@example.com", true, false, null, "USER@EXAMPLE.COM", "USER", "AQAAAAIAAYagAAAAEEaZ+VAGpHhh3GPPwt2hO6PwYHC7usx6nboBV1S4cmuFvJ3ZmO7SRaVmPTDdFXfdLg==", 2, null, false, "", 1, false, "user" },
+                    { "3", 0, "5d6d4e8b-4d55-4bf5-8809-fab418ab9263", "AppUser", "managed@example.com", true, false, null, "MANAGED@EXAMPLE.COM", "MANAGED", "AQAAAAIAAYagAAAAEDVNdikGhBp4RHpG6AZjc69q/gtJPnkuAuYTrHO4Wx1vamHH1YJwoAdBn841nMmUjw==", 3, null, false, "", 1, false, "managed" }
                 });
 
             migrationBuilder.InsertData(
@@ -731,11 +725,6 @@ namespace EccomerceApi.Migrations
                 name: "IX_EntryDetails_EntryId",
                 table: "EntryDetails",
                 column: "EntryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EntryDetails_EntryTypeId",
-                table: "EntryDetails",
-                column: "EntryTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntryDetails_ProductId",

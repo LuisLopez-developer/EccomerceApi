@@ -101,9 +101,6 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("EntryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EntryTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
@@ -116,8 +113,6 @@ namespace EccomerceApi.Migrations
                         .IsUnique();
 
                     b.HasIndex("EntryId");
-
-                    b.HasIndex("EntryTypeId");
 
                     b.HasIndex("ProductId");
 
@@ -970,13 +965,13 @@ namespace EccomerceApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9ceb7150-33a2-442b-a620-75d12dcd9fc5",
+                            ConcurrencyStamp = "4c20d095-9d33-442e-bcfd-24b2e7118ab3",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBAUaKxFIqeqZ04cmAmythvZZ+vAbWKbENXf7Ods3FkEprZcNf3jwQUXzF10lxDHvA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENsGaS33fOeRY6uAzwKASciER2FdoN98iOfMgdvq0+bnWawC3ZnEe2hPKJiHqJj00w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -988,13 +983,13 @@ namespace EccomerceApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5064c4d2-420d-4b3f-81da-7910cf0efe3c",
+                            ConcurrencyStamp = "660b5030-379f-410c-8301-28a1cf538a8a",
                             Email = "user@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@EXAMPLE.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDMyDe4SJ0Nuv2VOUmmAdukVQf6QH4i0EgETIcZB++Gs+y0xOd6U+e5Sd82Mm25LoQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEaZ+VAGpHhh3GPPwt2hO6PwYHC7usx6nboBV1S4cmuFvJ3ZmO7SRaVmPTDdFXfdLg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -1006,13 +1001,13 @@ namespace EccomerceApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a08d9a32-52cd-4a75-8e90-994fd809adbb",
+                            ConcurrencyStamp = "5d6d4e8b-4d55-4bf5-8809-fab418ab9263",
                             Email = "managed@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MANAGED@EXAMPLE.COM",
                             NormalizedUserName = "MANAGED",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGHRA+KpPk3ibw8dbTf5hyJJxgMh5KUzpkgxggzUUSiDXyLQnmHJhrb1JCTTPoI5cg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDVNdikGhBp4RHpG6AZjc69q/gtJPnkuAuYTrHO4Wx1vamHH1YJwoAdBn841nMmUjw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -1036,7 +1031,7 @@ namespace EccomerceApi.Migrations
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
                 {
                     b.HasOne("EccomerceApi.Entity.EntryType", "EntryType")
-                        .WithMany()
+                        .WithMany("EntryDetails")
                         .HasForeignKey("EntryTypeId");
 
                     b.HasOne("EccomerceApi.Entity.State", "State")
@@ -1059,10 +1054,6 @@ namespace EccomerceApi.Migrations
                     b.HasOne("EccomerceApi.Entity.Entry", "Entry")
                         .WithMany("EntryDetails")
                         .HasForeignKey("EntryId");
-
-                    b.HasOne("EccomerceApi.Entity.EntryType", null)
-                        .WithMany("EntryDetails")
-                        .HasForeignKey("EntryTypeId");
 
                     b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("EntryDetails")
