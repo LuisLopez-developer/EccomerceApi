@@ -22,6 +22,36 @@ namespace EccomerceApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EccomerceApi.Entity.Batch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InitialQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RemainingQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Batches");
+                });
+
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
                 {
                     b.Property<int>("Id")
@@ -57,7 +87,16 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<int>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("EntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EntryTypeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
@@ -68,11 +107,33 @@ namespace EccomerceApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatchId")
+                        .IsUnique();
+
                     b.HasIndex("EntryId");
+
+                    b.HasIndex("EntryTypeId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("EntryDetails");
+                });
+
+            modelBuilder.Entity("EccomerceApi.Entity.EntryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EntryType");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Loss", b =>
@@ -91,6 +152,9 @@ namespace EccomerceApi.Migrations
 
                     b.Property<decimal?>("Total")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -124,7 +188,7 @@ namespace EccomerceApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Amount")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -162,11 +226,9 @@ namespace EccomerceApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -176,6 +238,43 @@ namespace EccomerceApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Peoples");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Elm St",
+                            LastName = "Lopez",
+                            Name = "Luis"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "431 Elm St",
+                            LastName = "Muñoz",
+                            Name = "Jeampierre"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "233 Elm St",
+                            LastName = "benedicto",
+                            Name = "Jean"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "432 Elm St",
+                            LastName = "Zambrano",
+                            Name = "Fabrizzio"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "32 Elm St",
+                            LastName = "Ambrosio",
+                            Name = "Fabian"
+                        });
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Product", b =>
@@ -191,6 +290,7 @@ namespace EccomerceApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Cost")
@@ -202,22 +302,23 @@ namespace EccomerceApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Existence")
+                    b.Property<int>("Existence")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ProductBrandId")
+                    b.Property<int>("ProductBrandId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductCategoryId")
+                    b.Property<int>("ProductCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("StateId")
@@ -269,33 +370,6 @@ namespace EccomerceApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductCategories");
-                });
-
-            modelBuilder.Entity("EccomerceApi.Entity.ProductOutput", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReasonForExitId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SaleDetailId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReasonForExitId");
-
-                    b.HasIndex("SaleDetailId")
-                        .IsUnique();
-
-                    b.ToTable("ProductOutputs");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.ProductPhoto", b =>
@@ -405,23 +479,6 @@ namespace EccomerceApi.Migrations
                     b.ToTable("ProductSpecifications");
                 });
 
-            modelBuilder.Entity("EccomerceApi.Entity.ReasonForExit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReasonForExits");
-                });
-
             modelBuilder.Entity("EccomerceApi.Entity.Sale", b =>
                 {
                     b.Property<int>("Id")
@@ -457,6 +514,9 @@ namespace EccomerceApi.Migrations
                     b.Property<int?>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<int>("BatchId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
@@ -473,6 +533,9 @@ namespace EccomerceApi.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BatchId")
+                        .IsUnique();
 
                     b.HasIndex("ProductId");
 
@@ -495,6 +558,28 @@ namespace EccomerceApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Activo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Inactivo"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "En espera"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "En proceso"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -522,6 +607,26 @@ namespace EccomerceApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "user",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "managed",
+                            NormalizedName = "MANAGED"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -683,6 +788,23 @@ namespace EccomerceApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "3",
+                            RoleId = "3"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -711,7 +833,7 @@ namespace EccomerceApi.Migrations
                     b.Property<int>("PeopleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StateId")
+                    b.Property<int>("StateId")
                         .HasColumnType("int");
 
                     b.HasIndex("PeopleId");
@@ -719,6 +841,73 @@ namespace EccomerceApi.Migrations
                     b.HasIndex("StateId");
 
                     b.HasDiscriminator().HasValue("AppUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d65ec53a-2020-413c-8994-c65d87c6148c",
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMuMkP5/t6MHfGE8v1Zj5staqUcheQHcNHqlrg6qs600c9PG51X3FkYRL61NIqd9gw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "admin",
+                            PeopleId = 1,
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "35c56708-a162-47f6-a9bb-a9849d77c6d4",
+                            Email = "user@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@EXAMPLE.COM",
+                            NormalizedUserName = "USER",
+                            PasswordHash = "AQAAAAIAAYagAAAAED9dohuh5NaTLZECxAtQL9wWeDTcWuGxTpOl+Kt+ChzfH7nJCbfw9Sp4baFLb3RDCg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user",
+                            PeopleId = 2,
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "882b9c8f-d920-4a00-b45b-66110b1d8c71",
+                            Email = "managed@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGED@EXAMPLE.COM",
+                            NormalizedUserName = "MANAGED",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMF/gPU+X9QseGw9LnTnXGMKXA+7Z6ydz0WDd6YMcKsVszwACpAE8Ds3r/9Wrf6ZhQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "managed",
+                            PeopleId = 3,
+                            StateId = 1
+                        });
+                });
+
+            modelBuilder.Entity("EccomerceApi.Entity.Batch", b =>
+                {
+                    b.HasOne("EccomerceApi.Entity.Product", "Product")
+                        .WithMany("Batches")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
@@ -732,15 +921,29 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.EntryDetail", b =>
                 {
+                    b.HasOne("EccomerceApi.Entity.Batch", "Batch")
+                        .WithOne("EntryDetails")
+                        .HasForeignKey("EccomerceApi.Entity.EntryDetail", "BatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EccomerceApi.Entity.Entry", "Entry")
                         .WithMany("EntryDetails")
                         .HasForeignKey("EntryId");
+
+                    b.HasOne("EccomerceApi.Entity.EntryType", "EntryType")
+                        .WithMany("EntryDetails")
+                        .HasForeignKey("EntryTypeId");
 
                     b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("EntryDetails")
                         .HasForeignKey("ProductId");
 
+                    b.Navigation("Batch");
+
                     b.Navigation("Entry");
+
+                    b.Navigation("EntryType");
 
                     b.Navigation("Product");
                 });
@@ -779,11 +982,15 @@ namespace EccomerceApi.Migrations
                 {
                     b.HasOne("EccomerceApi.Entity.ProductBrand", "ProductBrand")
                         .WithMany("Products")
-                        .HasForeignKey("ProductBrandId");
+                        .HasForeignKey("ProductBrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EccomerceApi.Entity.ProductCategory", "ProductCategory")
                         .WithMany("Products")
-                        .HasForeignKey("ProductCategoryId");
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EccomerceApi.Entity.State", "State")
                         .WithMany("Products")
@@ -794,25 +1001,6 @@ namespace EccomerceApi.Migrations
                     b.Navigation("ProductCategory");
 
                     b.Navigation("State");
-                });
-
-            modelBuilder.Entity("EccomerceApi.Entity.ProductOutput", b =>
-                {
-                    b.HasOne("EccomerceApi.Entity.ReasonForExit", "ReasonForExit")
-                        .WithMany("ProductOutputs")
-                        .HasForeignKey("ReasonForExitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EccomerceApi.Entity.SaleDetail", "SaleDetail")
-                        .WithOne("ProductOutputs")
-                        .HasForeignKey("EccomerceApi.Entity.ProductOutput", "SaleDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ReasonForExit");
-
-                    b.Navigation("SaleDetail");
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.ProductPhoto", b =>
@@ -848,6 +1036,12 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.SaleDetail", b =>
                 {
+                    b.HasOne("EccomerceApi.Entity.Batch", "Batch")
+                        .WithOne("SaleDetails")
+                        .HasForeignKey("EccomerceApi.Entity.SaleDetail", "BatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EccomerceApi.Entity.Product", "Product")
                         .WithMany("SaleDetails")
                         .HasForeignKey("ProductId");
@@ -855,6 +1049,8 @@ namespace EccomerceApi.Migrations
                     b.HasOne("EccomerceApi.Entity.Sale", "Sale")
                         .WithMany("SaleDetails")
                         .HasForeignKey("SaleId");
+
+                    b.Navigation("Batch");
 
                     b.Navigation("Product");
 
@@ -922,14 +1118,30 @@ namespace EccomerceApi.Migrations
 
                     b.HasOne("EccomerceApi.Entity.State", "State")
                         .WithMany("AspNetUsers")
-                        .HasForeignKey("StateId");
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("People");
 
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("EccomerceApi.Entity.Batch", b =>
+                {
+                    b.Navigation("EntryDetails")
+                        .IsRequired();
+
+                    b.Navigation("SaleDetails")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EccomerceApi.Entity.Entry", b =>
+                {
+                    b.Navigation("EntryDetails");
+                });
+
+            modelBuilder.Entity("EccomerceApi.Entity.EntryType", b =>
                 {
                     b.Navigation("EntryDetails");
                 });
@@ -951,6 +1163,8 @@ namespace EccomerceApi.Migrations
 
             modelBuilder.Entity("EccomerceApi.Entity.Product", b =>
                 {
+                    b.Navigation("Batches");
+
                     b.Navigation("EntryDetails");
 
                     b.Navigation("LostDetails");
@@ -973,20 +1187,9 @@ namespace EccomerceApi.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("EccomerceApi.Entity.ReasonForExit", b =>
-                {
-                    b.Navigation("ProductOutputs");
-                });
-
             modelBuilder.Entity("EccomerceApi.Entity.Sale", b =>
                 {
                     b.Navigation("SaleDetails");
-                });
-
-            modelBuilder.Entity("EccomerceApi.Entity.SaleDetail", b =>
-                {
-                    b.Navigation("ProductOutputs")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EccomerceApi.Entity.State", b =>

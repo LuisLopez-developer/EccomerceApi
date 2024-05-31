@@ -15,5 +15,7 @@ public partial class SaleDetail
     public int? SaleId { get; set; }
     public virtual Sale? Sale { get; set; }
 
-    public virtual ProductOutput ProductOutputs { get; set; } = new ProductOutput();
+    public int BatchId { get; set; }
+    public Batch? Batch { get; set; }
+
 }

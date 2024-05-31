@@ -26,6 +26,47 @@ namespace EccomerceApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EntryType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LossReasons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LossReasons", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Peoples",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Peoples", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductBrands",
                 columns: table => new
                 {
@@ -92,6 +133,7 @@ namespace EccomerceApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: true),
+                    PeopleId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -110,6 +152,12 @@ namespace EccomerceApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Peoples_PeopleId",
+                        column: x => x.PeopleId,
+                        principalTable: "Peoples",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_States_StateId",
                         column: x => x.StateId,
@@ -144,6 +192,7 @@ namespace EccomerceApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     StateId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -163,15 +212,19 @@ namespace EccomerceApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Existence = table.Column<int>(type: "int", nullable: true),
+                    Existence = table.Column<int>(type: "int", nullable: false),
+                    IsVisible = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BarCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: true),
-                    ProductBrandId = table.Column<int>(type: "int", nullable: true),
-                    ProductCategoryId = table.Column<int>(type: "int", nullable: true)
+                    ProductBrandId = table.Column<int>(type: "int", nullable: false),
+                    ProductCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,12 +233,14 @@ namespace EccomerceApi.Migrations
                         name: "FK_Products_ProductBrands_ProductBrandId",
                         column: x => x.ProductBrandId,
                         principalTable: "ProductBrands",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_ProductCategories_ProductCategoryId",
                         column: x => x.ProductCategoryId,
                         principalTable: "ProductCategories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_States_StateId",
                         column: x => x.StateId,
@@ -299,29 +354,26 @@ namespace EccomerceApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntryDetails",
+                name: "Batches",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: true),
-                    EntryId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    InitialQuantity = table.Column<int>(type: "int", nullable: false),
+                    RemainingQuantity = table.Column<int>(type: "int", nullable: false),
+                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntryDetails", x => x.Id);
+                    table.PrimaryKey("PK_Batches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EntryDetails_Entries_EntryId",
-                        column: x => x.EntryId,
-                        principalTable: "Entries",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EntryDetails_Products_ProductId",
+                        name: "FK_Batches_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -331,13 +383,20 @@ namespace EccomerceApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LossId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    LossReasonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LostDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LostDetails_LossReasons_LossReasonId",
+                        column: x => x.LossReasonId,
+                        principalTable: "LossReasons",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_LostDetails_Losses_LossId",
                         column: x => x.LossId,
@@ -345,6 +404,107 @@ namespace EccomerceApi.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_LostDetails_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPhotos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductPhotos_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSpecifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sensor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModelNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProcessorSpeed = table.Column<double>(type: "float", nullable: true),
+                    ScreenSize = table.Column<double>(type: "float", nullable: true),
+                    ScreenResolution = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ScreenTechnology = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RearCameraResolution = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FrontCameraResolution = table.Column<int>(type: "int", nullable: true),
+                    RAM = table.Column<int>(type: "int", nullable: true),
+                    InternalStorage = table.Column<int>(type: "int", nullable: true),
+                    SimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SimCount = table.Column<int>(type: "int", nullable: true),
+                    NFC = table.Column<bool>(type: "bit", nullable: true),
+                    BluetoothVersion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsbInterface = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OperatingSystem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BatteryCapacity = table.Column<int>(type: "int", nullable: true),
+                    Waterproof = table.Column<bool>(type: "bit", nullable: true),
+                    WaterResistanceRating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SplashResistant = table.Column<bool>(type: "bit", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSpecifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductSpecifications_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntryDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntryTypeId = table.Column<int>(type: "int", nullable: true),
+                    EntryId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    BatchId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntryDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EntryDetails_Batches_BatchId",
+                        column: x => x.BatchId,
+                        principalTable: "Batches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EntryDetails_Entries_EntryId",
+                        column: x => x.EntryId,
+                        principalTable: "Entries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EntryDetails_EntryType_EntryTypeId",
+                        column: x => x.EntryTypeId,
+                        principalTable: "EntryType",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EntryDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id");
@@ -359,12 +519,20 @@ namespace EccomerceApi.Migrations
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true),
-                    SaleId = table.Column<int>(type: "int", nullable: true)
+                    SaleId = table.Column<int>(type: "int", nullable: true),
+                    BatchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SaleDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleDetails_Batches_BatchId",
+                        column: x => x.BatchId,
+                        principalTable: "Batches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SaleDetails_Products_ProductId",
                         column: x => x.ProductId,
@@ -410,6 +578,11 @@ namespace EccomerceApi.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_PeopleId",
+                table: "AspNetUsers",
+                column: "PeopleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_StateId",
                 table: "AspNetUsers",
                 column: "StateId");
@@ -422,14 +595,30 @@ namespace EccomerceApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Batches_ProductId",
+                table: "Batches",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Entries_StateId",
                 table: "Entries",
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EntryDetails_BatchId",
+                table: "EntryDetails",
+                column: "BatchId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EntryDetails_EntryId",
                 table: "EntryDetails",
                 column: "EntryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntryDetails_EntryTypeId",
+                table: "EntryDetails",
+                column: "EntryTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EntryDetails_ProductId",
@@ -447,8 +636,18 @@ namespace EccomerceApi.Migrations
                 column: "LossId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LostDetails_LossReasonId",
+                table: "LostDetails",
+                column: "LossReasonId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LostDetails_ProductId",
                 table: "LostDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPhotos_ProductId",
+                table: "ProductPhotos",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -465,6 +664,18 @@ namespace EccomerceApi.Migrations
                 name: "IX_Products_StateId",
                 table: "Products",
                 column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSpecifications_ProductId",
+                table: "ProductSpecifications",
+                column: "ProductId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleDetails_BatchId",
+                table: "SaleDetails",
+                column: "BatchId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleDetails_ProductId",
@@ -507,6 +718,12 @@ namespace EccomerceApi.Migrations
                 name: "LostDetails");
 
             migrationBuilder.DropTable(
+                name: "ProductPhotos");
+
+            migrationBuilder.DropTable(
+                name: "ProductSpecifications");
+
+            migrationBuilder.DropTable(
                 name: "SaleDetails");
 
             migrationBuilder.DropTable(
@@ -519,13 +736,25 @@ namespace EccomerceApi.Migrations
                 name: "Entries");
 
             migrationBuilder.DropTable(
+                name: "EntryType");
+
+            migrationBuilder.DropTable(
+                name: "LossReasons");
+
+            migrationBuilder.DropTable(
                 name: "Losses");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Batches");
 
             migrationBuilder.DropTable(
                 name: "Sales");
+
+            migrationBuilder.DropTable(
+                name: "Peoples");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "ProductBrands");
