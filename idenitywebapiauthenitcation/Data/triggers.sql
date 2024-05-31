@@ -36,12 +36,12 @@ BEGIN
 
     SET @EntryTotal = @ProductCost * @ProductExistence;
 
-    INSERT INTO Entries (Date, Total, StateId)
-    VALUES (GETDATE(), @EntryTotal, 1); -- 1 == activo
+    INSERT INTO Entries (Date, Total, StateId, EntryTypeId)
+    VALUES (GETDATE(), @EntryTotal, 1 , 1); -- 1 == activo y 1 == compra
 
     SET @EntryId = SCOPE_IDENTITY(); -- Obtener el ID de la entrada recién insertada
 
     -- Insertar una nueva fila en la tabla de detalles de entrada
-    INSERT INTO EntryDetails (UnitCost, Amount, Description, EntryTypeId, EntryId, ProductId, BatchId)
-    VALUES (@ProductCost, @ProductExistence, @ProductDescription, 1, @EntryId, @ProductId, @BatchId); -- 1 == compra
+    INSERT INTO EntryDetails (UnitCost, Amount, Description, EntryId, ProductId, BatchId)
+    VALUES (@ProductCost, @ProductExistence, @ProductDescription, @EntryId, @ProductId, @BatchId);
 END;
