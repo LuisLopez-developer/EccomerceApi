@@ -131,19 +131,6 @@ namespace EccomerceApi.Services.ProductServices
             _identityDbContext.Products.Add(newProduct);
             await _identityDbContext.SaveChangesAsync(); // Aquí se asigna el ID del producto nuevo
 
-            // Crear una nueva entrada correspondiente al nuevo producto
-            var entryCreateModel = new EntryCreateModel
-            {
-                Date = productCreateModel.Date,
-                Total = newProduct.Cost * newProduct.Existence,
-                IdState = newProduct.StateId,
-                UnitCost = newProduct.Cost,
-                Amount = newProduct.Existence,
-                IdProduct = newProduct.Id // Usamos el ID del producto recién creado
-            };
-
-            await _entryService.CreateAsync(entryCreateModel);
-
             // Crear las fotos del producto si hay alguna
             if (productCreateModel.Photos != null && productCreateModel.Photos.Any())
             {
