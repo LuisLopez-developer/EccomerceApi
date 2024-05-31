@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EccomerceApi.Entity.Configurations
+namespace EccomerceApi.Entity.Seeders
 {
-    public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
+    public static class ProductCategorySeedData
     {
-        public void Configure(EntityTypeBuilder<ProductCategory> builder)
+        public static void SeedData(ModelBuilder modelBuilder)
         {
-            builder.HasData(
+            modelBuilder.Entity<ProductCategory>().HasData(
                 new ProductCategory { Id = 1, Name = "Gama Baja" },
                 new ProductCategory { Id = 2, Name = "Gama Media" },
                 new ProductCategory { Id = 3, Name = "Gama Alta" },
                 new ProductCategory { Id = 4, Name = "Gama Top" }
+                // Puedes agregar más categorías de productos aquí según sea necesario
             );
         }
     }

@@ -96,7 +96,13 @@ namespace EccomerceApi.Data
             RoleSeedData.SeedData(modelBuilder);
             AppUserRoleSeedData.SeedData(modelBuilder);
 
+            //Sembrar datos para las marcas yc ategorias de los productos
+            ProductCategorySeedData.SeedData(modelBuilder);
+            ProductBrandSeedData.SeedData(modelBuilder);
 
+            //Sembrar datos para las razones y tipos
+            LossReasonSeedData.SeedData(modelBuilder);
+            EntryTypeSeedData.SeedData(modelBuilder);
 
         }
     }
