@@ -10,9 +10,6 @@ public partial class EntryDetail
     public int? Amount { get; set; }
     public string? Description { get; set; }
 
-    public int? EntryTypeId { get; set; }
-    public virtual EntryType? EntryType { get; set; }
-
     public int? EntryId { get; set; }
     public virtual Entry? Entry { get; set; }
 

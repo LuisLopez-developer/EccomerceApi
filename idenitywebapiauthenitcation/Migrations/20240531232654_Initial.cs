@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EccomerceApi.Migrations
 {
     /// <inheritdoc />
@@ -58,8 +60,8 @@ namespace EccomerceApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,7 +164,8 @@ namespace EccomerceApi.Migrations
                         name: "FK_AspNetUsers_States_StateId",
                         column: x => x.StateId,
                         principalTable: "States",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,11 +176,17 @@ namespace EccomerceApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    EntryTypeId = table.Column<int>(type: "int", nullable: true),
                     StateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Entries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Entries_EntryType_EntryTypeId",
+                        column: x => x.EntryTypeId,
+                        principalTable: "EntryType",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Entries_States_StateId",
                         column: x => x.StateId,
@@ -479,10 +488,10 @@ namespace EccomerceApi.Migrations
                     UnitCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EntryTypeId = table.Column<int>(type: "int", nullable: true),
                     EntryId = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true),
-                    BatchId = table.Column<int>(type: "int", nullable: false)
+                    BatchId = table.Column<int>(type: "int", nullable: false),
+                    EntryTypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -545,6 +554,109 @@ namespace EccomerceApi.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "1", null, "admin", "ADMIN" },
+                    { "2", null, "user", "USER" },
+                    { "3", null, "managed", "MANAGED" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EntryType",
+                columns: new[] { "Id", "Type" },
+                values: new object[,]
+                {
+                    { 1, "Compra" },
+                    { 2, "Transferencia de inventario" },
+                    { 3, "Devolución de cliente" },
+                    { 4, "Donación recibida" },
+                    { 5, "Muestra gratuita" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LossReasons",
+                columns: new[] { "Id", "Reason" },
+                values: new object[,]
+                {
+                    { 1, "Daño durante el transporte" },
+                    { 2, "Fecha de caducidad vencida" },
+                    { 3, "Robo" },
+                    { 4, "Producto dañado en el almacén" },
+                    { 5, "Devolución del cliente" },
+                    { 6, "Muestra gratuita" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Peoples",
+                columns: new[] { "Id", "Address", "LastName", "Name" },
+                values: new object[,]
+                {
+                    { 1, "123 Elm St", "Lopez", "Luis" },
+                    { 2, "431 Elm St", "Muñoz", "Jeampierre" },
+                    { 3, "233 Elm St", "benedicto", "Jean" },
+                    { 4, "432 Elm St", "Zambrano", "Fabrizzio" },
+                    { 5, "32 Elm St", "Ambrosio", "Fabian" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductBrands",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Samsung" },
+                    { 2, "Apple" },
+                    { 3, "Huawei" },
+                    { 4, "Xiaomi" },
+                    { 5, "Motorola" },
+                    { 6, "Lg" },
+                    { 7, "Sony" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductCategories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Gama Baja" },
+                    { 2, "Gama Media" },
+                    { 3, "Gama Alta" },
+                    { 4, "Gama Top" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "States",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Activo" },
+                    { 2, "Inactivo" },
+                    { 3, "En espera" },
+                    { 4, "En proceso" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PeopleId", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "StateId", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "1", 0, "9ceb7150-33a2-442b-a620-75d12dcd9fc5", "AppUser", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAEBAUaKxFIqeqZ04cmAmythvZZ+vAbWKbENXf7Ods3FkEprZcNf3jwQUXzF10lxDHvA==", 1, null, false, "", 1, false, "admin" },
+                    { "2", 0, "5064c4d2-420d-4b3f-81da-7910cf0efe3c", "AppUser", "user@example.com", true, false, null, "USER@EXAMPLE.COM", "USER", "AQAAAAIAAYagAAAAEDMyDe4SJ0Nuv2VOUmmAdukVQf6QH4i0EgETIcZB++Gs+y0xOd6U+e5Sd82Mm25LoQ==", 2, null, false, "", 1, false, "user" },
+                    { "3", 0, "a08d9a32-52cd-4a75-8e90-994fd809adbb", "AppUser", "managed@example.com", true, false, null, "MANAGED@EXAMPLE.COM", "MANAGED", "AQAAAAIAAYagAAAAEGHRA+KpPk3ibw8dbTf5hyJJxgMh5KUzpkgxggzUUSiDXyLQnmHJhrb1JCTTPoI5cg==", 3, null, false, "", 1, false, "managed" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "1", "1" },
+                    { "2", "2" },
+                    { "3", "3" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -598,6 +710,11 @@ namespace EccomerceApi.Migrations
                 name: "IX_Batches_ProductId",
                 table: "Batches",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Entries_EntryTypeId",
+                table: "Entries",
+                column: "EntryTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Entries_StateId",
@@ -736,9 +853,6 @@ namespace EccomerceApi.Migrations
                 name: "Entries");
 
             migrationBuilder.DropTable(
-                name: "EntryType");
-
-            migrationBuilder.DropTable(
                 name: "LossReasons");
 
             migrationBuilder.DropTable(
@@ -752,6 +866,9 @@ namespace EccomerceApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Peoples");
+
+            migrationBuilder.DropTable(
+                name: "EntryType");
 
             migrationBuilder.DropTable(
                 name: "Products");

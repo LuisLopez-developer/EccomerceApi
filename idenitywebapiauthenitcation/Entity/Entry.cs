@@ -11,6 +11,10 @@ public partial class Entry
 
     public decimal? Total { get; set; }
 
+    public int? EntryTypeId { get; set; }
+    public virtual EntryType? EntryType { get; set; }
+
+
     public int? StateId { get; set; }
     public virtual State? State { get; set; }
 
