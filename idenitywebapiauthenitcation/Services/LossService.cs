@@ -117,7 +117,7 @@ namespace EccomerceApi.Services
                 Total = loss.Total,
                 StateId = loss.StateId,
                 UnitCost = loss.LostDetails.FirstOrDefault()?.UnitCost,
-                Amount = loss.LostDetails.FirstOrDefault()?.Amount,
+                Amount = loss.LostDetails.FirstOrDefault().Amount,
                 Description = loss.LostDetails.FirstOrDefault()?.Description,
                 ProductId = loss.LostDetails.FirstOrDefault()?.ProductId,
                 LossReasonId = loss.LostDetails.FirstOrDefault()?.LossReasonId

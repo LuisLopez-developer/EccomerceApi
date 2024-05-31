@@ -6,7 +6,7 @@ public partial class LostDetail
 {
     public int Id { get; set; }
     public decimal? UnitCost { get; set; }
-    public int? Amount { get; set; }
+    public required int Amount { get; set; }
     public string? Description { get; set; } = string.Empty;
     public int? LossId { get; set; }
     public virtual Loss? Loss { get; set; }

@@ -1,10 +1,8 @@
 ﻿using Amazon.S3;
-using Amazon.S3.Model;
 using EccomerceApi.Interfaces;
-using EccomerceApi.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace EccomerceApi.Controllers
 {
@@ -48,26 +46,24 @@ namespace EccomerceApi.Controllers
             }
         }
 
+        private async Task<string> UploadFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("El archivo está vacío o no se proporcionó.");
+
+            if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
+                throw new ArgumentException("El tamaño del archivo excede el límite permitido.");
+
+            return await _cloudflare.UploadObjectAsync(file);
+        }
+
         [Authorize(Roles = "admin")]
-        [HttpPost]
-        [Route("UploadImage")]
-        public async Task<IActionResult> UploadObject(IFormFile file)
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> UploadImage([Required] IFormFile file)
         {
             try
             {
-                // Validar que el archivo no sea nulo y tenga contenido
-                if (file == null || file.Length == 0)
-                {
-                    return BadRequest("El archivo está vacío o no se proporcionó.");
-                }
-
-                // Validar el tamaño máximo del archivo (por ejemplo, 2 MB)
-                if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
-                {
-                    return BadRequest("El tamaño del archivo excede el límite permitido.");
-                }
-
-                var url = await _cloudflare.UploadObjectAsync(file);
+                var url = await UploadFile(file);
                 return Ok(url);
             }
             catch (ArgumentException e)
@@ -77,43 +73,17 @@ namespace EccomerceApi.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error, {e.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno del servidor: {e.Message}");
             }
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost]
-        [Route("UploadImages")]
-        public async Task<IActionResult> UploadObjects(List<IFormFile> files)
+        [HttpPost("UploadImages")]
+        public async Task<IActionResult> UploadImages([Required] List<IFormFile> files)
         {
             try
             {
-                // Validar que se hayan proporcionado archivos
-                if (files == null || files.Count == 0)
-                {
-                    return BadRequest("No se proporcionaron archivos.");
-                }
-
-                var urls = new List<string>();
-
-                foreach (var file in files)
-                {
-                    // Validar que el archivo no sea nulo y tenga contenido
-                    if (file == null || file.Length == 0)
-                    {
-                        return BadRequest("Uno o más archivos están vacíos o no se proporcionaron.");
-                    }
-
-                    // Validar el tamaño máximo del archivo (por ejemplo, 2 MB)
-                    if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
-                    {
-                        return BadRequest($"El tamaño de uno o más archivos excede el límite permitido: {file.FileName}");
-                    }
-
-                    var url = await _cloudflare.UploadObjectAsync(file);
-                    urls.Add(url);
-                }
-
+                var urls = await Task.WhenAll(files.Select(UploadFile));
                 return Ok(urls);
             }
             catch (ArgumentException e)
@@ -123,7 +93,7 @@ namespace EccomerceApi.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error, {e.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno del servidor: {e.Message}");
             }
         }
     }
