@@ -110,15 +110,19 @@ namespace EccomerceApi.Services.ProductServices
             }
 
             // Crear un nuevo objeto Product a partir de ProductCreateModel
-            var newProduct = new Entity.Product // el entity no deberia ser necesario usando using, pero me marcaba como error de tipo
+            var newProduct = new Entity.Product // el Entity no deberia ser necesario usando using, pero me marcaba como error de tipo
             {
                 Name = productCreateModel.Name,
-                Code = productCreateModel.Code,
+                Code = productCreateModel.Code, //SKU
                 StateId = productCreateModel.StateId,
                 Date = productCreateModel.Date,
+                UpdateAt = productCreateModel.Date ?? DateTime.UtcNow, // Para la creación la fecha UpdateAt sera igual que a la de la creación
                 Price = productCreateModel.Price,
                 Cost = productCreateModel.Cost,
                 Existence = productCreateModel.Existence,
+                IsVisible = productCreateModel.IsVisible,
+                Description = productCreateModel.Description,
+                BarCode = productCreateModel.BarCode,
                 ProductBrandId = productCreateModel.ProductBrandId,
                 ProductCategoryId = productCreateModel.ProductCategoryId
             };

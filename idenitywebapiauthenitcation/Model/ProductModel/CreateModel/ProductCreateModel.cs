@@ -13,6 +13,9 @@ namespace EccomerceApi.Model.ProductModel.CreateModel
         public required decimal Price { get; set; }
         public required decimal? Cost { get; set; }
         public required int Existence { get; set; }
+        public bool IsVisible { get; set; } = false;
+        public string? Description { get; set; }
+        public string BarCode { get; set; } = "sn";
         public required int ProductBrandId { get; set; }
         public required int ProductCategoryId { get; set; }
 
