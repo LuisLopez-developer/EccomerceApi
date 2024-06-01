@@ -8,6 +8,7 @@ namespace EccomerceApi.Model.ProductModel.EditModel
         public required string Name { get; set; }
         public required string Code { get; set; }
         public required int StateId { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public required decimal Price { get; set; }
         public required decimal? Cost { get; set; }
         public required int Existence { get; set; }

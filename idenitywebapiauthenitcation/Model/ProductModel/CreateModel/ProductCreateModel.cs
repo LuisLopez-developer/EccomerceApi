@@ -8,7 +8,7 @@ namespace EccomerceApi.Model.ProductModel.CreateModel
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Code { get; set; }
-        public int? StateId { get; set; }
+        public required int StateId { get; set; }
         public DateTime? Date { get; set; }
         public required decimal Price { get; set; }
         public required decimal? Cost { get; set; }

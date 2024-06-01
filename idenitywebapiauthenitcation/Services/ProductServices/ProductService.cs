@@ -71,7 +71,7 @@ namespace EccomerceApi.Services.ProductServices
             return matchedProducts;
         }
 
-        public async Task<ProductCreateModel> GetByIdAsync(int id)
+        public async Task<ProductEditModel> GetByIdAsync(int id)
         {
             var product = await _identityDbContext.Products
                 .Include(p => p.ProductPhotos)
@@ -83,13 +83,13 @@ namespace EccomerceApi.Services.ProductServices
                 return null;
             }
 
-            var productCreateModel = new ProductCreateModel
+            var productCreateModel = new ProductEditModel
             {
                 Id = product.Id,
                 Name = product.Name,
                 Code = product.Code,
                 StateId = product.StateId,
-                Date = product.Date,
+                UpdatedAt = product.UpdateAt,
                 Price = product.Price,
                 Cost = product.Cost,
                 Existence = product.Existence,
@@ -219,6 +219,9 @@ namespace EccomerceApi.Services.ProductServices
                 existingProduct.Price = product.Price;
                 existingProduct.Cost = product.Cost;
                 existingProduct.Existence = product.Existence;
+                existingProduct.IsVisible = product.IsVisible;
+                existingProduct.Description = product.Description;
+                existingProduct.BarCode = product.BarCode;
                 existingProduct.ProductBrandId = product.ProductBrandId;
                 existingProduct.ProductCategoryId = product.ProductCategoryId;
 

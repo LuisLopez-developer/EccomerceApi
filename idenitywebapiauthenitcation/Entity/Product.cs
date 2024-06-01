@@ -17,7 +17,7 @@ namespace EccomerceApi.Entity
         public string? Description { get; set; }
         public string BarCode { get; set; } = "sn";
 
-        public int? StateId { get; set; }
+        public required int StateId { get; set; }
         public virtual State State { get; set; }
 
         public required int ProductBrandId { get; set; }

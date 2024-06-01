@@ -10,7 +10,7 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
         Task<List<ProductViewModel>> GetAllAsync();
         Task<List<ProductViewModel>> SearchAsync(string name);
 
-        Task<ProductCreateModel> GetByIdAsync(int id);
+        Task<ProductEditModel> GetByIdAsync(int id);
         Task<ProductCreateModel> CreateAsync(ProductCreateModel product);
         Task<bool> UpdateAsync(int id, ProductEditModel product);
         Task<bool> DeleteAsync(int id);
