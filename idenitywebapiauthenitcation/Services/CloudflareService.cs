@@ -44,10 +44,12 @@ namespace EccomerceApi.Services
             {
                 throw new ArgumentException("File is empty or not provided");
             }
-
             var filepath = Path.GetTempFileName();
             try
             {
+                // Generar un GUID
+                string guid = Guid.NewGuid().ToString();
+
                 using (var stream = new FileStream(filepath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
@@ -59,12 +61,12 @@ namespace EccomerceApi.Services
                     BucketName = "eccomerce",
                     DisablePayloadSigning = true,
                     ContentType = file.ContentType,
-                    Key = file.FileName
+                    Key = $"{guid}-{file.FileName}" // se añade el guid a la key
                 };
 
                 await _s3Client.PutObjectAsync(request);
-
-                return "https://teamstarteight.work/" + file.FileName;
+          
+                return $"https://teamstarteight.work/{guid}-{file.FileName}"; // se retorna la nueva url mas el guid que se genero
             }
             finally
             {
