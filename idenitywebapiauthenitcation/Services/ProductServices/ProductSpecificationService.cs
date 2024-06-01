@@ -114,10 +114,10 @@ namespace EccomerceApi.Services.ProductServices
             };
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductSpecificationViewModel productSpecification)
+        public async Task<bool> UpdateAsync(int productId, ProductSpecificationViewModel productSpecification)
         {
             var existingProductSpecification = await _identityDbContext.ProductSpecifications
-                            .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
 
             if (existingProductSpecification != null)
             {

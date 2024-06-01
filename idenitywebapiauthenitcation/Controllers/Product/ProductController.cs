@@ -73,7 +73,7 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductEditModel productEditModel)
+        public async Task<IActionResult> Update(int id, ProductCreateModel productEditModel)
         {
             var existingPorduct = await _product.UpdateAsync(id, productEditModel);
             if (!existingPorduct)

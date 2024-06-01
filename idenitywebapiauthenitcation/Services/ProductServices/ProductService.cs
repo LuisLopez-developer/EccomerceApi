@@ -71,7 +71,7 @@ namespace EccomerceApi.Services.ProductServices
             return matchedProducts;
         }
 
-        public async Task<ProductEditModel> GetByIdAsync(int id)
+        public async Task<ProductCreateModel> GetByIdAsync(int id)
         {
             var product = await _identityDbContext.Products
                 .Include(p => p.ProductPhotos)
@@ -83,13 +83,16 @@ namespace EccomerceApi.Services.ProductServices
                 return null;
             }
 
-            var productCreateModel = new ProductEditModel
+            var productCreateModel = new ProductCreateModel
             {
                 Id = product.Id,
                 Name = product.Name,
                 Code = product.Code,
                 StateId = product.StateId,
-                UpdatedAt = product.UpdateAt,
+                BarCode = product.BarCode,
+                Date = product.UpdateAt,
+                IsVisible = product.IsVisible,
+                Description = product.Description,
                 Price = product.Price,
                 Cost = product.Cost,
                 Existence = product.Existence,
@@ -198,12 +201,12 @@ namespace EccomerceApi.Services.ProductServices
             return productCreateModel;
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductEditModel product)
+        public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
         {
             var existingProduct = await _identityDbContext.Products
                 .Include(p => p.ProductPhotos)
-                .Where(f => f.Id == id)
-                .FirstOrDefaultAsync();
+                .Include(sp => sp.ProductSpecifications)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (existingProduct != null)
             {
@@ -234,6 +237,8 @@ namespace EccomerceApi.Services.ProductServices
                 // Actualizar las especificaciones del producto
                 if (product.Specifications != null)
                 {
+                    Console.WriteLine(product.Specifications.ToString());
+                    Console.WriteLine(existingProduct.Id);
                     await _productSpecificationService.UpdateAsync(existingProduct.Id, product.Specifications);
                 }
 
