@@ -84,6 +84,19 @@ namespace EccomerceApi.Controllers.Product
             return NoContent();
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPut("changeState")]
+        public async Task<IActionResult> ChangeState(int idProduct)
+        {
+            var existingProduct = await _product.ChangeStateAsync(idProduct);
+            if (!existingProduct)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+
+        }
 
     }
 }
