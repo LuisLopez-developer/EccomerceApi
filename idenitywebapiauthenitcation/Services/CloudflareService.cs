@@ -47,8 +47,6 @@ namespace EccomerceApi.Services
             var filepath = Path.GetTempFileName();
             try
             {
-                // Generar un GUID
-                string guid = Guid.NewGuid().ToString();
 
                 using (var stream = new FileStream(filepath, FileMode.Create))
                 {
@@ -61,12 +59,12 @@ namespace EccomerceApi.Services
                     BucketName = "eccomerce",
                     DisablePayloadSigning = true,
                     ContentType = file.ContentType,
-                    Key = $"{guid}-{file.FileName}" // se añade el guid a la key
+                    Key = $"{file.FileName}"
                 };
 
                 await _s3Client.PutObjectAsync(request);
           
-                return $"https://teamstarteight.work/{guid}-{file.FileName}"; // se retorna la nueva url mas el guid que se genero
+                return $"https://teamstarteight.work/{file.FileName}"; 
             }
             finally
             {

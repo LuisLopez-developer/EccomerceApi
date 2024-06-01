@@ -85,7 +85,7 @@ namespace EccomerceApi.Controllers.Product
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPut("changeState")]
+        [HttpPut("changeState/{idProduct}")]
         public async Task<IActionResult> ChangeState(int idProduct)
         {
             var existingProduct = await _product.ChangeStateAsync(idProduct);

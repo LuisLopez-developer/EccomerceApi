@@ -139,7 +139,6 @@ namespace EccomerceApi.Services.ProductServices
 
         public async Task<ProductCreateModel> CreateAsync(ProductCreateModel productCreateModel)
         {
-            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
             try
             {
                 // Si la fecha es nula, establece la fecha actual
@@ -182,20 +181,16 @@ namespace EccomerceApi.Services.ProductServices
                     await _productSpecificationService.CreateAsync(newProduct.Id, productCreateModel.Specifications);
                 }
 
-                await transaction.CommitAsync();
                 return productCreateModel;
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
                 throw new InvalidOperationException("Error al crear el producto: " + ex.Message, ex);
             }
         }
 
         public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
-        {
-            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
-            try
+        {            try
             {
                 var existingProduct = await _identityDbContext.Products
                     .Include(p => p.ProductPhotos)
@@ -228,7 +223,6 @@ namespace EccomerceApi.Services.ProductServices
                     }
 
                     await _identityDbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
                     return true;
                 }
 
@@ -236,7 +230,6 @@ namespace EccomerceApi.Services.ProductServices
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
                 throw new InvalidOperationException("Error al actualizar el producto: " + ex.Message, ex);
             }
         }
