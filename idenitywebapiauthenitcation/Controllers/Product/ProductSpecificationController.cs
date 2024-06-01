@@ -26,7 +26,7 @@ namespace EccomerceApi.Controllers.Product
                 var createdSpecification = await _productSpecificationService.CreateAsync(productId, productSpecification);
                 return Ok(createdSpecification);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error interno del servidor.");
             }

@@ -18,7 +18,7 @@ namespace EccomerceApi.Services
         public async Task<List<RoleModel>> GetRolesAsync()
         {
             var roleList = _roleManager.Roles.Select(x => 
-            new RoleModel { Id = Guid.Parse(x.Id), Name = x.Name }).ToList();
+            new RoleModel { Id = Guid.Parse(x.Id), Name = x.Name ?? "Sin nombre" }).ToList();
             return roleList;
         }
 

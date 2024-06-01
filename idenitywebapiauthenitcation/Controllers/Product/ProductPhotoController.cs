@@ -34,7 +34,7 @@ namespace EccomerceApi.Controllers.Product
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error interno del servidor.");
             }

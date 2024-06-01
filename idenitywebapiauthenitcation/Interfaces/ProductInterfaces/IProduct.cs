@@ -1,5 +1,6 @@
 ﻿using EccomerceApi.Entity;
 using EccomerceApi.Model.ProductModel.CreateModel;
+using EccomerceApi.Model.ProductModel.EditModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 
 namespace EccomerceApi.Interfaces.ProductIntefaces
@@ -11,7 +12,7 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
 
         Task<ProductCreateModel> GetByIdAsync(int id);
         Task<ProductCreateModel> CreateAsync(ProductCreateModel product);
-        Task<bool> UpdateAsync(int id, ProductCreateModel product);
+        Task<bool> UpdateAsync(int id, ProductEditModel product);
         Task<bool> DeleteAsync(int id);
     }
 }

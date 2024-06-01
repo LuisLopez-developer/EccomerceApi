@@ -1,9 +1,11 @@
 ﻿using EccomerceApi.Data;
+using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
+using EccomerceApi.Model.ProductModel.EditModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +15,12 @@ namespace EccomerceApi.Services.ProductServices
     {
         private readonly IdentityDbContext _identityDbContext;
 
-        private readonly IEntry _entryService;
         private readonly IProductPhoto _productPhotoService;
         private readonly IProductSpecification _productSpecificationService;
 
-        public ProductService(IdentityDbContext identityDbContext, IEntry entryService, IProductPhoto productPhoto, IProductSpecification productSpecification)
+        public ProductService(IdentityDbContext identityDbContext, IProductPhoto productPhoto, IProductSpecification productSpecification)
         {
             _identityDbContext = identityDbContext;
-            _entryService = entryService;
             _productPhotoService = productPhoto;
             _productSpecificationService = productSpecification;
         }
@@ -73,7 +73,10 @@ namespace EccomerceApi.Services.ProductServices
 
         public async Task<ProductCreateModel> GetByIdAsync(int id)
         {
-            var product = await _identityDbContext.Products.FindAsync(id);
+            var product = await _identityDbContext.Products
+                .Include(p => p.ProductPhotos)
+                .Include(p => p.ProductSpecifications)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
             {
@@ -91,7 +94,40 @@ namespace EccomerceApi.Services.ProductServices
                 Cost = product.Cost,
                 Existence = product.Existence,
                 ProductBrandId = product.ProductBrandId,
-                ProductCategoryId = product.ProductCategoryId
+                ProductCategoryId = product.ProductCategoryId,
+                Photos = product.ProductPhotos?.Select(photo => new ProductPhotoViewModel
+                {
+                    Id = photo.Id,
+                    Url = photo.Url,
+                    IsMain = photo.IsMain,
+                    ProductId = photo.ProductId
+                }).ToList(),
+                Specifications = product.ProductSpecifications == null ? null : new ProductSpecificationViewModel
+                {
+                    ProductId = product.ProductSpecifications.ProductId,
+                    Color = product.ProductSpecifications.Color,
+                    Sensor = product.ProductSpecifications.Sensor,
+                    ModelNumber = product.ProductSpecifications.ModelNumber,
+                    ProcessorSpeed = product.ProductSpecifications.ProcessorSpeed,
+                    ScreenSize = product.ProductSpecifications.ScreenSize,
+                    ScreenResolution = product.ProductSpecifications.ScreenResolution,
+                    ScreenTechnology = product.ProductSpecifications.ScreenTechnology,
+                    RearCameraResolution = product.ProductSpecifications.RearCameraResolution,
+                    FrontCameraResolution = product.ProductSpecifications.FrontCameraResolution,
+                    RAM = product.ProductSpecifications.RAM,
+                    InternalStorage = product.ProductSpecifications.InternalStorage,
+                    SimType = product.ProductSpecifications.SimType,
+                    SimCount = product.ProductSpecifications.SimCount,
+                    NFC = product.ProductSpecifications.NFC,
+                    BluetoothVersion = product.ProductSpecifications.BluetoothVersion,
+                    UsbInterface = product.ProductSpecifications.UsbInterface,
+                    OperatingSystem = product.ProductSpecifications.OperatingSystem,
+                    BatteryCapacity = product.ProductSpecifications.BatteryCapacity,
+                    Waterproof = product.ProductSpecifications.Waterproof,
+                    WaterResistanceRating = product.ProductSpecifications.WaterResistanceRating,
+                    SplashResistant = product.ProductSpecifications.SplashResistant
+                }
+
             };
 
             return productCreateModel;
@@ -162,25 +198,47 @@ namespace EccomerceApi.Services.ProductServices
             return productCreateModel;
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
+        public async Task<bool> UpdateAsync(int id, ProductEditModel product)
         {
-            var existingProduct = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
+            var existingProduct = await _identityDbContext.Products
+                .Include(p => p.ProductPhotos)
+                .Where(f => f.Id == id)
+                .FirstOrDefaultAsync();
 
             if (existingProduct != null)
             {
                 existingProduct.Name = product.Name;
                 existingProduct.Code = product.Code;
                 existingProduct.StateId = product.StateId;
-                existingProduct.Date = product.Date;
+
+                // Obtener la hora de Perú
+                TimeZoneInfo peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Lima");
+                DateTime peruTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
+
+                existingProduct.UpdateAt = peruTime;
                 existingProduct.Price = product.Price;
                 existingProduct.Cost = product.Cost;
                 existingProduct.Existence = product.Existence;
                 existingProduct.ProductBrandId = product.ProductBrandId;
                 existingProduct.ProductCategoryId = product.ProductCategoryId;
+
+                // Actualizar las fotos del producto
+                if (product.Photos != null && product.Photos.Any())
+                {
+                    await _productPhotoService.UpdateProductPhotosAsync(existingProduct.Id, product.Photos);
+                }
+
+                // Actualizar las especificaciones del producto
+                if (product.Specifications != null)
+                {
+                    await _productSpecificationService.UpdateAsync(existingProduct.Id, product.Specifications);
+                }
+
+                await _identityDbContext.SaveChangesAsync();
+                return true;
             }
 
-            await _identityDbContext.SaveChangesAsync();
-            return existingProduct?.Id > 0;
+            return false;
         }
 
         public async Task<bool> DeleteAsync(int id)

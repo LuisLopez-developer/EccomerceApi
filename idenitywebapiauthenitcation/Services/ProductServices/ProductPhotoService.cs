@@ -10,9 +10,9 @@ namespace EccomerceApi.Services.ProductServices
     {
         private readonly IdentityDbContext _identityDbContext;
 
-        public ProductPhotoService(IdentityDbContext identityDbContext) 
+        public ProductPhotoService(IdentityDbContext identityDbContext)
         {
-            _identityDbContext = identityDbContext;   
+            _identityDbContext = identityDbContext;
         }
 
         public async Task<List<ProductPhotoViewModel>> CreateAsync(int productId, List<ProductPhotoViewModel> productPhotos)
@@ -133,6 +133,53 @@ namespace EccomerceApi.Services.ProductServices
             }
 
             return false;
+        }
+
+        public async Task<bool> UpdateProductPhotosAsync(int productId, List<ProductPhotoViewModel> updatedPhotos)
+        {
+            // Validar que solo una imagen sea la principal
+            if (updatedPhotos.Count(p => p.IsMain) > 1)
+            {
+                throw new ArgumentException("Solo una imagen puede ser la principal (IsMain).");
+            }
+
+            // Obtener las fotos existentes del producto
+            var existingPhotos = await _identityDbContext.ProductPhotos
+                .Where(p => p.ProductId == productId)
+                .ToListAsync();
+
+            // Eliminar las fotos que no están en la nueva lista
+            var photosToDelete = existingPhotos.Where(p => !updatedPhotos.Any(up => up.Id == p.Id)).ToList();
+            _identityDbContext.ProductPhotos.RemoveRange(photosToDelete);
+
+            // Actualizar las fotos existentes y agregar las nuevas fotos
+            foreach (var photo in updatedPhotos)
+            {
+                var existingPhoto = existingPhotos.FirstOrDefault(p => p.Id == photo.Id);
+                if (existingPhoto != null)
+                {
+                    // Actualizar la foto existente
+                    existingPhoto.Url = photo.Url;
+                    existingPhoto.IsMain = photo.IsMain;
+                    _identityDbContext.ProductPhotos.Update(existingPhoto);
+                }
+                else
+                {
+                    // Agregar la nueva foto
+                    var newPhoto = new ProductPhoto
+                    {
+                        ProductId = productId,
+                        Url = photo.Url,
+                        IsMain = photo.IsMain
+                    };
+                    _identityDbContext.ProductPhotos.Add(newPhoto);
+                }
+            }
+
+            // Guardar los cambios en la base de datos
+            await _identityDbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

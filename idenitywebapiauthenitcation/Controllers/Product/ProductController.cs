@@ -1,5 +1,6 @@
 ﻿using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.ProductModel.CreateModel;
+using EccomerceApi.Model.ProductModel.EditModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -72,9 +73,9 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductCreateModel productCreateModel)
+        public async Task<IActionResult> Update(int id, ProductEditModel productEditModel)
         {
-            var existingPorduct = await _product.UpdateAsync(id, productCreateModel);
+            var existingPorduct = await _product.UpdateAsync(id, productEditModel);
             if (!existingPorduct)
             {
                 return BadRequest();

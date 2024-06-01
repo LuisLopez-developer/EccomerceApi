@@ -2,8 +2,8 @@
 {
     public class AmazonS3ClientModel
     {
-        public string AccessKey { get; set; }
-        public string SecretKey { get; set; }
-        public string ServiceURL { get; set; }
+        public required string AccessKey { get; set; }
+        public required string SecretKey { get; set; }
+        public required string ServiceURL { get; set; }
     }
 }
