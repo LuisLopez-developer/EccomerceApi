@@ -138,131 +138,149 @@ namespace EccomerceApi.Services.ProductServices
 
         public async Task<ProductCreateModel> CreateAsync(ProductCreateModel productCreateModel)
         {
-            // Si la fecha es nula, establece la fecha actual
-            if (productCreateModel.Date == null)
+            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
+            try
             {
-                // Obtener la hora actual de Perú
-                var peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
-                var currentTimePeru = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
+                // Si la fecha es nula, establece la fecha actual
+                if (productCreateModel.Date == null)
+                {
+                    var peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+                    var currentTimePeru = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
+                    productCreateModel.Date = currentTimePeru;
+                }
 
-                productCreateModel.Date = currentTimePeru;
-            }
+                var newProduct = new Entity.Product
+                {
+                    Name = productCreateModel.Name,
+                    Code = productCreateModel.Code,
+                    StateId = productCreateModel.StateId,
+                    Date = productCreateModel.Date,
+                    UpdateAt = productCreateModel.Date ?? DateTime.UtcNow,
+                    Price = productCreateModel.Price,
+                    Cost = productCreateModel.Cost,
+                    Existence = productCreateModel.Existence,
+                    IsVisible = productCreateModel.IsVisible,
+                    Description = productCreateModel.Description,
+                    BarCode = productCreateModel.BarCode,
+                    ProductBrandId = productCreateModel.ProductBrandId,
+                    ProductCategoryId = productCreateModel.ProductCategoryId
+                };
 
-            // Crear un nuevo objeto Product a partir de ProductCreateModel
-            var newProduct = new Entity.Product // el Entity no deberia ser necesario usando using, pero me marcaba como error de tipo
-            {
-                Name = productCreateModel.Name,
-                Code = productCreateModel.Code, //SKU
-                StateId = productCreateModel.StateId,
-                Date = productCreateModel.Date,
-                UpdateAt = productCreateModel.Date ?? DateTime.UtcNow, // Para la creación la fecha UpdateAt sera igual que a la de la creación
-                Price = productCreateModel.Price,
-                Cost = productCreateModel.Cost,
-                Existence = productCreateModel.Existence,
-                IsVisible = productCreateModel.IsVisible,
-                Description = productCreateModel.Description,
-                BarCode = productCreateModel.BarCode,
-                ProductBrandId = productCreateModel.ProductBrandId,
-                ProductCategoryId = productCreateModel.ProductCategoryId
-            };
+                _identityDbContext.Products.Add(newProduct);
+                await _identityDbContext.SaveChangesAsync();
 
-            // Agregar el nuevo producto a la base de datos
-            _identityDbContext.Products.Add(newProduct);
-            await _identityDbContext.SaveChangesAsync(); // Aquí se asigna el ID del producto nuevo
 
-            // Crear las fotos del producto si hay alguna
-            if (productCreateModel.Photos != null && productCreateModel.Photos.Any())
-            {
-                try
+                // Se guarda la información de las fotos, si existe alguna
+                if (productCreateModel.Photos != null && productCreateModel.Photos.Any())
                 {
                     await _productPhotoService.CreateAsync(newProduct.Id, productCreateModel.Photos);
                 }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException("Error al crear fotos del producto: " + ex.Message, ex);
-                }
-            }
 
-            // Crear las especificaciones del producto si existen
-            if (productCreateModel.Specifications != null)
-            {
-                try
+                // Se guarda la información de las especificaciones, si existe alguna
+                if (productCreateModel.Specifications != null)
                 {
                     await _productSpecificationService.CreateAsync(newProduct.Id, productCreateModel.Specifications);
                 }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException("Error al crear especificaciones del producto: " + ex.Message, ex);
-                }
+
+                await transaction.CommitAsync();
+                return productCreateModel;
             }
-
-
-            // Devolver el objeto ProductCreateModel recién creado
-            return productCreateModel;
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException("Error al crear el producto: " + ex.Message, ex);
+            }
         }
 
         public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
         {
-            var existingProduct = await _identityDbContext.Products
-                .Include(p => p.ProductPhotos)
-                .Include(sp => sp.ProductSpecifications)
-                .FirstOrDefaultAsync(f => f.Id == id);
-
-            if (existingProduct != null)
+            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
+            try
             {
-                existingProduct.Name = product.Name;
-                existingProduct.Code = product.Code;
-                existingProduct.StateId = product.StateId;
+                var existingProduct = await _identityDbContext.Products
+                    .Include(p => p.ProductPhotos)
+                    .Include(sp => sp.ProductSpecifications)
+                    .FirstOrDefaultAsync(f => f.Id == id);
 
-                // Obtener la hora de Perú
-                TimeZoneInfo peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Lima");
-                DateTime peruTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
-
-                existingProduct.UpdateAt = peruTime;
-                existingProduct.Price = product.Price;
-                existingProduct.Cost = product.Cost;
-                existingProduct.Existence = product.Existence;
-                existingProduct.IsVisible = product.IsVisible;
-                existingProduct.Description = product.Description;
-                existingProduct.BarCode = product.BarCode;
-                existingProduct.ProductBrandId = product.ProductBrandId;
-                existingProduct.ProductCategoryId = product.ProductCategoryId;
-
-                // Actualizar las fotos del producto
-                if (product.Photos != null && product.Photos.Any())
+                if (existingProduct != null)
                 {
-                    await _productPhotoService.UpdateProductPhotosAsync(existingProduct.Id, product.Photos);
+                    existingProduct.Name = product.Name;
+                    existingProduct.Code = product.Code;
+                    existingProduct.StateId = product.StateId;
+
+                    TimeZoneInfo peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Lima"); //Obtener la hoara de peru
+                    DateTime peruTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
+
+                    existingProduct.UpdateAt = peruTime;
+                    existingProduct.Price = product.Price;
+                    existingProduct.Cost = product.Cost;
+                    existingProduct.Existence = product.Existence;
+                    existingProduct.IsVisible = product.IsVisible;
+                    existingProduct.Description = product.Description;
+                    existingProduct.BarCode = product.BarCode;
+                    existingProduct.ProductBrandId = product.ProductBrandId;
+                    existingProduct.ProductCategoryId = product.ProductCategoryId;
+
+                    if (product.Photos != null && product.Photos.Any())
+                    {
+                        await _productPhotoService.UpdateProductPhotosAsync(existingProduct.Id, product.Photos);
+                    }
+
+                    if (product.Specifications != null)
+                    {
+                        await _productSpecificationService.UpdateAsync(existingProduct.Id, product.Specifications);
+                    }
+
+                    await _identityDbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return true;
                 }
 
-                // Actualizar las especificaciones del producto
-                if (product.Specifications != null)
+                return false;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException("Error al actualizar el producto: " + ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            using var transaction = await _identityDbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var product = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
+
+                if (product != null)
                 {
-                    Console.WriteLine(product.Specifications.ToString());
-                    Console.WriteLine(existingProduct.Id);
-                    await _productSpecificationService.UpdateAsync(existingProduct.Id, product.Specifications);
+                    _identityDbContext.Products.Remove(product);
+                    await _identityDbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return true;
                 }
 
+                return false;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new InvalidOperationException("Error al eliminar el producto: " + ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> ChangeStateAsync(int id)
+        {
+            var product = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
+
+            if (product != null)
+            {
+                product.StateId = 2; // 2 = Inactivo
                 await _identityDbContext.SaveChangesAsync();
                 return true;
             }
 
             return false;
         }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var product = await _identityDbContext.Products.Where(f => f.Id == id).FirstOrDefaultAsync();
-
-            if (product != null)
-            {
-                _identityDbContext.Products.Remove(product);
-                await _identityDbContext.SaveChangesAsync();
-                id = product.Id;
-            }
-
-            return product?.Id > 0;
-        }
-
-
     }
 }
