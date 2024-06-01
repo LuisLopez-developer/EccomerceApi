@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using EccomerceApi.Entity;
 using EccomerceApi.Entity.Seeders;
+using EccomerceApi.Entity.Triggers;
 
 namespace EccomerceApi.Data
 {
@@ -104,6 +105,12 @@ namespace EccomerceApi.Data
             LossReasonSeedData.SeedData(modelBuilder);
             EntryTypeSeedData.SeedData(modelBuilder);
 
+        }
+
+        // Usar la nueva convencion para crear triggers ficticios en las tablas, para manejar correctamente las opereaciones de los triggers reales
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
         }
     }
 }
