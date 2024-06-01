@@ -1,5 +1,6 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
+using EccomerceApi.Herlpers;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
@@ -144,9 +145,8 @@ namespace EccomerceApi.Services.ProductServices
                 // Si la fecha es nula, establece la fecha actual
                 if (productCreateModel.Date == null)
                 {
-                    var peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
-                    var currentTimePeru = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
-                    productCreateModel.Date = currentTimePeru;
+                    productCreateModel.Date = getTimePeruHelper.GetCurrentTimeInPeru();
+
                 }
 
                 var newProduct = new Entity.Product
@@ -155,7 +155,7 @@ namespace EccomerceApi.Services.ProductServices
                     Code = productCreateModel.Code,
                     StateId = productCreateModel.StateId,
                     Date = productCreateModel.Date,
-                    UpdateAt = productCreateModel.Date ?? DateTime.UtcNow,
+                    UpdateAt = productCreateModel.Date ?? getTimePeruHelper.GetCurrentTimeInPeru(),
                     Price = productCreateModel.Price,
                     Cost = productCreateModel.Cost,
                     Existence = productCreateModel.Existence,
@@ -207,11 +207,7 @@ namespace EccomerceApi.Services.ProductServices
                     existingProduct.Name = product.Name;
                     existingProduct.Code = product.Code;
                     existingProduct.StateId = product.StateId;
-
-                    TimeZoneInfo peruTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Lima"); //Obtener la hoara de peru
-                    DateTime peruTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, peruTimeZone);
-
-                    existingProduct.UpdateAt = peruTime;
+                    existingProduct.UpdateAt = getTimePeruHelper.GetCurrentTimeInPeru();
                     existingProduct.Price = product.Price;
                     existingProduct.Cost = product.Cost;
                     existingProduct.Existence = product.Existence;
@@ -276,6 +272,7 @@ namespace EccomerceApi.Services.ProductServices
             if (product != null)
             {
                 product.StateId = 2; // 2 = Inactivo
+                product.UpdateAt = getTimePeruHelper.GetCurrentTimeInPeru(); // Actualizar la fecha de cambio
                 await _identityDbContext.SaveChangesAsync();
                 return true;
             }
