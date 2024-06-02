@@ -1,6 +1,5 @@
 ﻿using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.ProductModel.CreateModel;
-using EccomerceApi.Model.ProductModel.EditModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace EccomerceApi.Controllers.Product
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("GetPagedProducts")]
         public async Task<IActionResult> GetPagedProducts(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
