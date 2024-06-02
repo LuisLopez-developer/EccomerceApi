@@ -20,6 +20,34 @@ namespace EccomerceApi.Controllers.Product
         }
 
         [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetPagedProducts(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string searchTerm = "",
+            [FromQuery] DateTime? startDate = null,
+            [FromQuery] DateTime? endDate = null)
+        {
+            if (page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Page and PageSize should be greater than 0.");
+            }
+
+            var pagedResult = await _product.GetLeakedProductsAsync(page, pageSize, searchTerm, startDate, endDate);
+
+            var response = new
+            {
+                pagedResult.TotalItems,
+                pagedResult.TotalPages,
+                CurrentPage = page,
+                PageSize = pageSize,
+                pagedResult.Items
+            };
+
+            return Ok(response);
+        }
+
+        [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {

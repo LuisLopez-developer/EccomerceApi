@@ -4,6 +4,7 @@ using EccomerceApi.Herlpers;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
+using EccomerceApi.Model;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.EditModel;
@@ -271,6 +272,65 @@ namespace EccomerceApi.Services.ProductServices
             }
 
             return false;
+        }
+
+        public async Task<PagedResult<ProductViewModel>> GetLeakedProductsAsync(int page, int pageSize, string searchTerm, DateTime? startDate, DateTime? endDate)
+        {
+            var query = _identityDbContext.Products
+                .Include(p => p.ProductBrand)
+                .Include(p => p.ProductCategory)
+                .Include(p => p.State)
+                .AsQueryable();
+
+            // Aplicar filtros por fechas si se proporcionan
+            if (startDate.HasValue)
+            {
+                DateTime startOfDay = startDate.Value.Date;
+                query = query.Where(p => p.Date >= startOfDay);
+            }
+
+            if (endDate.HasValue)
+            {
+                // Incrementar la fecha en un día para incluir registros hasta el final del día
+                DateTime endOfDay = endDate.Value.Date.AddDays(1).AddTicks(-1);
+                query = query.Where(p => p.Date <= endOfDay);
+            }
+
+            // Aplicar filtro de término de búsqueda si se proporciona
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => p.Name.Contains(searchTerm) ||
+                                         p.ProductBrand.Name.Contains(searchTerm) ||
+                                         p.ProductCategory.Name.Contains(searchTerm));
+            }
+
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var products = await query
+                .OrderBy(p => p.State.Id == 1 ? 0 : p.State.Id == 2 ? 2 : 1) // Ordenar por estado (1, otros, 2)
+                .ThenByDescending(p => p.UpdateAt) // Luego por fecha de actualización descendente
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new ProductViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Existence = p.Existence,
+                    CategoryName = p.ProductCategory.Name,
+                    BrandName = p.ProductBrand.Name,
+                    Price = p.Price,
+                    Cost = p.Cost,
+                    StateName = p.State.Name
+                })
+                .ToListAsync();
+
+            return new PagedResult<ProductViewModel>
+            {
+                Items = products,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            };
         }
     }
 }
