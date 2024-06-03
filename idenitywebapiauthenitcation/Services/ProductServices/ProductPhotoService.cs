@@ -54,6 +54,7 @@ namespace EccomerceApi.Services.ProductServices
             var newProductPhotos = productPhotos.Select(photo => new ProductPhoto
             {
                 ProductId = productId,
+                FileName = photo.FileName,
                 Url = photo.Url,
                 IsMain = photo.IsMain
             }).ToList();
@@ -93,6 +94,7 @@ namespace EccomerceApi.Services.ProductServices
                 .Select(photo => new ProductPhotoViewModel
                 {
                     Id = photo.Id,
+                    FileName = photo.FileName,
                     Url = photo.Url,
                     IsMain = photo.IsMain,
                     ProductId = photo.ProductId
@@ -169,6 +171,7 @@ namespace EccomerceApi.Services.ProductServices
                     var newPhoto = new ProductPhoto
                     {
                         ProductId = productId,
+                        FileName = photo.FileName,
                         Url = photo.Url,
                         IsMain = photo.IsMain
                     };

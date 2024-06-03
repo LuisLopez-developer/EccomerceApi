@@ -103,6 +103,7 @@ namespace EccomerceApi.Services.ProductServices
                 Photos = product.ProductPhotos?.Select(photo => new ProductPhotoViewModel
                 {
                     Id = photo.Id,
+                    FileName = photo.FileName,
                     Url = photo.Url,
                     IsMain = photo.IsMain,
                     ProductId = photo.ProductId
