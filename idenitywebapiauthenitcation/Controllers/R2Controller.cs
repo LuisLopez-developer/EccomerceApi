@@ -96,5 +96,45 @@ namespace EccomerceApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno del servidor: {e.Message}");
             }
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("DeleteObject")]
+        public async Task<IActionResult> DeleteImage(string url)
+        {
+            try
+            {
+                await _cloudflare.DeleteObjectByUrlAsync(url);
+                return Ok($"El objeto con clave '{url}' ha sido eliminado exitosamente.");
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno del servidor: {e.Message}");
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("DeleteObjects")]
+        public async Task<IActionResult> DeleteObjects(List<string> urls)
+        {
+            try
+            {
+                await _cloudflare.DeleteObjectsByUrlAsync(urls);
+                return Ok("Los objetos han sido eliminados exitosamente.");
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error interno del servidor: {e.Message}");
+            }
+        }
     }
 }

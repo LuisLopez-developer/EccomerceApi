@@ -75,6 +75,53 @@ namespace EccomerceApi.Services
             }
         }
 
+        public async Task DeleteObjectsByUrlAsync(List<string> urls)
+        {
+            if (urls == null || urls.Count == 0)
+            {
+                throw new ArgumentException("List of URLs cannot be null or empty");
+            }
+
+            foreach (var url in urls)
+            {
+                await DeleteObjectByUrlAsync(url);
+            }
+        }
+
+
+        public async Task DeleteObjectByUrlAsync(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentException("URL cannot be null or empty");
+            }
+
+            // Extraer el nombre del archivo de la URL
+            string fileName = url.Substring(url.LastIndexOf('/') + 1);
+
+            // Decodificar el nombre del archivo si es necesario
+            fileName = Uri.UnescapeDataString(fileName);
+
+            // Llamar al método para eliminar el objeto utilizando el nombre del archivo como clave
+            await DeleteObjectAsync(fileName);
+        }
+
+        public async Task DeleteObjectAsync(string objectKey)
+        {
+            if (string.IsNullOrEmpty(objectKey))
+            {
+                throw new ArgumentException("Object key cannot be null or empty");
+            }
+
+            var deleteObjectRequest = new DeleteObjectRequest
+            {
+                BucketName = "eccomerce",
+                Key = objectKey
+            };
+
+            await _s3Client.DeleteObjectAsync(deleteObjectRequest);
+        }
+
     }
-  
+
 }

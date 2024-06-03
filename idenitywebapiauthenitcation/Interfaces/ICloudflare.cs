@@ -4,5 +4,7 @@
     {
         Task<List<string>> ListBucketsAsync();
         Task<string> UploadObjectAsync(IFormFile file);
+        Task DeleteObjectByUrlAsync(string url);
+        Task DeleteObjectsByUrlAsync(List<string> urls);
     }
 }
