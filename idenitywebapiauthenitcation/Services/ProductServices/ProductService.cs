@@ -333,5 +333,31 @@ namespace EccomerceApi.Services.ProductServices
                 TotalPages = totalPages
             };
         }
+
+        // Metodos, enfocados para el eccomerce
+        public async Task<List<ProductCatalogViewModel>> GetMostValuableProductCatalog()
+        {
+            //Obtener los productos mas valiosos y su iamgen principal
+            var listProducts = await _identityDbContext.Products
+                .Include(p => p.ProductPhotos)
+                .OrderByDescending(p => p.Price) // Ordenar por precio de mayor a menor
+                .Take(20) // Tomar los primeros 20 elementos
+                .Select(p => new ProductCatalogViewModel
+                {
+                    Name = p.Name,
+                    Price = p.Price,
+                    imageUrl = p.ProductPhotos.FirstOrDefault(photo => photo.IsMain).Url
+                })
+                .ToListAsync();
+
+
+            if (listProducts == null)
+            {
+                return [];
+            }
+
+            return listProducts;
+        }
+
     }
 }

@@ -125,5 +125,13 @@ namespace EccomerceApi.Controllers.Product
 
         }
 
+        //API'S enfocadas para la web del eccomerce
+        [HttpGet("MostValablesProducts")]
+        public async Task<IActionResult> GetMostValueblesProducts()
+        {
+            var response = await _product.GetMostValuableProductCatalog();
+            return Ok(response);
+        }
+
     }
 }

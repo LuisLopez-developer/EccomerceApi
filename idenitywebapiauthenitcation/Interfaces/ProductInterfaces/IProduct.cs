@@ -18,5 +18,8 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
         Task<bool> UpdateAsync(int id, ProductCreateModel product);
         Task<bool> ChangeStateAsync(int id);
         Task<bool> DeleteAsync(int id);
+
+        // Metodos, enfocados para el eccomerce
+        Task<List<ProductCatalogViewModel>> GetMostValuableProductCatalog(); 
     }
 }
