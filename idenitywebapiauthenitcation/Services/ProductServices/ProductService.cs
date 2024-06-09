@@ -345,6 +345,7 @@ namespace EccomerceApi.Services.ProductServices
                 .Take(20) // Tomar los primeros 20 elementos
                 .Select(p => new ProductCatalogViewModel
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
                     imageUrl = p.ProductPhotos.FirstOrDefault(photo => photo.IsMain).Url
