@@ -118,7 +118,7 @@ namespace EccomerceApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("DeleteObjects")]
+        [HttpPost("DeleteObjects")]
         public async Task<IActionResult> DeleteObjects(List<string> urls)
         {
             try
