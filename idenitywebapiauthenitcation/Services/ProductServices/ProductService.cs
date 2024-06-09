@@ -337,9 +337,10 @@ namespace EccomerceApi.Services.ProductServices
         // Metodos, enfocados para el eccomerce
         public async Task<List<ProductCatalogViewModel>> GetMostValuableProductCatalog()
         {
-            //Obtener los productos mas valiosos y su iamgen principal
+            // Obtener los productos más valiosos y su imagen principal, filtrando por visibilidad y estado activo
             var listProducts = await _identityDbContext.Products
                 .Include(p => p.ProductPhotos)
+                .Where(p => p.IsVisible && p.StateId == 1) // Filtrar por IsVisible y StateId
                 .OrderByDescending(p => p.Price) // Ordenar por precio de mayor a menor
                 .Take(20) // Tomar los primeros 20 elementos
                 .Select(p => new ProductCatalogViewModel
@@ -350,14 +351,15 @@ namespace EccomerceApi.Services.ProductServices
                 })
                 .ToListAsync();
 
-
+            // Si la lista de productos es null, retorna una lista vacía
             if (listProducts == null)
             {
-                return [];
+                return new List<ProductCatalogViewModel>();
             }
 
             return listProducts;
         }
+
 
     }
 }
