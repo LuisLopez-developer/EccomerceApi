@@ -70,11 +70,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins(builder.Configuration.GetSection("Url")["FrontendUrl"] ?? "https://localhost:7033", "https://aa6b07d4f6a02d2f9c053b24b15c5c07.r2.cloudflarestorage.com")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("Content-Length", "X-Custom-Header")
-            .AllowCredentials();
+        policy.WithOrigins(
+                builder.Configuration.GetSection("Url")["FrontendUrlAdmin"] ?? "https://localhost:7033", // Enlace para el panel administrativo del eccomerce
+                builder.Configuration.GetSection("Url")["FrontendUrlUser"] ?? "https://localhost:7040" // Enlace para la página web del Eccomerce
+            )
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithExposedHeaders("Content-Length", "X-Custom-Header")
+        .AllowCredentials();
     });
 });
 
