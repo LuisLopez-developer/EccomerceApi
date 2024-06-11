@@ -1,13 +1,10 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Herlpers;
-using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model;
-using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
-using EccomerceApi.Model.ProductModel.EditModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,7 +86,7 @@ namespace EccomerceApi.Services.ProductServices
             {
                 Id = product.Id,
                 Name = product.Name,
-                Code = product.Code,
+                SKU = product.SKU,
                 StateId = product.StateId,
                 BarCode = product.BarCode,
                 Date = product.UpdateAt,
@@ -143,20 +140,13 @@ namespace EccomerceApi.Services.ProductServices
         {
             try
             {
-                // Si la fecha es nula, establece la fecha actual
-                if (productCreateModel.Date == null)
-                {
-                    productCreateModel.Date = getTimePeruHelper.GetCurrentTimeInPeru();
-
-                }
-
-                var newProduct = new Entity.Product
+                var newProduct = new Product
                 {
                     Name = productCreateModel.Name,
-                    Code = productCreateModel.Code,
+                    SKU = productCreateModel.SKU,
                     StateId = productCreateModel.StateId,
                     Date = productCreateModel.Date,
-                    UpdateAt = productCreateModel.Date ?? getTimePeruHelper.GetCurrentTimeInPeru(),
+                    UpdateAt = productCreateModel.Date,
                     Price = productCreateModel.Price,
                     Cost = productCreateModel.Cost,
                     Existence = productCreateModel.Existence,
@@ -202,7 +192,7 @@ namespace EccomerceApi.Services.ProductServices
                 if (existingProduct != null)
                 {
                     existingProduct.Name = product.Name;
-                    existingProduct.Code = product.Code;
+                    existingProduct.SKU = product.SKU;
                     existingProduct.StateId = product.StateId;
                     existingProduct.UpdateAt = getTimePeruHelper.GetCurrentTimeInPeru();
                     existingProduct.Price = product.Price;

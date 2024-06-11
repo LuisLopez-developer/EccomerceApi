@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using EccomerceApi.Entity;
 using EccomerceApi.Entity.Seeders;
 using EccomerceApi.Entity.Triggers;
+using EccomerceApi.Entity.Configurations;
 
 namespace EccomerceApi.Data
 {
@@ -53,13 +54,8 @@ namespace EccomerceApi.Data
                 .Property(ld => ld.UnitCost)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Cost)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18,2)");
+            // Aplicar configuraciones adicionales a una entidad desde la carpeta "Configurations"
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
             modelBuilder.Entity<Sale>()
                 .Property(s => s.Total)
