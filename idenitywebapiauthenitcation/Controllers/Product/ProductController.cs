@@ -1,4 +1,5 @@
 ﻿using EccomerceApi.Interfaces.ProductIntefaces;
+using EccomerceApi.Model;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -130,6 +131,37 @@ namespace EccomerceApi.Controllers.Product
         public async Task<IActionResult> GetMostValueblesProducts()
         {
             var response = await _product.GetMostValuableProductCatalog();
+            return Ok(response);
+        }
+
+        [HttpGet("GetProductCatalogWithFilters")]
+        public async Task<IActionResult> GetProductCatalogWithFilters(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string searchTerm = "",
+            [FromQuery] int? brandId = null,
+            [FromQuery] int? categoryId = null,
+            [FromQuery] string? model = null,
+            [FromQuery] decimal? minimumPrice = null,
+            [FromQuery] decimal? maximunPrice = null
+        )
+        {
+            if (page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Page and PageSize should be greater than 0.");
+            }
+
+            var result = await _product.GetProductCatalogWithFiltersAsync(page, pageSize, searchTerm, brandId, categoryId, model, minimumPrice, maximunPrice);
+
+            var response = new
+            {
+                result.TotalItems,
+                result.TotalPages,
+                CurrentPage = page,
+                PageSize = pageSize,
+                result.Items
+            };
+
             return Ok(response);
         }
 

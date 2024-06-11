@@ -338,7 +338,7 @@ namespace EccomerceApi.Services.ProductServices
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    imageUrl = p.ProductPhotos.FirstOrDefault(photo => photo.IsMain).Url
+                    ImageUrl = p.ProductPhotos.FirstOrDefault(photo => photo.IsMain).Url
                 })
                 .ToListAsync();
 
@@ -351,6 +351,71 @@ namespace EccomerceApi.Services.ProductServices
             return listProducts;
         }
 
+        public async Task<PagedResult<ProductCatalogViewModel>> GetProductCatalogWithFiltersAsync(int page, int pageSize, string searchTerm,
+            int? brandId, int? categoryId, string? model, decimal? minimumPrice, decimal? maximunPrice)
+        {
+            // Preparar un query que obtendra los productos y sus fotos
+            var query = _identityDbContext.Products
+                .Include(p => p.ProductPhotos)
+                .Where(p => p.IsVisible && p.StateId == 1) // Filtrar por IsVisible y StateId
+                .AsQueryable();
 
+            // Aplicar filtros
+
+            // filtro por categoria
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.ProductCategoryId == categoryId);
+            }
+            
+            // filtro por marca
+            if (brandId.HasValue)
+            {
+                query = query.Where(p => p.ProductBrandId == brandId);
+            }
+
+            // filtro por modelo
+            // pendiente...
+
+            // filtro por precio minimo
+            if (minimumPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minimumPrice);
+            }
+
+            // filtro por precio maximo
+            if (maximunPrice.HasValue)
+            {
+                query = query.Where(P => P.Price <= maximunPrice);
+            }
+
+            // filtro por texto de busqueda
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => p.Name.Contains(searchTerm));
+            }
+
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var products = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new ProductCatalogViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    ImageUrl = p.ProductPhotos.FirstOrDefault(photo => photo.IsMain).Url
+                })
+                .ToListAsync();
+
+            return new PagedResult<ProductCatalogViewModel>
+            {
+                Items = products,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            };
+        }
     }
 }
