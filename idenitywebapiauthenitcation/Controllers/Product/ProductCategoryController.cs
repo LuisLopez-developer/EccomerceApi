@@ -121,5 +121,18 @@ namespace EccomerceApi.Controllers.Product
             return NoContent();
         }
 
+        // controladores enfocados para el eccomerce
+        [HttpGet("GetAllPublic")]
+        public async Task<IActionResult> GetAllPublic()
+        {
+            var response = await _prodCategoryService.GetAllAsync();
+            var viewModel = response.Select(pc => new ProductCategoryViewModel
+            {
+                Id = pc.Id,
+                Name = pc.Name
+            });
+
+            return Ok(viewModel);
+        }
     }
 }
