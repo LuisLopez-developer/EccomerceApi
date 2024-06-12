@@ -116,5 +116,19 @@ namespace EccomerceApi.Controllers.Product
             return NoContent();
         }
 
+        // Metodos enfocados para el eccomerce
+        [HttpGet("GetAllPublic")]
+        public async Task<IActionResult> GetAllPublic()
+        {
+            var response = await _productBrand.GetAllAsync();
+            var viewModel = response.Select(pb => new ProductBrandViewModel
+            {
+                Id = pb.Id,
+                Name = pb.Name
+            });
+
+            return Ok(viewModel);
+        }
+
     }
 }
