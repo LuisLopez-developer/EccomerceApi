@@ -21,5 +21,7 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
         Task<List<ProductCatalogViewModel>> GetMostValuableProductCatalog();
         Task<PagedResult<ProductCatalogViewModel>> GetProductCatalogWithFiltersAsync(int page, int pageSize, string searchTerm,
             int? brandId, int? categoryId, string? model, decimal? minimumPrice, decimal? maximunPrice);
+        Task<ProductInformationViewModel> GetProductInformationAsync(int id);
+
     }
 }

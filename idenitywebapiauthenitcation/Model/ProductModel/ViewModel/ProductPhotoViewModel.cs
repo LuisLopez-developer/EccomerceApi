@@ -8,4 +8,10 @@
         public bool IsMain { get; set; }
         public required int ProductId { get; set; }
     }
+
+    public class ProductPhotoEccomerceViewModel
+    {
+        public required string Url { get; set; }
+        public bool IsMain { get; set; }
+    }
 }

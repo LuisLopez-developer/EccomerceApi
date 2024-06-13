@@ -150,7 +150,7 @@ namespace EccomerceApi.Controllers.Product
             {
                 return BadRequest("Page and PageSize should be greater than 0.");
             }
-
+            
             var result = await _product.GetProductCatalogWithFiltersAsync(page, pageSize, searchTerm, brandId, categoryId, model, minimumPrice, maximunPrice);
 
             var response = new
@@ -165,5 +165,16 @@ namespace EccomerceApi.Controllers.Product
             return Ok(response);
         }
 
+        [HttpGet("GetProductInformationAsync")]
+        public async Task<IActionResult> GetProductInformationAsync(int id) 
+        {
+            var result = await _product.GetProductInformationAsync(id);
+
+            if(result == null)
+            {
+                return NotFound("No se pudo encontrar el producto");
+            }
+            return Ok(result);
+        }
     }
 }

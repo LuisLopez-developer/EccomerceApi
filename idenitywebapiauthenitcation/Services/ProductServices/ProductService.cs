@@ -6,6 +6,7 @@ using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services.ProductServices
@@ -416,6 +417,63 @@ namespace EccomerceApi.Services.ProductServices
                 TotalItems = totalItems,
                 TotalPages = totalPages
             };
+        }
+
+        public async Task<ProductInformationViewModel> GetProductInformationAsync(int id)
+        {
+            var product = await _identityDbContext.Products
+                .Where(p => p.IsVisible && p.StateId == 1) // Filtrar si IsVisible y su StateId(1 = activo)
+                .Include(p => p.ProductPhotos)
+                .Include(p => p.ProductSpecifications)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return null;
+            }
+
+            var productInformation = new ProductInformationViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Existence = product.Existence,
+                Description = product.Description,
+                ProductBrandId = product.ProductBrandId,
+                Photos = product.ProductPhotos?.Select(photo => new ProductPhotoEccomerceViewModel
+                {
+                    Url = photo.Url,
+                    IsMain = photo.IsMain
+                }).ToList(),
+                Specifications = product.ProductSpecifications == null ? null : new ProductSpecificationViewModel
+                {
+                    ProductId = product.ProductSpecifications.ProductId,
+                    Color = product.ProductSpecifications.Color,
+                    Sensor = product.ProductSpecifications.Sensor,
+                    ModelNumber = product.ProductSpecifications.ModelNumber,
+                    ProcessorSpeed = product.ProductSpecifications.ProcessorSpeed,
+                    ScreenSize = product.ProductSpecifications.ScreenSize,
+                    ScreenResolution = product.ProductSpecifications.ScreenResolution,
+                    ScreenTechnology = product.ProductSpecifications.ScreenTechnology,
+                    RearCameraResolution = product.ProductSpecifications.RearCameraResolution,
+                    FrontCameraResolution = product.ProductSpecifications.FrontCameraResolution,
+                    RAM = product.ProductSpecifications.RAM,
+                    InternalStorage = product.ProductSpecifications.InternalStorage,
+                    SimType = product.ProductSpecifications.SimType,
+                    SimCount = product.ProductSpecifications.SimCount,
+                    NFC = product.ProductSpecifications.NFC,
+                    BluetoothVersion = product.ProductSpecifications.BluetoothVersion,
+                    UsbInterface = product.ProductSpecifications.UsbInterface,
+                    OperatingSystem = product.ProductSpecifications.OperatingSystem,
+                    BatteryCapacity = product.ProductSpecifications.BatteryCapacity,
+                    Waterproof = product.ProductSpecifications.Waterproof,
+                    WaterResistanceRating = product.ProductSpecifications.WaterResistanceRating,
+                    SplashResistant = product.ProductSpecifications.SplashResistant
+                }
+            };
+
+            return productInformation;
+
         }
     }
 }
