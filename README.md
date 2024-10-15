@@ -11,13 +11,21 @@ git clone https://github.com/LuisLopez-developer/EccomerceApi.git
 
 4. Genera las migraciones:
 ```bash
-Update-Database
+Add-Migration InitialCreate
 ```
+
+5. Genera las tablas:
+```bash
+Update-Database
+```   
+> [!WARNING]
+> Verifica que tu `appsettings.Development.json`, el  `ConnectionStrings`,
+>  este con las credenciales de tu servidor SQL Server.
 
 > [!NOTE]
 > Valida en tu SSMS, que se hayan generado correctamente las migraciones.
 
-5. Por ultimo:
+6. Por ultimo:
    
 > [!important]
 > Ejecuta el proyecto por HTTPS
