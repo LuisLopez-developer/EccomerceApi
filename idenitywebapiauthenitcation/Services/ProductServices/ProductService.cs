@@ -1,9 +1,11 @@
 ﻿using EccomerceApi.Data;
 using EccomerceApi.Entity;
 using EccomerceApi.Herlpers;
+using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model;
+using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,12 +19,14 @@ namespace EccomerceApi.Services.ProductServices
 
         private readonly IProductPhoto _productPhotoService;
         private readonly IProductSpecification _productSpecificationService;
+        private readonly IEntry _entryService;
 
-        public ProductService(IdentityDbContext identityDbContext, IProductPhoto productPhoto, IProductSpecification productSpecification)
+        public ProductService(IdentityDbContext identityDbContext, IProductPhoto productPhoto, IProductSpecification productSpecification, IEntry entryService)
         {
             _identityDbContext = identityDbContext;
             _productPhotoService = productPhoto;
             _productSpecificationService = productSpecification;
+            _entryService = entryService; // Asignar el servicio de entrada
         }
 
         public async Task<List<ProductViewModel>> GetAllAsync()
@@ -161,7 +165,6 @@ namespace EccomerceApi.Services.ProductServices
                 _identityDbContext.Products.Add(newProduct);
                 await _identityDbContext.SaveChangesAsync();
 
-
                 // Se guarda la información de las fotos, si existe alguna
                 if (productCreateModel.Photos != null && productCreateModel.Photos.Any())
                 {
@@ -173,6 +176,19 @@ namespace EccomerceApi.Services.ProductServices
                 {
                     await _productSpecificationService.CreateAsync(newProduct.Id, productCreateModel.Specifications);
                 }
+
+                // Crear una nueva entrada para el producto recién creado
+                var entryCreateModel = new EntryCreateModel
+                {
+                    Date = getTimePeruHelper.GetCurrentTimeInPeru(), 
+                    Total = productCreateModel.Cost * productCreateModel.Existence, // Ajusta esto según tus necesidades
+                    IdState = productCreateModel.StateId,
+                    UnitCost = productCreateModel.Cost,
+                    Amount = productCreateModel.Existence,
+                    IdProduct = newProduct.Id
+                };
+
+                await _entryService.CreateAsync(entryCreateModel); // Crear la entrada
 
                 return productCreateModel;
             }

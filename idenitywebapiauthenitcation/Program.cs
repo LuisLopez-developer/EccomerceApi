@@ -48,6 +48,7 @@ builder.Services.AddScoped<ILoss, LossService>();
 builder.Services.AddScoped<ILossReason, LossReasonService>();
 builder.Services.AddScoped<IProductPhoto, ProductPhotoService>();
 builder.Services.AddScoped<IProductSpecification, ProductSpecificationService>();
+builder.Services.AddScoped<IBatch, BatchService>();
 
 
 builder.Services.AddScoped<ICloudflare, CloudflareService>();
