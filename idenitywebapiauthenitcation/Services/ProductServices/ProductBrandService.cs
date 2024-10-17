@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using EccomerceApi.Entity;
-using EccomerceApi.Data;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces.ProductIntefaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services.ProductServices
 {
     public class ProductBrandService : IProductBrand
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public ProductBrandService(IdentityDbContext identityDbContext)
+        public ProductBrandService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

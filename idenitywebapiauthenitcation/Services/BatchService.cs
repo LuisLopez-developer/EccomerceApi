@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Model;
 
@@ -7,9 +7,9 @@ namespace EccomerceApi.Services
 {
     public class BatchService : IBatch
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public BatchService(IdentityDbContext identityDbContext)
+        public BatchService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

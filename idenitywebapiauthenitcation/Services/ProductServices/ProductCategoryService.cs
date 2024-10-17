@@ -1,15 +1,15 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
-using Microsoft.EntityFrameworkCore;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces.ProductIntefaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services.ProductServices
 {
     public class ProductCategoryService : IProductCategory
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public ProductCategoryService(IdentityDbContext identityDbContext)
+        public ProductCategoryService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

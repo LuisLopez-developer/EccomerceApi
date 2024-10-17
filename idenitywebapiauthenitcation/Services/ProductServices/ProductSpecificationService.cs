@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces.ProductInterfaces;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +8,9 @@ namespace EccomerceApi.Services.ProductServices
 {
     public class ProductSpecificationService : IProductSpecification
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public ProductSpecificationService(IdentityDbContext identityDbContext)
+        public ProductSpecificationService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

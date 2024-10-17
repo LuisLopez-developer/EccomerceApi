@@ -28,13 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Validators\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AplicationLayer\AplicationLayer.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\EnterpriseLayer\EnterpriseLayer.csproj" />
+    <ProjectReference Include="..\Mappers\Mappers.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Presenters\Presenters.csproj" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
 </Project>

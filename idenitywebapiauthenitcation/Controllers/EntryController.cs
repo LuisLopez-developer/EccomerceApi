@@ -1,9 +1,6 @@
 ﻿using EccomerceApi.Interfaces;
-using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
-using EccomerceApi.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EccomerceApi.Controllers
@@ -27,7 +24,7 @@ namespace EccomerceApi.Controllers
             return Ok(response);
         }
 
-       
+
 
         [HttpGet("filter")]
         public async Task<ActionResult<IEnumerable<EntryViewModel>>> FilterByDateAsync([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)

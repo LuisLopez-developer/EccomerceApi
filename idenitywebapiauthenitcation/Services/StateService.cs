@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,9 +7,9 @@ namespace EccomerceApi.Services
 {
     public class StateService : IState
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public StateService(IdentityDbContext identityDbContext)
+        public StateService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

@@ -1,8 +1,6 @@
-﻿using EccomerceApi.Entity;
-using EccomerceApi.Interfaces;
+﻿using EccomerceApi.Interfaces;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EccomerceApi.Controllers
