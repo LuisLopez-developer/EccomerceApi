@@ -1,4 +1,4 @@
-﻿using EccomerceApi.Entity;
+﻿using Data.Entity;
 
 namespace EccomerceApi.Interfaces
 {

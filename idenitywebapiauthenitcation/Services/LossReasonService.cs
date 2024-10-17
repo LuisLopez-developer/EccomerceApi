@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +8,9 @@ namespace EccomerceApi.Services
 {
     public class LossReasonService : ILossReason
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
-        public LossReasonService (IdentityDbContext identityDbContext)
+        public LossReasonService(AppDbContext identityDbContext)
         {
             _identityDbContext = identityDbContext;
         }

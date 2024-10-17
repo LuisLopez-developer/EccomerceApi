@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Herlpers;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Model;
@@ -11,11 +11,11 @@ namespace EccomerceApi.Services
 {
     public class EntryService : IEntry
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
         private readonly IBatch _batchService;
 
-        public EntryService(IdentityDbContext identityDbContext, IBatch batchService)
+        public EntryService(AppDbContext identityDbContext, IBatch batchService)
         {
             _identityDbContext = identityDbContext;
             _batchService = batchService;

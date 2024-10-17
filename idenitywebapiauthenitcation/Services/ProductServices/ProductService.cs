@@ -1,5 +1,5 @@
-﻿using EccomerceApi.Data;
-using EccomerceApi.Entity;
+﻿using Data;
+using Data.Entity;
 using EccomerceApi.Herlpers;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
@@ -8,20 +8,19 @@ using EccomerceApi.Model;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace EccomerceApi.Services.ProductServices
 {
     public class ProductService : IProduct
     {
-        private readonly IdentityDbContext _identityDbContext;
+        private readonly AppDbContext _identityDbContext;
 
         private readonly IProductPhoto _productPhotoService;
         private readonly IProductSpecification _productSpecificationService;
         private readonly IEntry _entryService;
 
-        public ProductService(IdentityDbContext identityDbContext, IProductPhoto productPhoto, IProductSpecification productSpecification, IEntry entryService)
+        public ProductService(AppDbContext identityDbContext, IProductPhoto productPhoto, IProductSpecification productSpecification, IEntry entryService)
         {
             _identityDbContext = identityDbContext;
             _productPhotoService = productPhoto;
@@ -180,7 +179,7 @@ namespace EccomerceApi.Services.ProductServices
                 // Crear una nueva entrada para el producto recién creado
                 var entryCreateModel = new EntryCreateModel
                 {
-                    Date = getTimePeruHelper.GetCurrentTimeInPeru(), 
+                    Date = getTimePeruHelper.GetCurrentTimeInPeru(),
                     Total = productCreateModel.Cost * productCreateModel.Existence, // Ajusta esto según tus necesidades
                     IdState = productCreateModel.StateId,
                     UnitCost = productCreateModel.Cost,
@@ -199,7 +198,8 @@ namespace EccomerceApi.Services.ProductServices
         }
 
         public async Task<bool> UpdateAsync(int id, ProductCreateModel product)
-        {            try
+        {
+            try
             {
                 var existingProduct = await _identityDbContext.Products
                     .Include(p => p.ProductPhotos)
@@ -384,7 +384,7 @@ namespace EccomerceApi.Services.ProductServices
             {
                 query = query.Where(p => p.ProductCategoryId == categoryId);
             }
-            
+
             // filtro por marca
             if (brandId.HasValue)
             {

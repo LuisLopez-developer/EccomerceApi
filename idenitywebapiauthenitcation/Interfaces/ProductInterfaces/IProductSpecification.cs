@@ -1,5 +1,4 @@
-﻿using EccomerceApi.Entity;
-using EccomerceApi.Model.ProductModel.ViewModel;
+﻿using EccomerceApi.Model.ProductModel.ViewModel;
 
 namespace EccomerceApi.Interfaces.ProductInterfaces
 {

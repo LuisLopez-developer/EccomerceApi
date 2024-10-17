@@ -1,14 +1,20 @@
-using EccomerceApi.Data;
-using EccomerceApi.Entity;
+using AplicationLayer.Sale;
+using Data;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
+using EccomerceApi.Middlewares;
 using EccomerceApi.Services;
 using EccomerceApi.Services.ProductServices;
-using Microsoft.AspNetCore.Diagnostics;
+using EccomerceApi.Validators;
+using EnterpriseLayer;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Presenters;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,15 +34,26 @@ var connectionString = isDevelopment ?
     builder.Configuration.GetSection("ConnectionStrings")["idenitycs"] :
     Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
+// Validaciones
+builder.Services.AddValidatorsFromAssemblyContaining<CartValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
 // Add services to the container.
-builder.Services.AddDbContext<IdentityDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Generar los endpoints para la gestion de sessiones
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<IdentityDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>();
 
+// Nuevas API'S
+//builder.Services.AddScoped<GetCartUseCase<Cart, CartViewModel>>();
+//builder.Services.AddScoped<AddCartUseCase<CartRequestDTO>>();
+
+
+// Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProduct, ProductService>();
@@ -93,45 +110,10 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();
-
-
-// Logging para errores no controlados
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-        context.Response.ContentType = "application/json";
-        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-        if (errorFeature != null)
-        {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogError(errorFeature.Error, "Unhandled exception");
-            await context.Response.WriteAsync(new
-            {
-                error = errorFeature.Error.Message
-            }.ToString());
-        }
-    });
-});
-
-// Aquí añadimos la inicialización de migraciones
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    try
-//    {
-//        var context = services.GetRequiredService<IdentityDbContext>();
-//        context.Database.Migrate(); // Aplica migraciones
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = services.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
-//    }
-//}
 
 app.Run();
