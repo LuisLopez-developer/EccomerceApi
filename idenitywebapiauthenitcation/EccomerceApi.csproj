@@ -11,6 +11,7 @@
     <PackageReference Include="AWSSDK.S3" Version="3.7.308.7" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
@@ -28,7 +29,12 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Validators\" />
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AplicationLayer\AplicationLayer.csproj" />
   </ItemGroup>
 
 </Project>

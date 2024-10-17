@@ -3,6 +3,7 @@ using EccomerceApi.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
+using EccomerceApi.Middlewares;
 using EccomerceApi.Services;
 using EccomerceApi.Services.ProductServices;
 using Microsoft.AspNetCore.Diagnostics;
@@ -93,45 +94,10 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();
-
-
-// Logging para errores no controlados
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        context.Response.StatusCode = 500;
-        context.Response.ContentType = "application/json";
-        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-        if (errorFeature != null)
-        {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogError(errorFeature.Error, "Unhandled exception");
-            await context.Response.WriteAsync(new
-            {
-                error = errorFeature.Error.Message
-            }.ToString());
-        }
-    });
-});
-
-// Aquí añadimos la inicialización de migraciones
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    try
-//    {
-//        var context = services.GetRequiredService<IdentityDbContext>();
-//        context.Database.Migrate(); // Aplica migraciones
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = services.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "Ocurrió un error al aplicar las migraciones.");
-//    }
-//}
 
 app.Run();
