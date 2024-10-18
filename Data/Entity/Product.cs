@@ -36,7 +36,6 @@ namespace Data.Entity
 
         public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
         public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();
-        public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
         public virtual ICollection<ProductPhoto> ProductPhotos { get; set; } = new List<ProductPhoto>();
         public virtual ProductSpecification ProductSpecifications { get; set; } = new ProductSpecification();
         public ICollection<Batch> Batches { get; set; } = new List<Batch>();
