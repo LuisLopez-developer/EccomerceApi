@@ -1,3 +1,4 @@
+using AplicationLayer;
 using AplicationLayer.Sale;
 using Data;
 using EccomerceApi.Interfaces;
@@ -10,11 +11,12 @@ using EccomerceApi.Validators;
 using EnterpriseLayer;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Mappers;
 using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Presenters;
+using Repository;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,9 +51,10 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 // Nuevas API'S
-//builder.Services.AddScoped<GetCartUseCase<Cart, CartViewModel>>();
-//builder.Services.AddScoped<AddCartUseCase<CartRequestDTO>>();
-
+builder.Services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
+builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
+builder.Services.AddScoped<AddCartUseCase<CartRequestDTO>>();
+builder.Services.AddScoped<GetCartUseCase>();
 
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();

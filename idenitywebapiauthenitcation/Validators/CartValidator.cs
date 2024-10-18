@@ -7,8 +7,8 @@ namespace EccomerceApi.Validators
     {
         public CartValidator()
         {
-            RuleFor(x => x.ProductId).NotEmpty().WithMessage("El id del producto es requerido");
-            RuleFor(x => x.Quantity).NotEmpty().WithMessage("La cantidad es requerida");
+            RuleFor(x => x.CartItems).NotEmpty().WithMessage("Se requiere Items.");
+            RuleFor(x => x.UserId).NotEmpty().WithMessage("Se requiere el id de un Usuario.");
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Data.Entity.Configurations
     {
         public void Configure(EntityTypeBuilder<CartModel> builder)
         {
-            // Configuración de la clave foránea para ProductId 
-            builder.HasOne<Product>()
-                .WithMany()
-                .HasForeignKey(c => c.ProductId)
-                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasMany(c => c.CartItems)
+                .WithOne()
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Configuración de la clave foránea para UserId 
             builder.HasOne<IdentityUser>()
@@ -21,10 +21,6 @@ namespace Data.Entity.Configurations
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.NoAction);  
 
-            // Otras configuraciones de propiedades
-            builder.Property(c => c.Quantity).IsRequired();
-            builder.Property(c => c.CreatedAt).IsRequired();
-            builder.Property(c => c.UpdatedAt).IsRequired();
         }
     }
 }

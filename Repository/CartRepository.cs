@@ -16,39 +16,42 @@ namespace Repository
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Cart entity)
+        public async Task AddAsync(Cart cart)
         {
-            var cartModel = new CartModel
+            var cartModel = new CartModel();
+            cartModel.UserId = cart.UserId;
+            cartModel.CreatedAt = cart.CreatedAt;
+            cartModel.CartItems = cart.CartItems.Select(ci => new CartItemModel
             {
-                ProductId = entity.ProductId,
-                UserId = entity.UserId,
-                Quantity = entity.Quantity,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
+                ProductId = ci.ProductId,
+                Quantity = ci.Quantity,
+                CreatedAt = ci.CreatedAt
+
+            }).ToList();
 
             await _dbContext.Carts.AddAsync(cartModel);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Cart>> GetAllAsync() => await _dbContext.Carts.Select(c => new Cart
-        {
-            Id = c.Id,
-            ProductId = c.ProductId,
-            UserId = c.UserId,
-            Quantity = c.Quantity
-        }).ToListAsync();
+        public async Task<IEnumerable<Cart>> GetAllAsync() 
+            => await _dbContext.Carts
+                .Select(c => new Cart(c.Id, c.UserId, c.CreatedAt, 
+                                        _dbContext.CartItems
+                                            .Where(ci => ci.CartId == c.Id)
+                                            .Select(ci => new CartItem(ci.ProductId, ci.Quantity, ci.CreatedAt))
+                                            .ToList()
+                                    )
+                ).ToListAsync();
 
         public async Task<Cart> GetById(int id)
         {
-            var cart = await _dbContext.Carts.FindAsync(id);
-            return new Cart
-            {
-                Id = cart.Id,
-                ProductId = cart.ProductId,
-                UserId = cart.UserId,
-                Quantity = cart.Quantity
-            };
+            var cartModel = await _dbContext.Carts.FindAsync(id);
+            return new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt,
+                                _dbContext.CartItems
+                                    .Where(ci => ci.CartId == cartModel.Id)
+                                    .Select(ci => new CartItem(ci.ProductId, ci.Quantity, ci.CreatedAt))
+                                    .ToList()
+                            );
         }
     }
 }

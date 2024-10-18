@@ -37,6 +37,7 @@ namespace Data
 
         // Nuevas entidades
         public virtual DbSet<CartModel> Carts { get; set; }
+        public virtual DbSet<CartItemModel> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

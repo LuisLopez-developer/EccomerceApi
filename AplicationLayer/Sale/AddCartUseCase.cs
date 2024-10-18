@@ -18,8 +18,8 @@ namespace AplicationLayer.Sale
         {
             var cart = _mapper.ToEntity(cartDTO);
 
-            if (cart.Quantity <= 0)
-                throw new ValidationException("La cantidad debe ser mayor que 0");
+            if (cart.CartItems.Count <= 0)
+                throw new ValidationException("El carrito debe conterner Items.");
 
             await _cartRepository.AddAsync(cart);
         }
