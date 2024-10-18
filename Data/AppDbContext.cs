@@ -24,8 +24,10 @@ namespace Data
         public virtual DbSet<Loss> Losses { get; set; }
         public virtual DbSet<LostDetail> LostDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Sale> Sales { get; set; }
-        public virtual DbSet<SaleDetail> SaleDetails { get; set; }
+        public virtual DbSet<PaymentMethodModel> PaymentMethods { get; set; }
+        public virtual DbSet<OrderStatusModel> OrderStatuses { get; set; }
+        public virtual DbSet<OrderModel> Orders { get; set; }
+        public virtual DbSet<OrderDetailModel> OrderDetails{ get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
@@ -63,21 +65,8 @@ namespace Data
             // Aplicar configuraciones adicionales a una entidad desde la carpeta "Configurations"
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
-            modelBuilder.Entity<Sale>()
-                .Property(s => s.Total)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<SaleDetail>()
-                .Property(sd => sd.UnitCost)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<SaleDetail>()
-                .Property(sd => sd.UnitPrice)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<SaleDetail>()
-                .Property(sd => sd.Subtotal)
-                .HasColumnType("decimal(18,2)");
+            modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
 
             modelBuilder.Entity<ProductCategory>()
                 .Property(pc => pc.Name)
@@ -109,6 +98,10 @@ namespace Data
             //Sembrar datos para las razones y tipos
             LossReasonSeedData.SeedData(modelBuilder);
             EntryTypeSeedData.SeedData(modelBuilder);
+
+            //Sembrar datos para los estados de los pedidos
+            PaymentMethodSeedData.SeedData(modelBuilder);
+            OrderStatusSeedData.SeedData(modelBuilder);
 
         }
 
