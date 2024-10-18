@@ -6,12 +6,17 @@ namespace Mappers
 {
     public class CartMapper : IMapper<CartRequestDTO, Cart>
     {
-        public Cart ToEntity(CartRequestDTO dto) => new Cart
+        public Cart ToEntity(CartRequestDTO dto)
         {
-            Id = dto.Id,
-            ProductId = dto.ProductId,
-            UserId = dto.UserId,
-            Quantity = dto.Quantity
-        };
+            var cartItems = new List<CartItem>();
+
+            foreach (var item in dto.CartItems)
+            {
+                cartItems.Add(new CartItem(item.ProductId, item.Quantity, DateTime.Now));
+            }
+
+            return new Cart(dto.UserId, DateTime.Now, cartItems);
+
+        }
     }
 }
