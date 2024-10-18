@@ -3,10 +3,11 @@ using Data;
 using EnterpriseLayer;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Linq.Expressions;
 
 namespace Repository
 {
-    public class CartRepository : IRepository<Cart>
+    public class CartRepository : IRepository<Cart>, IRepositorySearch<CartModel, Cart>
     {
 
         private readonly AppDbContext _dbContext;
@@ -52,6 +53,64 @@ namespace Repository
                                     .Select(ci => new CartItem(ci.ProductId, ci.Quantity, ci.CreatedAt))
                                     .ToList()
                             );
+        }
+
+        public async Task<IEnumerable<Cart>> GetAsync(Expression<Func<CartModel, bool>> predicate)
+        {
+            var cartsModel = await _dbContext.Carts.Include("CartItems").Where(predicate).ToListAsync();
+            var carts = new List<Cart>();
+
+            foreach (var cartModel in cartsModel)
+            {
+                var cartItems = new List<CartItem>();
+                foreach (var cartItemModel in cartModel.CartItems)
+                {
+                    cartItems.Add(new CartItem(cartItemModel.ProductId, cartItemModel.Quantity, cartItemModel.CreatedAt));
+                }
+                carts.Add(new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt, cartItems));
+            }
+            return carts;
+        }
+
+        public async Task UpdateAsync(int id, Cart entity)
+        {
+            var cartModel = await _dbContext.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cartModel == null)
+            {
+                throw new Exception($"Cart with ID {id} not found.");
+            }
+
+            cartModel.UserId = entity.UserId;
+            cartModel.CreatedAt = entity.CreatedAt;
+
+            _dbContext.CartItems.RemoveRange(cartModel.CartItems);
+
+            // Luego, agregar los nuevos items
+            cartModel.CartItems = entity.CartItems.Select(ci => new CartItemModel
+            {
+                ProductId = ci.ProductId,
+                Quantity = ci.Quantity,
+                CreatedAt = ci.CreatedAt,
+                CartId = cartModel.Id 
+            }).ToList();
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+
+        public async Task DeleteAsync(int id)
+        {
+            // Buscar el carrito por su ID
+            var cart = await _dbContext.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cart == null)
+            {
+                throw new Exception($"Cart with ID {id} not found.");
+            }
+
+            _dbContext.Carts.Remove(cart);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

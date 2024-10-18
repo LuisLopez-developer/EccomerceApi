@@ -2,6 +2,7 @@
 using FluentValidation;
 using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace EccomerceApi.Controllers.Eccomerce
 {
@@ -12,15 +13,24 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly AddCartUseCase<CartRequestDTO> _addCartUseCase;
         private readonly IValidator<CartRequestDTO> _validator;
         private readonly GetCartUseCase _cartUseCase;
+        private readonly GetCartSearchUseCase<CartModel> _cartSearchUseCase;
+        private readonly UpdateCartUseCase<CartRequestDTO> _updateCartUseCase;
+        private readonly DeleteCartUseCase _deleteCartUseCase;
 
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
             IValidator<CartRequestDTO> validator,
-            GetCartUseCase cartUseCase)
+            GetCartUseCase cartUseCase,
+            GetCartSearchUseCase<CartModel> cartSearchUseCase,
+            UpdateCartUseCase<CartRequestDTO> updateCartUseCase,
+            DeleteCartUseCase deleteCartUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
             _cartUseCase = cartUseCase;
+            _cartSearchUseCase = cartSearchUseCase;
+            _updateCartUseCase = updateCartUseCase;
+            _deleteCartUseCase = deleteCartUseCase;
         }
 
         [HttpPost("cart")]
@@ -44,5 +54,55 @@ namespace EccomerceApi.Controllers.Eccomerce
             var result = await _cartUseCase.ExecuteAsync();
             return Ok(result);
         }
+
+
+
+        [HttpGet("cart/{userId}")]
+        public async Task<IActionResult> GetCartSearch(string userId)
+        {
+            var result = await _cartSearchUseCase.ExecuteAsync(c => c.UserId == userId);
+
+            if (result == null || !result.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("cart")]
+        public async Task<IActionResult> UpdateCart(int cartId, CartRequestDTO cartRequest)
+        {
+            try
+            {
+                await _updateCartUseCase.ExecuteAsync(cartId, cartRequest);
+                return NoContent(); 
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
+        [HttpDelete("cart/{cartId}")]
+        public async Task<IActionResult> DeleteCart(int cartId)
+        {
+            try
+            {
+                await _deleteCartUseCase.ExecuteAsync(cartId);
+                return NoContent(); // 204 si se eliminó correctamente
+            }
+            catch (Exception ex)
+            {
+                // Si no se encontró el carrito o hay otro error
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
     }
 }
