@@ -24,7 +24,7 @@ namespace Data
         public virtual DbSet<Loss> Losses { get; set; }
         public virtual DbSet<LostDetail> LostDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<OrderStatusesModel> OrderStatuses { get; set; }
+        public virtual DbSet<OrderStatusModel> OrderStatuses { get; set; }
         public virtual DbSet<OrderModel> Orders { get; set; }
         public virtual DbSet<OrderDetailModel> OrderDetails{ get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -97,6 +97,9 @@ namespace Data
             //Sembrar datos para las razones y tipos
             LossReasonSeedData.SeedData(modelBuilder);
             EntryTypeSeedData.SeedData(modelBuilder);
+
+            //Sembrar datos para los estados de los pedidos
+            OrderStatusSeedData.SeedData(modelBuilder);
 
         }
 

@@ -26,7 +26,7 @@ namespace Data.Entity.Configurations
                 .HasForeignKey(o => o.CreatedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne<OrderStatusesModel>()
+            builder.HasOne<OrderStatusModel>()
                 .WithMany()
                 .HasForeignKey(o => o.StatusId)
                 .OnDelete(DeleteBehavior.NoAction);
