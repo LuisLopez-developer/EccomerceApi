@@ -8,6 +8,7 @@ namespace Presenters.SaleViewModel
         public IEnumerable<CartDetailViewModel> Present(IEnumerable<Cart> carts)
             => carts.Select(cart => new CartDetailViewModel
             {
+                Id = cart.Id,
                 UserId = cart.UserId,
                 CartItems = cart.CartItems.Select(cartItem => new CartItemViewModel
                 {

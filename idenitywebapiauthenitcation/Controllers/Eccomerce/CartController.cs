@@ -1,8 +1,10 @@
 ﻿using AplicationLayer.Sale;
+using EnterpriseLayer;
 using FluentValidation;
 using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Presenters.SaleViewModel;
 
 namespace EccomerceApi.Controllers.Eccomerce
 {
@@ -12,7 +14,7 @@ namespace EccomerceApi.Controllers.Eccomerce
     {
         private readonly AddCartUseCase<CartRequestDTO> _addCartUseCase;
         private readonly IValidator<CartRequestDTO> _validator;
-        private readonly GetCartUseCase _cartUseCase;
+        private readonly GetCartUseCase<Cart, CartDetailViewModel> _cartUseCase;
         private readonly GetCartSearchUseCase<CartModel> _cartSearchUseCase;
         private readonly UpdateCartUseCase<CartRequestDTO> _updateCartUseCase;
         private readonly DeleteCartUseCase _deleteCartUseCase;
@@ -20,7 +22,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
             IValidator<CartRequestDTO> validator,
-            GetCartUseCase cartUseCase,
+            GetCartUseCase<Cart, CartDetailViewModel> cartUseCase,
             GetCartSearchUseCase<CartModel> cartSearchUseCase,
             UpdateCartUseCase<CartRequestDTO> updateCartUseCase,
             DeleteCartUseCase deleteCartUseCase)

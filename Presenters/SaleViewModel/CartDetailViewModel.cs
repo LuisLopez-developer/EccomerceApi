@@ -2,6 +2,7 @@
 {
     public class CartDetailViewModel
     {
+        public int Id { get; set; }
         public string UserId { get; set; }
         public List<CartItemViewModel> CartItems { get; set; }
     }

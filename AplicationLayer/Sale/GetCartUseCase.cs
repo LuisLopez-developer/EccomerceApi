@@ -2,19 +2,21 @@
 
 namespace AplicationLayer.Sale
 {
-    public class GetCartUseCase
+    public class GetCartUseCase<TEntity, TOutput>
     {
-        private readonly IRepository<Cart> _cartRepository;
+        private readonly IRepository<TEntity> _cartRepository;
+        private readonly IPresenter<TEntity, TOutput> _presenter;
 
 
-        public GetCartUseCase(IRepository<Cart> cartRepository)
+        public GetCartUseCase(IRepository<TEntity> cartRepository, IPresenter<TEntity, TOutput> presenter)
         {
             _cartRepository = cartRepository;
+            _presenter = presenter;
         }
 
-        public async Task<IEnumerable<Cart>> ExecuteAsync()
+        public async Task<IEnumerable<TOutput>> ExecuteAsync()
         {
-            return await _cartRepository.GetAllAsync();
+            return _presenter.Present(await _cartRepository.GetAllAsync());
         }
     }
 }
