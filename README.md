@@ -9,6 +9,12 @@ git clone https://github.com/LuisLopez-developer/EccomerceApi.git
 
 ![image](https://github.com/LuisLopez-developer/EccomerceApi/assets/156825396/cc0fd1a8-b982-485a-8647-f2efcf82e0c3)
 
+> [!NOTE]
+> Antes de ejecutar los comandos, asegúrate de que el proyecto `Data` esté seleccionado en la consola.
+> 
+> ![image](https://github.com/user-attachments/assets/f80c49fe-62e2-447d-8ff3-36098501f3e1)
+
+
 4. Genera las migraciones:
 ```bash
 Add-Migration InitialCreate
