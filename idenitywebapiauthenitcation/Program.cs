@@ -16,6 +16,8 @@ using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Models;
+using Presenters.SaleViewModel;
 using Repository;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -53,8 +55,13 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 // Nuevas API'S
 builder.Services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
 builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
+builder.Services.AddScoped<IRepositorySearch<CartModel, Cart>, CartRepository>();
+builder.Services.AddScoped<IPresenter<Cart, CartDetailViewModel>, CartDetailPresenter>();
+builder.Services.AddScoped<GetCartSearchUseCase<CartModel>>();
 builder.Services.AddScoped<AddCartUseCase<CartRequestDTO>>();
-builder.Services.AddScoped<GetCartUseCase>();
+builder.Services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
+builder.Services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
+builder.Services.AddScoped<DeleteCartUseCase>();
 
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();

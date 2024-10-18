@@ -25,7 +25,7 @@ namespace EccomerceApi.Services.ProductServices
             _identityDbContext = identityDbContext;
             _productPhotoService = productPhoto;
             _productSpecificationService = productSpecification;
-            _entryService = entryService; // Asignar el servicio de entrada
+            _entryService = entryService;
         }
 
         public async Task<List<ProductViewModel>> GetAllAsync()
