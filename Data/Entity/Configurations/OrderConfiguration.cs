@@ -31,6 +31,10 @@ namespace Data.Entity.Configurations
                 .HasForeignKey(o => o.StatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.HasOne<PaymentMethodModel>()
+                .WithMany()
+                .HasForeignKey(o => o.PaymentMethodId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
