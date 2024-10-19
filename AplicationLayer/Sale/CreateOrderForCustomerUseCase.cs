@@ -36,9 +36,9 @@ namespace AplicationLayer.Sale
                 if (product.Existence < detail.Quantity)
                     throw new ValidationException($"No hay suficiente cantidad del producto con ID {detail.ProductId}.");
 
-                // Validar si el precio del actual producto, es mayor al 60% del nuevo precio
-                if (product.Cost * 0.6m > detail.UnitPrice)
-                    throw new ValidationException($"El precio del producto con ID {detail.ProductId} no puede ser menor al 60% del costo.");
+                // La ganancia no debe ser menor al 10% costo
+                if (detail.TotalPrice < product.Cost * 1.1m)
+                    throw new ValidationException($"La ganancia del producto con ID {detail.ProductId} no debe ser menor al 10% del costo.");
 
                 product.Existence -= detail.Quantity;
                 await _productRepository.UpdateAsync(product.Id, product);
