@@ -18,12 +18,12 @@ namespace Data.Entity.Configurations
 
             builder.HasOne<AppUser>()
                 .WithMany()
-                .HasForeignKey(o => o.UserId)
+                .HasForeignKey(o => o.CustomerDNI)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne<AppUser>()
                 .WithMany()
-                .HasForeignKey(o => o.CreatedByUserId)
+                .HasForeignKey(o => o.WorkerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne<OrderStatusModel>()

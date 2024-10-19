@@ -3,7 +3,7 @@
     public class OrderViewModel
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string CustomerDNI { get; set; }
         public int StatusID { get; set; }
         public int PaymentMethodId { get; set; }
         public decimal Total { get; set; }
