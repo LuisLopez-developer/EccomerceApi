@@ -1,6 +1,7 @@
 using AplicationLayer;
 using AplicationLayer.Sale;
 using Data;
+using Data.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;
@@ -72,6 +73,8 @@ builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
 builder.Services.AddScoped<GetAllOrdersUseCase<Order, OrdersViewModel>>();
 
 builder.Services.AddScoped<IProductRepository<Product>, ProductRepository>();
+builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
+builder.Services.AddScoped<IRepositorySearch<ProductModel, Product>, ProductRepository>();
 
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();
