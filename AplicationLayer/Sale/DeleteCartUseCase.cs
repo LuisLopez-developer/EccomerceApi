@@ -14,7 +14,7 @@ namespace AplicationLayer.Sale
         public async Task ExecuteAsync(int cartId)
         {
             // Verificamos si el carrito existe antes de intentar eliminarlo
-            var cart = await _cartRepository.GetById(cartId);
+            var cart = await _cartRepository.GetByIdAsync(cartId);
 
             if (cart == null)
             {

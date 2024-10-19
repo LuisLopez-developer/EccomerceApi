@@ -78,7 +78,7 @@ namespace Repository
                           )
                       ).ToListAsync();
 
-        public async Task<Order> GetById(int id)
+        public async Task<Order> GetByIdAsync(int id)
         {
             var orderModel = await _dbContext.Orders
                 .Include(o => o.OrderDetails)

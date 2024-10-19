@@ -44,7 +44,7 @@ namespace Repository
                                     )
                 ).ToListAsync();
 
-        public async Task<Cart> GetById(int id)
+        public async Task<Cart> GetByIdAsync(int id)
         {
             var cartModel = await _dbContext.Carts.FindAsync(id);
             return new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt,

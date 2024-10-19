@@ -20,7 +20,7 @@ namespace AplicationLayer.Sale
 
         public async Task<TOutput> ExecuteAsync(int orderId)
         {
-            var order = await _orderRepository.GetById(orderId);
+            var order = await _orderRepository.GetByIdAsync(orderId);
             if (order == null)
             {
                 throw new Exception("Pedido no encontrado");

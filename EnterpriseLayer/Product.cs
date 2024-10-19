@@ -7,9 +7,9 @@
         public string SKU { get; }
         public DateTime CreateAt { get; }
         public DateTime UpdateAt { get; }
-        public decimal Cost { get; }
+        public decimal Cost { get; set; }
         public decimal Price { get; }
-        public int Existence { get; }
+        public int Existence { get; set; }
         public bool IsVisible { get; }
         public string Description { get; }
         public string BarCode { get; }
@@ -34,7 +34,6 @@
             ProductBrandId = productBrandId;
             ProductCategoryId = productCategoryId;
         }
-
 
     }
 }

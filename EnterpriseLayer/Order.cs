@@ -7,7 +7,7 @@
         public string UserName { get; }
         public string CreatedByUserId { get; }
         public string CreatedByUserName { get; }
-        public int StatusId { get; }
+        public int StatusId { get; set; }
         public string StatusName { get; }
         public int PaymentMethodId { get; }
         public string PaymentMethodName { get; }
