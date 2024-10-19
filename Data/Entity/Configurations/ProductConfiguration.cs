@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Entity.Configurations
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : IEntityTypeConfiguration<ProductModel>
     {
         // Aqui se añadira las restricciones que no se puedan colocar por anotaciones de datos, en la entidad misma
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public void Configure(EntityTypeBuilder<ProductModel> builder)
         {
             builder.HasIndex(p => p.SKU)
                 .IsUnique();

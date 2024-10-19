@@ -11,7 +11,7 @@ public partial class EntryDetail
     public virtual Entry? Entry { get; set; }
 
     public int? ProductId { get; set; }
-    public virtual Product? Product { get; set; }
+    public virtual ProductModel? Product { get; set; }
 
     public int BatchId { get; set; }
     public Batch Batch { get; set; }

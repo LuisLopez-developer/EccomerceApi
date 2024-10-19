@@ -23,7 +23,7 @@ namespace Data
         public virtual DbSet<EntryDetail> EntryDetails { get; set; }
         public virtual DbSet<Loss> Losses { get; set; }
         public virtual DbSet<LostDetail> LostDetails { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductModel> Products { get; set; }
         public virtual DbSet<PaymentMethodModel> PaymentMethods { get; set; }
         public virtual DbSet<OrderStatusModel> OrderStatuses { get; set; }
         public virtual DbSet<OrderModel> Orders { get; set; }
