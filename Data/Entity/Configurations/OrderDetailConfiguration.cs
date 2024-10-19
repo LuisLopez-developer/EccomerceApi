@@ -19,6 +19,11 @@ namespace Data.Entity.Configurations
 
             builder.Property(od => od.TotalPrice)
                 .HasColumnType("decimal(18,2)");
+
+            builder.HasOne<ProductModel>()
+               .WithMany()
+               .HasForeignKey(od => od.ProductId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

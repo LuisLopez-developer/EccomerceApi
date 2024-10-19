@@ -63,6 +63,16 @@ builder.Services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
 builder.Services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
 builder.Services.AddScoped<DeleteCartUseCase>();
 
+builder.Services.AddScoped<IMapper<OrderRequestDTO, Order>, OrderMapper>();
+builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
+builder.Services.AddScoped<IOrderDetailPresenter<OrderViewModel>, OrderPresenter>(); 
+builder.Services.AddScoped<IPresenter<Order, OrdersViewModel>, OrdersPresenter>();
+builder.Services.AddScoped<CreateOrderForCustomerUseCase<OrderRequestDTO>>();
+builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
+builder.Services.AddScoped<GetAllOrdersUseCase<Order, OrdersViewModel>>();
+
+builder.Services.AddScoped<IProductRepository<Product>, ProductRepository>();
+
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();

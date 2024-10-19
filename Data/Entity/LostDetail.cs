@@ -9,7 +9,7 @@ public partial class LostDetail
     public virtual Loss? Loss { get; set; }
 
     public int? ProductId { get; set; }
-    public virtual Product? Product { get; set; }
+    public virtual ProductModel? Product { get; set; }
 
     public int? LossReasonId { get; set; }
     public virtual LossReason LossReason { get; set; }

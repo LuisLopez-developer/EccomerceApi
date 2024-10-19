@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EccomerceApi", "idenityweba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AplicationLayer", "AplicationLayer\AplicationLayer.csproj", "{116B8C55-E079-44E6-AD35-A2F6FDAA7A3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{A672548E-523E-4835-AEA6-B96A6DF4296B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{A672548E-523E-4835-AEA6-B96A6DF4296B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterpriseLayer", "EnterpriseLayer\EnterpriseLayer.csproj", "{FB6EA508-D415-4543-8CE6-F89EE6936BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterpriseLayer", "EnterpriseLayer\EnterpriseLayer.csproj", "{FB6EA508-D415-4543-8CE6-F89EE6936BE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers", "Mappers\Mappers.csproj", "{D6DF989E-4EC1-42FB-B343-BE8A23E8700B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mappers", "Mappers\Mappers.csproj", "{D6DF989E-4EC1-42FB-B343-BE8A23E8700B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{57672930-8890-46A9-89EA-88E8B76ACD5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{57672930-8890-46A9-89EA-88E8B76ACD5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presenters", "Presenters\Presenters.csproj", "{8118BD96-803C-4EF0-B1ED-3B5A36699CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presenters", "Presenters\Presenters.csproj", "{8118BD96-803C-4EF0-B1ED-3B5A36699CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{5856313B-1103-41B4-99C6-21C492C9AA0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{5856313B-1103-41B4-99C6-21C492C9AA0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

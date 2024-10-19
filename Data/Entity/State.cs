@@ -9,7 +9,7 @@ public partial class State
 
     public virtual ICollection<Loss> Losses { get; set; } = new List<Loss>();
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<ProductModel> Products { get; set; } = new List<ProductModel>();
 
     public virtual ICollection<AppUser> AspNetUsers { get; set; } = new List<AppUser>();
 }

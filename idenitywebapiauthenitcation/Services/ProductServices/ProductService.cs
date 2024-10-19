@@ -144,7 +144,7 @@ namespace EccomerceApi.Services.ProductServices
         {
             try
             {
-                var newProduct = new Product
+                var newProduct = new ProductModel
                 {
                     Name = productCreateModel.Name,
                     SKU = productCreateModel.SKU,
