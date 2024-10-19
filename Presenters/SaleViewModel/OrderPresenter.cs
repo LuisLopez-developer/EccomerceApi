@@ -34,7 +34,7 @@ namespace Presenters.SaleViewModel
             var orderViewModel = new OrderViewModel
             {
                 Id = order.Id,
-                UserId = order.UserId,
+                CustomerDNI = order.CustomerDNI,
                 StatusID = order.StatusId,
                 PaymentMethodId = order.PaymentMethodId,
                 Total = order.Total,

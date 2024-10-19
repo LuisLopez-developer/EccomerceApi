@@ -19,8 +19,8 @@ namespace Repository
         {
             var orderModel = new OrderModel
             {
-                UserId = entity.UserId,
-                CreatedByUserId = entity.CreatedByUserId,
+                CustomerDNI = entity.CustomerDNI,
+                WorkerId = entity.CreatedByUserId,
                 StatusId = entity.StatusId,
                 PaymentMethodId = entity.PaymentMethodId,
                 Total = entity.Total,
@@ -64,9 +64,9 @@ namespace Repository
                       join orderStatus in _dbContext.OrderStatuses
                           on order.StatusId equals orderStatus.Id
                       join user in _dbContext.Users
-                          on order.UserId equals user.Id
+                          on order.CustomerDNI equals user.Id
                       join createdByUser in _dbContext.Users
-                          on order.CreatedByUserId equals createdByUser.Id
+                          on order.WorkerId equals createdByUser.Id
                       select new Order(
                           order.Id,
                           user.UserName ?? "",
@@ -86,8 +86,8 @@ namespace Repository
 
             return new Order(
                 orderModel.Id,
-                orderModel.UserId,
-                orderModel.CreatedByUserId,
+                orderModel.CustomerDNI,
+                orderModel.WorkerId,
                 orderModel.StatusId,
                 orderModel.PaymentMethodId,
                 orderModel.CreatedAt,

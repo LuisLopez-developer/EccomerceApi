@@ -3,7 +3,7 @@
     public class Order
     {
         public int Id { get; }
-        public string UserId { get; }
+        public string CustomerDNI { get; }
         public string UserName { get; }
         public string CreatedByUserId { get; }
         public string CreatedByUserName { get; }
@@ -29,7 +29,7 @@
 
         public Order(string userId, string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
         {
-            UserId = userId;
+            CustomerDNI = userId;
             CreatedByUserId = createdByUserId;
             StatusId = statusId;
             PaymentMethodId = paymentMethodId;
@@ -41,7 +41,7 @@
         public Order(int id, string userId, string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
         {
             Id = id;
-            UserId = userId;
+            CustomerDNI = userId;
             CreatedByUserId = createdByUserId;
             StatusId = statusId;
             PaymentMethodId = paymentMethodId;

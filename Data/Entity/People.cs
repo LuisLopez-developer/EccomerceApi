@@ -8,7 +8,7 @@
         public string? Address { get; set; }
 
         // Nueva colección de AppUsers
-        public virtual ICollection<AppUser> AppUsers { get; set; } = new List<AppUser>();
+        public virtual ICollection<AppUser> AppUsers { get; set; } = [];
 
     }
 }

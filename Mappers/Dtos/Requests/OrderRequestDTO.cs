@@ -2,8 +2,8 @@
 {
     public class OrderRequestDTO
     {
-        public string UserId { get; set; }
-        public string CreatedByUserId { get; set; }
+        public string CustomerDNI { get; set; }
+        public string WorkerId { get; set; }
         public int StatusId { get; set; }
         public int PaymentMethodId { get; set; }
         public DateTime CreatedAt { get; set; }

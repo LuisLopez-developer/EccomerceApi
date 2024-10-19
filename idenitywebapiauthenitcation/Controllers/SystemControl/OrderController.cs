@@ -28,7 +28,7 @@ namespace EccomerceApi.Controllers.SystemControl
         {
             await _orderForCustomerUseCase.ExecuteAsync(orderRequest);
 
-            return CreatedAtAction(nameof(CreateOrder), new { id = orderRequest.UserId }, orderRequest);
+            return CreatedAtAction(nameof(CreateOrder), new { id = orderRequest.CustomerDNI }, orderRequest);
         }
 
         [HttpGet("{orderId}")]

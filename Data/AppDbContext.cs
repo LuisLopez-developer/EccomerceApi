@@ -44,7 +44,7 @@ namespace Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             // Configuración para las entidades con tipo decimal
             modelBuilder.Entity<Entry>()
                 .Property(e => e.Total)
