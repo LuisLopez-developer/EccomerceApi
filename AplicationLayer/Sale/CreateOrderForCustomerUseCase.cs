@@ -37,7 +37,7 @@ namespace AplicationLayer.Sale
                     throw new ValidationException($"No hay suficiente cantidad del producto con ID {detail.ProductId}.");
 
                 // La ganancia no debe ser menor al 10% costo
-                if (detail.TotalPrice < product.Cost * 1.1m)
+                if (detail.UnitPrice < product.Cost * 1.1m)
                     throw new ValidationException($"La ganancia del producto con ID {detail.ProductId} no debe ser menor al 10% del costo.");
 
                 product.Existence -= detail.Quantity;
