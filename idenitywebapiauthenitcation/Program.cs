@@ -76,6 +76,10 @@ builder.Services.AddScoped<IProductRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepositorySearch<ProductModel, Product>, ProductRepository>();
 
+builder.Services.AddScoped<IRepository<Status>, StatusRepository>();
+builder.Services.AddScoped<IPresenter<Status, StatusViewModel>, StatusPresenter>();
+builder.Services.AddScoped<GetAllStatusesUseCase<Status, StatusViewModel>>();
+
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();

@@ -9,6 +9,6 @@
         public string PaymentMethod { get; set; }
         public decimal Total { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool IsCreatedBySameUser { get; set; }
+        public bool IsCreatedBySameUser { get; set; } 
     }
 }
