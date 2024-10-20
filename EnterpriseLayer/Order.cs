@@ -28,10 +28,10 @@
             CreatedAt = createdAt;
         }
 
-        public Order(string CustomerDNI, string CustomerEmail , string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
+        public Order(string CustomerDNI, string customerEmail , string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
         {
             this.CustomerDNI = CustomerDNI;
-            CustomerEmail = CustomerEmail;
+            CustomerEmail = customerEmail;
             CreatedByUserId = createdByUserId;
             StatusId = statusId;
             PaymentMethodId = paymentMethodId;

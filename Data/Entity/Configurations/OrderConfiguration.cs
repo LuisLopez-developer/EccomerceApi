@@ -18,11 +18,6 @@ namespace Data.Entity.Configurations
 
             builder.HasOne<AppUser>()
                 .WithMany()
-                .HasForeignKey(o => o.CustomerDNI)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne<AppUser>()
-                .WithMany()
                 .HasForeignKey(o => o.WorkerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
