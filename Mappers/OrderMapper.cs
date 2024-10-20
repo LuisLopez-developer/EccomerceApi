@@ -13,7 +13,7 @@ namespace Mappers
             {
                 orderDetail.Add(new OrderDetail(item.ProductId, item.Quantity, item.UnitPrice));
             }
-            return new Order(dto.CustomerDNI, dto.WorkerId, dto.StatusId, dto.PaymentMethodId, dto.CreatedAt, orderDetail);
+            return new Order(dto.CustomerDNI, dto.CustomerEmail, dto.WorkerId, dto.StatusId, dto.PaymentMethodId, dto.CreatedAt, orderDetail);
         }
     }
 }

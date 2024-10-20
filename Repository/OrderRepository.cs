@@ -24,6 +24,7 @@ namespace Repository
                 StatusId = entity.StatusId,
                 PaymentMethodId = entity.PaymentMethodId,
                 Total = entity.Total,
+                Email = entity.CustomerEmail,
                 CreatedAt = entity.CreatedAt
             };
 

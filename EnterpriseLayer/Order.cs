@@ -5,6 +5,7 @@
         public int Id { get; }
         public string CustomerDNI { get; }
         public string UserName { get; }
+        public string CustomerEmail { get; set; }
         public string CreatedByUserId { get; }
         public string CreatedByUserName { get; }
         public int StatusId { get; set; }
@@ -27,9 +28,10 @@
             CreatedAt = createdAt;
         }
 
-        public Order(string userId, string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
+        public Order(string CustomerDNI, string CustomerEmail , string createdByUserId, int statusId, int paymentMethodId, DateTime createdAt, List<OrderDetail> orderDetails)
         {
-            CustomerDNI = userId;
+            this.CustomerDNI = CustomerDNI;
+            CustomerEmail = CustomerEmail;
             CreatedByUserId = createdByUserId;
             StatusId = statusId;
             PaymentMethodId = paymentMethodId;

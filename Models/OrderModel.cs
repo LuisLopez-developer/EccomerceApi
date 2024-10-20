@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string CustomerDNI { get; set; }
         public int StatusId { get; set; }
+        public string Email { get; set; }
         public int PaymentMethodId { get; set; }
         public decimal Total { get; set; }
         public string WorkerId { get; set; } // Sirve para saber quien creo la orden
