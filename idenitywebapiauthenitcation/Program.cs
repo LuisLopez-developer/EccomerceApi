@@ -68,6 +68,8 @@ builder.Services.AddScoped<IMapper<OrderRequestDTO, Order>, OrderMapper>();
 builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
 builder.Services.AddScoped<IOrderDetailPresenter<OrderViewModel>, OrderPresenter>(); 
 builder.Services.AddScoped<IPresenter<Order, OrdersViewModel>, OrdersPresenter>();
+builder.Services.AddScoped<IRepositorySearch<OrderModel, Order>, OrderRepository>();
+builder.Services.AddScoped<GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel>>();
 builder.Services.AddScoped<CreateOrderForCustomerUseCase<OrderRequestDTO>>();
 builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
 builder.Services.AddScoped<GetAllOrdersUseCase<Order, OrdersViewModel>>();

@@ -3,10 +3,12 @@ using Data;
 using EnterpriseLayer;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Repository
 {
-    public class OrderRepository : IRepository<Order>
+    public class OrderRepository : IRepository<Order>, IRepositorySearch<OrderModel, Order>
     {
         private readonly AppDbContext _dbContext;
 
@@ -60,24 +62,44 @@ namespace Repository
 
         public async Task<IEnumerable<Order>> GetAllAsync()
             => await (from order in _dbContext.Orders
-                      join paymentMethod in _dbContext.PaymentMethods
-                          on order.PaymentMethodId equals paymentMethod.Id
-                      join orderStatus in _dbContext.OrderStatuses
-                          on order.StatusId equals orderStatus.Id
-                      join user in _dbContext.Users
-                          on order.CustomerDNI equals user.Id
-                      join createdByUser in _dbContext.Users
-                          on order.WorkerId equals createdByUser.Id
-                      select new Order(
-                          order.Id,
-                          user.UserName ?? "",
-                          createdByUser.UserName ?? "",
-                          orderStatus.Name,
-                          paymentMethod.Name,
-                          order.Total,
-                          order.CreatedAt
-                          )
+                   join paymentMethod in _dbContext.PaymentMethods
+                       on order.PaymentMethodId equals paymentMethod.Id
+                   join orderStatus in _dbContext.OrderStatuses
+                       on order.StatusId equals orderStatus.Id
+                   join createdByUser in _dbContext.Users
+                       on order.WorkerId equals createdByUser.Id
+                   select new Order(
+                       order.Id,
+                       order.CustomerDNI ?? "",
+                       createdByUser.UserName ?? "",
+                       orderStatus.Name,
+                       paymentMethod.Name,
+                       order.Total,
+                       order.CreatedAt
+                       )
                       ).ToListAsync();
+
+        public async Task<IEnumerable<Order>> GetAsync(Expression<Func<OrderModel, bool>> predicate)
+        {
+            var query = from order in _dbContext.Orders.Where(predicate)
+                        join paymentMethod in _dbContext.PaymentMethods
+                            on order.PaymentMethodId equals paymentMethod.Id
+                        join orderStatus in _dbContext.OrderStatuses
+                            on order.StatusId equals orderStatus.Id
+                        join createdByUser in _dbContext.Users
+                            on order.WorkerId equals createdByUser.Id
+                        select new Order(
+                            order.Id,
+                            order.CustomerDNI ?? "",
+                            createdByUser.UserName ?? "",
+                            orderStatus.Name,
+                            paymentMethod.Name,
+                            order.Total,
+                            order.CreatedAt
+                        );
+
+            return await query.ToListAsync();
+        }
 
         public async Task<Order> GetByIdAsync(int id)
         {

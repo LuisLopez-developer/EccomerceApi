@@ -57,7 +57,7 @@ namespace Repository
 
         public async Task<IEnumerable<Cart>> GetAsync(Expression<Func<CartModel, bool>> predicate)
         {
-            var cartsModel = await _dbContext.Carts.Include("CartItems").Where(predicate).ToListAsync();
+            var cartsModel = await _dbContext.Carts.Include(c => c.CartItems).Where(predicate).ToListAsync();
             var carts = new List<Cart>();
 
             foreach (var cartModel in cartsModel)

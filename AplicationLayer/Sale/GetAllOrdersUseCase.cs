@@ -12,9 +12,7 @@
         }
 
         public async Task<IEnumerable<TOutput>> ExecuteAsync()
-        {
-            return _presenter.Present(await _orderRepository.GetAllAsync());
-        }
+            => _presenter.Present(await _orderRepository.GetAllAsync());
 
     }
 }
