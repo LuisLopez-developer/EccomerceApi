@@ -1,6 +1,6 @@
 ﻿namespace EccomerceApi.Model
 {
-    public class BatchModel
+    public class BatchViewModel
     {
         public int Id { get; set; }
         public int InitialQuantity { get; set; }

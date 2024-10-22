@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class AppUser : IdentityUser
+    public class UserModel : IdentityUser
     {
 
         public required int StateId { get; set; }
@@ -10,7 +10,7 @@ namespace Models
 
         // Nueva propiedad para relacionar con People
         public int PeopleId { get; set; }
-        public virtual People People { get; set; }
+        public virtual PeopleModel People { get; set; }
     }
 
 }

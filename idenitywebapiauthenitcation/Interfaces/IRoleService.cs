@@ -4,7 +4,7 @@ namespace EccomerceApi.Interfaces
 {
     public interface IRoleService
     {
-        Task<List<RoleModel>> GetRolesAsync();
+        Task<List<RoleViewModel>> GetRolesAsync();
 
         Task<List<string>> GetUserRolesAsync(string emailId);
 

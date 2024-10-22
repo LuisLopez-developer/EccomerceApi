@@ -1,6 +1,6 @@
 ﻿namespace Models;
 
-public partial class Loss
+public partial class LossModel
 {
     public int Id { get; set; }
     public DateTime? Date { get; set; }
@@ -10,5 +10,5 @@ public partial class Loss
     public int? StateId { get; set; }
     public virtual StateModel? State { get; set; }
 
-    public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();
+    public virtual ICollection<LostDetailModel> LostDetails { get; set; } = new List<LostDetailModel>();
 }

@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class Batch
+    public class BatchModel
     {
         public int Id { get; set; }
 
@@ -12,7 +12,7 @@
         public required int ProductId { get; set; }
         public virtual ProductModel Product { get; set; }
 
-        public virtual EntryDetail EntryDetails { get; set; } = new EntryDetail();
+        public virtual EntryDetailModel EntryDetails { get; set; } = new EntryDetailModel();
 
     }
 }

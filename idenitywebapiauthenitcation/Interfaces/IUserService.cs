@@ -4,11 +4,11 @@ namespace EccomerceApi.Interfaces
 {
     public interface IUserService
     {
-        Task<List<UserModel>> GetAllUsers();
+        Task<List<UserViewModel>> GetAllUsers();
 
-        Task<UserModel> GetUserByEmail(string emailId);
+        Task<UserViewModel> GetUserByEmail(string emailId);
 
-        Task<bool> UpdateUser(string emailId, UserModel user);
+        Task<bool> UpdateUser(string emailId, UserViewModel user);
 
         Task<bool> DeleteUserByEmail(string emailId);
 

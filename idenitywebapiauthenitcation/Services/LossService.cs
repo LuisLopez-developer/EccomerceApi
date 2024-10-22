@@ -26,14 +26,14 @@ namespace EccomerceApi.Services
                 lossCreateModel.Date = currentTimePeru;
             }
 
-            var newLoss = new Loss
+            var newLoss = new LossModel
             {
                 Date = lossCreateModel.Date,
                 Total = lossCreateModel.Total,
                 StateId = lossCreateModel.StateId,
-                LostDetails = new List<LostDetail>
+                LostDetails = new List<LostDetailModel>
                 {
-                    new LostDetail
+                    new LostDetailModel
                     {
                         UnitCost = lossCreateModel.UnitCost,
                         Amount = lossCreateModel.Amount,

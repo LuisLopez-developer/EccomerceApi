@@ -5,11 +5,11 @@ public partial class StateModel
 
     public string? Name { get; set; }
 
-    public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
+    public virtual ICollection<EntryModel> Entries { get; set; } = new List<EntryModel>();
 
-    public virtual ICollection<Loss> Losses { get; set; } = new List<Loss>();
+    public virtual ICollection<LossModel> Losses { get; set; } = new List<LossModel>();
 
     public virtual ICollection<ProductModel> Products { get; set; } = new List<ProductModel>();
 
-    public virtual ICollection<AppUser> AspNetUsers { get; set; } = new List<AppUser>();
+    public virtual ICollection<UserModel> AspNetUsers { get; set; } = new List<UserModel>();
 }

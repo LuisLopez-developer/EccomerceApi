@@ -47,7 +47,7 @@ namespace EccomerceApi.Services
 
         public async Task<LossReasonViewModel> CreateAsync(LossReasonViewModel lossReason)
         {
-            var newLossReason = new LossReason
+            var newLossReason = new LossReasonModel
             {
                 Reason = lossReason.Reason
             };

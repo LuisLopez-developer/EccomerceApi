@@ -14,11 +14,11 @@ namespace EccomerceApi.Services
             _identityDbContext = identityDbContext;
         }
 
-        public async Task<BatchModel> CreateAsync(BatchModel batchModel)
+        public async Task<Model.BatchViewModel> CreateAsync(Model.BatchViewModel batchModel)
         {
             try
             {
-                var batch = new Batch
+                var batch = new Models.BatchModel
                 {
                     InitialQuantity = batchModel.InitialQuantity,
                     RemainingQuantity = batchModel.RemainingQuantity,
@@ -30,7 +30,7 @@ namespace EccomerceApi.Services
                 _identityDbContext.Batches.Add(batch);
                 await _identityDbContext.SaveChangesAsync();
 
-                return new BatchModel
+                return new Model.BatchViewModel
                 {
                     Id = batch.Id,
                     InitialQuantity = batch.InitialQuantity,

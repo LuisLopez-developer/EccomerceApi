@@ -10,7 +10,7 @@ namespace Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        private DbSet<Entry> entries;
+        private DbSet<EntryModel> entries;
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -18,10 +18,10 @@ namespace Data
         }
 
         // Entidades existentes
-        public virtual DbSet<Entry> Entries { get => entries; set => entries = value; }
-        public virtual DbSet<EntryDetail> EntryDetails { get; set; }
-        public virtual DbSet<Loss> Losses { get; set; }
-        public virtual DbSet<LostDetail> LostDetails { get; set; }
+        public virtual DbSet<EntryModel> Entries { get => entries; set => entries = value; }
+        public virtual DbSet<EntryDetailModel> EntryDetails { get; set; }
+        public virtual DbSet<LossModel> Losses { get; set; }
+        public virtual DbSet<LostDetailModel> LostDetails { get; set; }
         public virtual DbSet<ProductModel> Products { get; set; }
         public virtual DbSet<PaymentMethodModel> PaymentMethods { get; set; }
         public virtual DbSet<OrderStatusModel> OrderStatuses { get; set; }
@@ -30,11 +30,11 @@ namespace Data
         public virtual DbSet<StateModel> States { get; set; }
         public virtual DbSet<ProductCategoryModel> ProductCategories { get; set; }
         public virtual DbSet<ProductBrandModel> ProductBrands { get; set; }
-        public virtual DbSet<LossReason> LossReasons { get; set; }
-        public virtual DbSet<People> Peoples { get; set; }
+        public virtual DbSet<LossReasonModel> LossReasons { get; set; }
+        public virtual DbSet<PeopleModel> Peoples { get; set; }
         public virtual DbSet<ProductSpecificationModel> ProductSpecifications { get; set; }
         public virtual DbSet<ProductPhotoModel> ProductPhotos { get; set; }
-        public virtual DbSet<Batch> Batches { get; set; }
+        public virtual DbSet<BatchModel> Batches { get; set; }
 
         // Nuevas entidades
         public virtual DbSet<CartModel> Carts { get; set; }
@@ -45,19 +45,19 @@ namespace Data
             base.OnModelCreating(modelBuilder);
             
             // Configuración para las entidades con tipo decimal
-            modelBuilder.Entity<Entry>()
+            modelBuilder.Entity<EntryModel>()
                 .Property(e => e.Total)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<EntryDetail>()
+            modelBuilder.Entity<EntryDetailModel>()
                 .Property(ed => ed.UnitCost)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Loss>()
+            modelBuilder.Entity<LossModel>()
                 .Property(l => l.Total)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<LostDetail>()
+            modelBuilder.Entity<LostDetailModel>()
                 .Property(ld => ld.UnitCost)
                 .HasColumnType("decimal(18,2)");
 
@@ -76,7 +76,7 @@ namespace Data
                 .Property(pb => pb.Name)
                 .IsRequired();
 
-            modelBuilder.Entity<Batch>()
+            modelBuilder.Entity<BatchModel>()
                 .Property(b => b.Cost)
                 .HasColumnType("decimal(18,2)");
 

@@ -33,10 +33,10 @@ namespace Models
         public required int ProductCategoryId { get; set; }
         public virtual ProductCategoryModel ProductCategory { get; set; }
 
-        public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
-        public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();
+        public virtual ICollection<EntryDetailModel> EntryDetails { get; set; } = new List<EntryDetailModel>();
+        public virtual ICollection<LostDetailModel> LostDetails { get; set; } = new List<LostDetailModel>();
         public virtual ICollection<ProductPhotoModel> ProductPhotos { get; set; } = new List<ProductPhotoModel>();
         public virtual ProductSpecificationModel ProductSpecifications { get; set; } = new ProductSpecificationModel();
-        public ICollection<Batch> Batches { get; set; } = new List<Batch>();
+        public ICollection<BatchModel> Batches { get; set; } = new List<BatchModel>();
     }
 }

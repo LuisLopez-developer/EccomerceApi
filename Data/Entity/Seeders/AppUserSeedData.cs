@@ -13,8 +13,8 @@ namespace Data.Entity.Seeders
             //StateSeedData.SeedData(modelBuilder);
 
             // Sembrar datos para la entidad AppUser
-            modelBuilder.Entity<AppUser>().HasData(
-                new AppUser
+            modelBuilder.Entity<UserModel>().HasData(
+                new UserModel
                 {
                     Id = "1",
                     UserName = "admin",
@@ -22,12 +22,12 @@ namespace Data.Entity.Seeders
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",
                     EmailConfirmed = true,
-                    PasswordHash = new PasswordHasher<AppUser>().HashPassword(null, "Admin@123"),
+                    PasswordHash = new PasswordHasher<UserModel>().HashPassword(null, "Admin@123"),
                     SecurityStamp = string.Empty,
                     StateId = 1, // Estado activo
                     PeopleId = 1 // Luis Lopez
                 },
-                new AppUser
+                new UserModel
                 {
                     Id = "2",
                     UserName = "user",
@@ -35,12 +35,12 @@ namespace Data.Entity.Seeders
                     Email = "user@example.com",
                     NormalizedEmail = "USER@EXAMPLE.COM",
                     EmailConfirmed = true,
-                    PasswordHash = new PasswordHasher<AppUser>().HashPassword(null, "User@123"),
+                    PasswordHash = new PasswordHasher<UserModel>().HashPassword(null, "User@123"),
                     SecurityStamp = string.Empty,
                     StateId = 1, // Estado activo
                     PeopleId = 2 // Jeampierre Muñoz
                 },
-                new AppUser
+                new UserModel
                 {
                     Id = "3",
                     UserName = "managed",
@@ -48,7 +48,7 @@ namespace Data.Entity.Seeders
                     Email = "managed@example.com",
                     NormalizedEmail = "MANAGED@EXAMPLE.COM",
                     EmailConfirmed = true,
-                    PasswordHash = new PasswordHasher<AppUser>().HashPassword(null, "Managed@123"),
+                    PasswordHash = new PasswordHasher<UserModel>().HashPassword(null, "Managed@123"),
                     SecurityStamp = string.Empty,
                     StateId = 1, // Estado activo
                     PeopleId = 3 // Jean Benedicto

@@ -39,7 +39,7 @@ namespace EccomerceApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{emailId}")]
-        public async Task<IActionResult> UpdateUser(string emailId, [FromBody] UserModel userModel)
+        public async Task<IActionResult> UpdateUser(string emailId, [FromBody] UserViewModel userModel)
         {
             var result = await _userService.UpdateUser(emailId, userModel);
             if (!result)

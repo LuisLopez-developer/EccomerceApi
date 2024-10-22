@@ -16,7 +16,7 @@ namespace Data.Entity.Configurations
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne<AppUser>()
+            builder.HasOne<UserModel>()
                 .WithMany()
                 .HasForeignKey(o => o.WorkerId)
                 .OnDelete(DeleteBehavior.NoAction);

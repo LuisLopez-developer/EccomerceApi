@@ -15,14 +15,14 @@ namespace EccomerceApi.Services
             _roleService = roleService;
         }
 
-        public async Task<List<UserModel>> GetAllUsers()
+        public async Task<List<UserViewModel>> GetAllUsers()
         {
-            var response = new List<UserModel>();
+            var response = new List<UserViewModel>();
             var users = _userManager.Users.ToList();
             foreach (var x in users)
             {
                 var userRoles = await _userManager.GetRolesAsync(x);
-                var user = new UserModel
+                var user = new UserViewModel
                 {
                     Id = Guid.Parse(x.Id),
                     Email = x.Email,
@@ -36,11 +36,11 @@ namespace EccomerceApi.Services
             return response;
         }
 
-        public async Task<UserModel> GetUserByEmail(string emailId)
+        public async Task<UserViewModel> GetUserByEmail(string emailId)
         {
             var user = await _userManager.FindByEmailAsync(emailId);
             var userRoles = await _userManager.GetRolesAsync(user);
-            var userModel = new UserModel
+            var userModel = new UserViewModel
             {
                 Id = Guid.Parse(user.Id),
                 Email = user.Email,
@@ -61,7 +61,7 @@ namespace EccomerceApi.Services
 
 
 
-        public async Task<bool> UpdateUser(string emailId, UserModel user)
+        public async Task<bool> UpdateUser(string emailId, UserViewModel user)
         {
             // user role - admin,hr
             var userIdentity = await _userManager.FindByEmailAsync(emailId);

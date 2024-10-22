@@ -52,7 +52,7 @@ namespace EccomerceApi.Services
                     entryCreateModel.Date = currentTimePeru;
                 }
 
-                var newEntry = new Entry
+                var newEntry = new EntryModel
                 {
                     Date = entryCreateModel.Date,
                     Total = entryCreateModel.Total,
@@ -63,7 +63,7 @@ namespace EccomerceApi.Services
                 await _identityDbContext.SaveChangesAsync();
                 Console.WriteLine("Entrada creada con éxito" + newEntry.Id);
 
-                var batchModel = new BatchModel
+                var batchModel = new BatchViewModel
                 {
                     InitialQuantity = entryCreateModel.Amount ?? 0,
                     RemainingQuantity = entryCreateModel.Amount ?? 0,
@@ -76,9 +76,9 @@ namespace EccomerceApi.Services
                 Console.WriteLine("Entrada creada con éxito" + batchModel.Id);
 
 
-                newEntry.EntryDetails = new List<EntryDetail>
+                newEntry.EntryDetails = new List<EntryDetailModel>
                 {
-                    new EntryDetail
+                    new EntryDetailModel
                     {
                         BatchId = batchModel.Id,
                         EntryId = newEntry.Id,
