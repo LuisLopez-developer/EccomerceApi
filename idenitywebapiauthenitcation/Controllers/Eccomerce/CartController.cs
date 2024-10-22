@@ -35,7 +35,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _deleteCartUseCase = deleteCartUseCase;
         }
 
-        [HttpPost("cart")]
+        [HttpPost]
         public async Task<IActionResult> AddCart(CartRequestDTO cartRequest)
         {
             var result = await _validator.ValidateAsync(cartRequest);
@@ -50,16 +50,14 @@ namespace EccomerceApi.Controllers.Eccomerce
             return CreatedAtAction(nameof(AddCart), new { id = cartRequest.UserId }, cartRequest);
         }
 
-        [HttpGet("cart")]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetCarts()
         {
             var result = await _cartUseCase.ExecuteAsync();
             return Ok(result);
         }
 
-
-
-        [HttpGet("cart/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetCartSearch(string userId)
         {
             var result = await _cartSearchUseCase.ExecuteAsync(c => c.UserId == userId);
@@ -72,7 +70,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             return Ok(result);
         }
 
-        [HttpPut("cart")]
+        [HttpPut]
         public async Task<IActionResult> UpdateCart(int cartId, CartRequestDTO cartRequest)
         {
             try
@@ -91,7 +89,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         }
 
 
-        [HttpDelete("cart/{cartId}")]
+        [HttpDelete("{cartId}")]
         public async Task<IActionResult> DeleteCart(int cartId)
         {
             try
