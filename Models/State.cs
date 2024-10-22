@@ -1,4 +1,4 @@
-﻿namespace Data.Entity;
+﻿namespace Models;
 public partial class State
 {
     public int Id { get; set; }

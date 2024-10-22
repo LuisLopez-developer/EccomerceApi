@@ -1,8 +1,8 @@
-﻿using Data.Entity;
-using EccomerceApi.Interfaces.ProductIntefaces;
+﻿using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace EccomerceApi.Controllers.Product
 {

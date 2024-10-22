@@ -1,4 +1,4 @@
-﻿namespace Data.Entity
+﻿namespace Models
 {
     public class ProductBrand
     {

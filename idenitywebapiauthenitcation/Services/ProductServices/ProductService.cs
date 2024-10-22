@@ -9,6 +9,7 @@ using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ProductModel.CreateModel;
 using EccomerceApi.Model.ProductModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace EccomerceApi.Services.ProductServices
 {

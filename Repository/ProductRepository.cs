@@ -1,8 +1,8 @@
 ﻿using AplicationLayer;
 using Data;
-using Data.Entity;
 using EnterpriseLayer;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Linq.Expressions;
 
 namespace Repository

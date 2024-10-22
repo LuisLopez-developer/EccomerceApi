@@ -1,7 +1,7 @@
 ﻿using Data;
-using Data.Entity;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace EccomerceApi.Services.ProductServices
 {

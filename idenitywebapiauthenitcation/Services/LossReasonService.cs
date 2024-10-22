@@ -1,8 +1,8 @@
 ﻿using Data;
-using Data.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace EccomerceApi.Services
 {

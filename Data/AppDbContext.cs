@@ -1,5 +1,4 @@
-﻿using Data.Entity;
-using Data.Entity.Configurations;
+﻿using Data.Entity.Configurations;
 using Data.Entity.Seeders;
 using Data.Entity.Triggers;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +10,7 @@ namespace Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        private DbSet<Entity.Entry> entries;
+        private DbSet<Entry> entries;
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

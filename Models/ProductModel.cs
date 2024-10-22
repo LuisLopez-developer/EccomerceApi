@@ -1,7 +1,6 @@
-﻿using Data.Herlpers;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Data.Entity
+namespace Models
 {
     public partial class ProductModel
     {
@@ -12,7 +11,7 @@ namespace Data.Entity
 
         [StringLength(16, MinimumLength = 4)]
         public required string SKU { get; set; } //SKU
-        public DateTime Date { get; set; } = getTimePeruHelper.GetCurrentTimeInPeru(); //Obtener la hora de Perú
+        public DateTime Date { get; set; } = DateTime.UtcNow;
         public DateTime UpdateAt { get; set; }
         public required decimal Cost { get; set; } = 0;
         public required decimal Price { get; set; } = 0;

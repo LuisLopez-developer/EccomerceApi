@@ -2,7 +2,6 @@ using AplicationLayer;
 using AplicationLayer.GenericUseCases;
 using AplicationLayer.Sale;
 using Data;
-using Data.Entity;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
 using EccomerceApi.Interfaces.ProductInterfaces;

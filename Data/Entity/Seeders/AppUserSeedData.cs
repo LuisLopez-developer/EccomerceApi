@@ -1,6 +1,6 @@
-﻿using Data.Entity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace Data.Entity.Seeders
 {

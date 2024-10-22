@@ -1,11 +1,11 @@
 ﻿using Data;
-using Data.Entity;
 using EccomerceApi.Herlpers;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Model;
 using EccomerceApi.Model.CreateModel;
 using EccomerceApi.Model.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace EccomerceApi.Services
 {
