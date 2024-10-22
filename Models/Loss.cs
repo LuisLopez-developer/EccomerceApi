@@ -8,7 +8,7 @@ public partial class Loss
     public decimal? Total { get; set; }
 
     public int? StateId { get; set; }
-    public virtual State? State { get; set; }
+    public virtual StateModel? State { get; set; }
 
     public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();
 }

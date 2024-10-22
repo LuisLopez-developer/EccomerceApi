@@ -1,5 +1,5 @@
 ﻿namespace Models;
-public partial class State
+public partial class StateModel
 {
     public int Id { get; set; }
 

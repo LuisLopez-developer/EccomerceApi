@@ -27,7 +27,7 @@ namespace Data
         public virtual DbSet<OrderStatusModel> OrderStatuses { get; set; }
         public virtual DbSet<OrderModel> Orders { get; set; }
         public virtual DbSet<OrderDetailModel> OrderDetails{ get; set; }
-        public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<StateModel> States { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
         public virtual DbSet<LossReason> LossReasons { get; set; }

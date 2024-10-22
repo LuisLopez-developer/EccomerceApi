@@ -25,7 +25,7 @@ namespace Models
         public string BarCode { get; set; } = "sn";
 
         public required int StateId { get; set; }
-        public virtual State State { get; set; }
+        public virtual StateModel State { get; set; }
 
         public required int ProductBrandId { get; set; }
         public virtual ProductBrand ProductBrand { get; set; }

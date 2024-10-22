@@ -6,7 +6,7 @@ namespace Models
     {
 
         public required int StateId { get; set; }
-        public virtual State State { get; set; }
+        public virtual StateModel State { get; set; }
 
         // Nueva propiedad para relacionar con People
         public int PeopleId { get; set; }

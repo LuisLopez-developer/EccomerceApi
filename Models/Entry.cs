@@ -13,7 +13,7 @@ public partial class Entry
 
 
     public int? StateId { get; set; }
-    public virtual State? State { get; set; }
+    public virtual StateModel? State { get; set; }
 
     public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
 }

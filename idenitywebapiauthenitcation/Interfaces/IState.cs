@@ -4,6 +4,6 @@ namespace EccomerceApi.Interfaces
 {
     public interface IState
     {
-        Task<List<State>> GetAllAsync();
+        Task<List<StateModel>> GetAllAsync();
     }
 }

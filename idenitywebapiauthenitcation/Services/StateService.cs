@@ -14,7 +14,7 @@ namespace EccomerceApi.Services
             _identityDbContext = identityDbContext;
         }
 
-        public async Task<List<State>> GetAllAsync()
+        public async Task<List<StateModel>> GetAllAsync()
         {
             var statesList = await _identityDbContext.States.ToListAsync();
             return statesList;
