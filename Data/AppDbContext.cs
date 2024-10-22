@@ -28,7 +28,7 @@ namespace Data
         public virtual DbSet<OrderModel> Orders { get; set; }
         public virtual DbSet<OrderDetailModel> OrderDetails{ get; set; }
         public virtual DbSet<StateModel> States { get; set; }
-        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<ProductCategoryModel> ProductCategories { get; set; }
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
         public virtual DbSet<LossReason> LossReasons { get; set; }
         public virtual DbSet<People> Peoples { get; set; }
@@ -67,7 +67,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
 
-            modelBuilder.Entity<ProductCategory>()
+            modelBuilder.Entity<ProductCategoryModel>()
                 .Property(pc => pc.Name)
                 .IsRequired();
 

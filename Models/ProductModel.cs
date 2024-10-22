@@ -31,7 +31,7 @@ namespace Models
         public virtual ProductBrand ProductBrand { get; set; }
 
         public required int ProductCategoryId { get; set; }
-        public virtual ProductCategory ProductCategory { get; set; }
+        public virtual ProductCategoryModel ProductCategory { get; set; }
 
         public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
         public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();

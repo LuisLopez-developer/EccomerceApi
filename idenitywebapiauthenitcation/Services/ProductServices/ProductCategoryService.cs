@@ -14,7 +14,7 @@ namespace EccomerceApi.Services.ProductServices
             _identityDbContext = identityDbContext;
         }
 
-        public async Task<List<ProductCategory>> SearchAsync(string name)
+        public async Task<List<ProductCategoryModel>> SearchAsync(string name)
         {
             // Filtrar las categorías de productos cuyo nombre contenga la cadena proporcionada
             var matchedCategories = await _identityDbContext.ProductCategories
@@ -24,25 +24,25 @@ namespace EccomerceApi.Services.ProductServices
             return matchedCategories;
         }
 
-        public async Task<List<ProductCategory>> GetAllAsync()
+        public async Task<List<ProductCategoryModel>> GetAllAsync()
         {
             var producCategorytList = await _identityDbContext.ProductCategories.ToListAsync();
             return producCategorytList;
         }
 
-        public async Task<ProductCategory> GetByIdAsync(int id)
+        public async Task<ProductCategoryModel> GetByIdAsync(int id)
         {
             return await _identityDbContext.ProductCategories.Where(f => f.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<ProductCategory> CreateAsync(ProductCategory productCategory)
+        public async Task<ProductCategoryModel> CreateAsync(ProductCategoryModel productCategory)
         {
             await _identityDbContext.AddAsync(productCategory);
             await _identityDbContext.SaveChangesAsync();
             return productCategory;
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductCategory productCategory)
+        public async Task<bool> UpdateAsync(int id, ProductCategoryModel productCategory)
         {
             var existingProductCategory = await _identityDbContext.ProductCategories.Where(f => f.Id == id).FirstOrDefaultAsync();
 

@@ -56,7 +56,7 @@ namespace EccomerceApi.Controllers.Product
         [HttpGet("search")]
         public async Task<IActionResult> SearchByName(string? name)
         {
-            IEnumerable<ProductCategory> response;
+            IEnumerable<ProductCategoryModel> response;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -82,7 +82,7 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> Post(ProductCategory productCategory)
+        public async Task<IActionResult> Post(ProductCategoryModel productCategory)
         {
             var response = await _prodCategoryService.CreateAsync(productCategory);
 
@@ -98,7 +98,7 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductCategory productCategory)
+        public async Task<IActionResult> Update(int id, ProductCategoryModel productCategory)
         {
             var existingPorductCategory = await _prodCategoryService.UpdateAsync(id, productCategory);
             if (!existingPorductCategory)
