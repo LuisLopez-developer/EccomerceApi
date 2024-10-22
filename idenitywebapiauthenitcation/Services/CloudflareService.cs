@@ -8,11 +8,12 @@ namespace EccomerceApi.Services
     public class CloudflareService : ICloudflare
     {
         private readonly AmazonS3Client _s3Client;
+        private readonly long _maxFileSize = 500 * 1024; // 500 KB
+        private readonly string[] _allowedFileTypes = { "image/jpeg", "image/png", "image/webp" };
 
         public CloudflareService()
         {
             _s3Client = S3client();
-
         }
 
         private AmazonS3Client S3client()
@@ -25,11 +26,9 @@ namespace EccomerceApi.Services
             var s3Client = new AmazonS3Client(credentials, new AmazonS3Config
             {
                 ServiceURL = serviceUrl,
-
             });
 
             return s3Client;
-
         }
 
         public async Task<List<string>> ListBucketsAsync()
@@ -42,12 +41,22 @@ namespace EccomerceApi.Services
         {
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("File is empty or not provided");
+                throw new ArgumentException("El archivo está vacío o no se proporciona");
             }
+
+            if (file.Length > _maxFileSize)
+            {
+                throw new ArgumentException("El tamaño del archivo excede el límite máximo de 500 KB");
+            }
+
+            if (!_allowedFileTypes.Contains(file.ContentType))
+            {
+                throw new ArgumentException("No se permite ningún tipo de archivo. Solo se admiten JPEG, PNG y WebP.");
+            }
+
             var filepath = Path.GetTempFileName();
             try
             {
-
                 using (var stream = new FileStream(filepath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
@@ -63,8 +72,8 @@ namespace EccomerceApi.Services
                 };
 
                 await _s3Client.PutObjectAsync(request);
-          
-                return $"https://teamstarteight.work/{file.FileName}"; 
+
+                return $"https://teamstarteight.work/{file.FileName}";
             }
             finally
             {
@@ -87,7 +96,6 @@ namespace EccomerceApi.Services
                 await DeleteObjectByUrlAsync(url);
             }
         }
-
 
         public async Task DeleteObjectByUrlAsync(string url)
         {
@@ -121,7 +129,5 @@ namespace EccomerceApi.Services
 
             await _s3Client.DeleteObjectAsync(deleteObjectRequest);
         }
-
     }
-
 }
