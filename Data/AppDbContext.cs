@@ -32,7 +32,7 @@ namespace Data
         public virtual DbSet<ProductBrand> ProductBrands { get; set; }
         public virtual DbSet<LossReason> LossReasons { get; set; }
         public virtual DbSet<People> Peoples { get; set; }
-        public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public virtual DbSet<ProductSpecificationModel> ProductSpecifications { get; set; }
         public virtual DbSet<ProductPhoto> ProductPhotos { get; set; }
         public virtual DbSet<Batch> Batches { get; set; }
 

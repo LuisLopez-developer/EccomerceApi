@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ProductSpecification
+    public class ProductSpecificationModel
     {
         public int Id { get; set; }
         public string? Color { get; set; }

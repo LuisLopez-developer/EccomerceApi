@@ -21,7 +21,7 @@ namespace EccomerceApi.Services.ProductServices
 
             try
             {
-                var productSpec = new ProductSpecification
+                var productSpec = new ProductSpecificationModel
                 {
                     ProductId = productId,
                     Color = productSpecification.Color,

@@ -36,7 +36,7 @@ namespace Models
         public virtual ICollection<EntryDetail> EntryDetails { get; set; } = new List<EntryDetail>();
         public virtual ICollection<LostDetail> LostDetails { get; set; } = new List<LostDetail>();
         public virtual ICollection<ProductPhoto> ProductPhotos { get; set; } = new List<ProductPhoto>();
-        public virtual ProductSpecification ProductSpecifications { get; set; } = new ProductSpecification();
+        public virtual ProductSpecificationModel ProductSpecifications { get; set; } = new ProductSpecificationModel();
         public ICollection<Batch> Batches { get; set; } = new List<Batch>();
     }
 }
