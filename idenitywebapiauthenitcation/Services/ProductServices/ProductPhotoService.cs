@@ -51,7 +51,7 @@ namespace EccomerceApi.Services.ProductServices
             }
 
             // Crear nuevas entidades ProductPhoto
-            var newProductPhotos = productPhotos.Select(photo => new ProductPhoto
+            var newProductPhotos = productPhotos.Select(photo => new ProductPhotoModel
             {
                 ProductId = productId,
                 FileName = photo.FileName,
@@ -168,7 +168,7 @@ namespace EccomerceApi.Services.ProductServices
                 else
                 {
                     // Agregar la nueva foto
-                    var newPhoto = new ProductPhoto
+                    var newPhoto = new ProductPhotoModel
                     {
                         ProductId = productId,
                         FileName = photo.FileName,

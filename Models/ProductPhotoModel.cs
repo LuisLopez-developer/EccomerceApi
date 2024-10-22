@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ProductPhoto
+    public class ProductPhotoModel
     {
         public int Id { get; set; }
         public required string FileName { get; set; } = "SinNombre";
