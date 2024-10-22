@@ -14,7 +14,7 @@ namespace EccomerceApi.Services.ProductServices
             _identityDbContext = identityDbContext;
         }
 
-        public async Task<ProductBrand> CreateAsync(ProductBrand productBrand)
+        public async Task<ProductBrandModel> CreateAsync(ProductBrandModel productBrand)
         {
             await _identityDbContext.AddAsync(productBrand);
             await _identityDbContext.SaveChangesAsync();
@@ -35,18 +35,18 @@ namespace EccomerceApi.Services.ProductServices
             return productBrand?.Id > 0;
         }
 
-        public async Task<List<ProductBrand>> GetAllAsync()
+        public async Task<List<ProductBrandModel>> GetAllAsync()
         {
             var producBrandsList = await _identityDbContext.ProductBrands.ToListAsync();
             return producBrandsList;
         }
 
-        public async Task<ProductBrand> GetByIdAsync(int id)
+        public async Task<ProductBrandModel> GetByIdAsync(int id)
         {
             return await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<List<ProductBrand>> SearchAsync(string name)
+        public async Task<List<ProductBrandModel>> SearchAsync(string name)
         {
             // Filtrar las marcas de productos cuyo nombre contenga la cadena proporcionada
             var matchedBrands = await _identityDbContext.ProductBrands
@@ -56,7 +56,7 @@ namespace EccomerceApi.Services.ProductServices
             return matchedBrands;
         }
 
-        public async Task<bool> UpdateAsync(int id, ProductBrand productBrand)
+        public async Task<bool> UpdateAsync(int id, ProductBrandModel productBrand)
         {
             var existingProductBrand = await _identityDbContext.ProductBrands.Where(f => f.Id == id).FirstOrDefaultAsync();
 

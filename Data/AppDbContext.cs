@@ -29,7 +29,7 @@ namespace Data
         public virtual DbSet<OrderDetailModel> OrderDetails{ get; set; }
         public virtual DbSet<StateModel> States { get; set; }
         public virtual DbSet<ProductCategoryModel> ProductCategories { get; set; }
-        public virtual DbSet<ProductBrand> ProductBrands { get; set; }
+        public virtual DbSet<ProductBrandModel> ProductBrands { get; set; }
         public virtual DbSet<LossReason> LossReasons { get; set; }
         public virtual DbSet<People> Peoples { get; set; }
         public virtual DbSet<ProductSpecificationModel> ProductSpecifications { get; set; }
@@ -72,7 +72,7 @@ namespace Data
                 .IsRequired();
 
 
-            modelBuilder.Entity<ProductBrand>()
+            modelBuilder.Entity<ProductBrandModel>()
                 .Property(pb => pb.Name)
                 .IsRequired();
 

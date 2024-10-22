@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class ProductBrand
+    public class ProductBrandModel
     {
         public int Id { get; set; }
 

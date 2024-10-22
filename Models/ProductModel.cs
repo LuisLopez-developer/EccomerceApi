@@ -28,7 +28,7 @@ namespace Models
         public virtual StateModel State { get; set; }
 
         public required int ProductBrandId { get; set; }
-        public virtual ProductBrand ProductBrand { get; set; }
+        public virtual ProductBrandModel ProductBrand { get; set; }
 
         public required int ProductCategoryId { get; set; }
         public virtual ProductCategoryModel ProductCategory { get; set; }

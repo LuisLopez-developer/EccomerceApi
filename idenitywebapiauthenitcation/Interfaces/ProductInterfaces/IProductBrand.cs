@@ -4,11 +4,11 @@ namespace EccomerceApi.Interfaces.ProductIntefaces
 {
     public interface IProductBrand
     {
-        Task<List<ProductBrand>> GetAllAsync();
-        Task<List<ProductBrand>> SearchAsync(string name);
-        Task<ProductBrand> GetByIdAsync(int id);
-        Task<ProductBrand> CreateAsync(ProductBrand productBrand);
-        Task<bool> UpdateAsync(int id, ProductBrand productBrand);
+        Task<List<ProductBrandModel>> GetAllAsync();
+        Task<List<ProductBrandModel>> SearchAsync(string name);
+        Task<ProductBrandModel> GetByIdAsync(int id);
+        Task<ProductBrandModel> CreateAsync(ProductBrandModel productBrand);
+        Task<bool> UpdateAsync(int id, ProductBrandModel productBrand);
         Task<bool> DeleteAsync(int id);
     }
 }

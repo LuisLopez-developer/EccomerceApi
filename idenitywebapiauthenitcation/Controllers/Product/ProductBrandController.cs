@@ -54,7 +54,7 @@ namespace EccomerceApi.Controllers.Product
         [HttpGet("search")]
         public async Task<IActionResult> SearchByName(string? name)
         {
-            IEnumerable<ProductBrand> response;
+            IEnumerable<ProductBrandModel> response;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -78,7 +78,7 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(ProductBrand productBrand)
+        public async Task<IActionResult> Create(ProductBrandModel productBrand)
         {
             var response = await _productBrand.CreateAsync(productBrand);
 
@@ -93,7 +93,7 @@ namespace EccomerceApi.Controllers.Product
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductBrand productBrand)
+        public async Task<IActionResult> Update(int id, ProductBrandModel productBrand)
         {
             var existingPorductBrand = await _productBrand.UpdateAsync(id, productBrand);
             if (!existingPorductBrand)
