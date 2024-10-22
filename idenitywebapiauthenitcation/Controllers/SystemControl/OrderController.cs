@@ -1,10 +1,10 @@
-﻿using AplicationLayer.Sale;
+﻿using AplicationLayer.GenericUseCases;
+using AplicationLayer.Sale;
 using EnterpriseLayer;
 using Mappers.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Presenters.SaleViewModel;
-using Repository;
 
 namespace EccomerceApi.Controllers.SystemControl
 {
@@ -14,13 +14,13 @@ namespace EccomerceApi.Controllers.SystemControl
     {
         private readonly CreateOrderForCustomerUseCase<OrderRequestDTO> _orderForCustomerUseCase;
         private readonly GetOrderDetailByIdUseCase<OrderViewModel> _orderDetailByIdUseCase;
-        private readonly GetAllOrdersUseCase<Order, OrdersViewModel> _getAllOrdersUseCase;
+        private readonly GetAllEntitiesUseCase<Order, OrdersViewModel> _getAllOrdersUseCase;
         private readonly GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel> _getEntitiesSearchUseCase;
 
         public OrderController(
-            CreateOrderForCustomerUseCase<OrderRequestDTO> orderForCustomerUseCase, 
+            CreateOrderForCustomerUseCase<OrderRequestDTO> orderForCustomerUseCase,
             GetOrderDetailByIdUseCase<OrderViewModel> getOrderDetailByIdUseCase,
-            GetAllOrdersUseCase<Order, OrdersViewModel> getAllOrdersUseCase,
+            GetAllEntitiesUseCase<Order, OrdersViewModel> getAllOrdersUseCase,
             GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel> getEntitiesSearchUseCase)
         {
             _orderForCustomerUseCase = orderForCustomerUseCase;

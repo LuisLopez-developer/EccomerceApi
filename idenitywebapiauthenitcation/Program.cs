@@ -1,4 +1,5 @@
 using AplicationLayer;
+using AplicationLayer.GenericUseCases;
 using AplicationLayer.Sale;
 using Data;
 using Data.Entity;
@@ -72,7 +73,7 @@ builder.Services.AddScoped<IRepositorySearch<OrderModel, Order>, OrderRepository
 builder.Services.AddScoped<GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel>>();
 builder.Services.AddScoped<CreateOrderForCustomerUseCase<OrderRequestDTO>>();
 builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
-builder.Services.AddScoped<GetAllOrdersUseCase<Order, OrdersViewModel>>();
+builder.Services.AddScoped<GetAllEntitiesUseCase<Order, OrdersViewModel>>();
 
 builder.Services.AddScoped<IProductRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
@@ -80,7 +81,7 @@ builder.Services.AddScoped<IRepositorySearch<ProductModel, Product>, ProductRepo
 
 builder.Services.AddScoped<IRepository<Status>, StatusRepository>();
 builder.Services.AddScoped<IPresenter<Status, StatusViewModel>, StatusPresenter>();
-builder.Services.AddScoped<GetAllStatusesUseCase<Status, StatusViewModel>>();
+builder.Services.AddScoped<GetAllEntitiesUseCase<Status, StatusViewModel>>();
 
 // Viejas API'S
 builder.Services.AddScoped<IRoleService, RoleService>();

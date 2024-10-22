@@ -10,8 +10,4 @@
     <ProjectReference Include="..\EnterpriseLayer\EnterpriseLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="GenericUseCases\" />
-  </ItemGroup>
-
 </Project>

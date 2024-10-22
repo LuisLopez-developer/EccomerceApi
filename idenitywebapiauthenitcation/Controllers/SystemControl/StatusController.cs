@@ -1,4 +1,4 @@
-﻿using AplicationLayer.Sale;
+﻿using AplicationLayer.GenericUseCases;
 using EnterpriseLayer;
 using Microsoft.AspNetCore.Mvc;
 using Presenters.SaleViewModel;
@@ -9,9 +9,9 @@ namespace EccomerceApi.Controllers.SystemControl
     [Route("api/system/[controller]")]
     public class StatusController : ControllerBase
     {
-        private readonly GetAllStatusesUseCase<Status, StatusViewModel> _getAllStatusesUseCase;
+        private readonly GetAllEntitiesUseCase<Status, StatusViewModel> _getAllStatusesUseCase;
 
-        public StatusController(GetAllStatusesUseCase<Status, StatusViewModel> getAllStatusesUseCase)
+        public StatusController(GetAllEntitiesUseCase<Status, StatusViewModel> getAllStatusesUseCase)
         {
             _getAllStatusesUseCase = getAllStatusesUseCase;
         }
