@@ -46,24 +46,13 @@ namespace EccomerceApi.Controllers
             }
         }
 
-        private async Task<string> UploadFile(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-                throw new ArgumentException("El archivo está vacío o no se proporcionó.");
-
-            if (file.Length > 2 * 1024 * 1024) // 2 MB en bytes
-                throw new ArgumentException("El tamaño del archivo excede el límite permitido.");
-
-            return await _cloudflare.UploadObjectAsync(file);
-        }
-
         [Authorize(Roles = "admin")]
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage([Required] IFormFile file)
         {
             try
             {
-                var url = await UploadFile(file);
+                var url = await _cloudflare.UploadObjectAsync(file);
                 return Ok(url);
             }
             catch (ArgumentException e)
@@ -83,7 +72,7 @@ namespace EccomerceApi.Controllers
         {
             try
             {
-                var urls = await Task.WhenAll(files.Select(UploadFile));
+                var urls = await Task.WhenAll(files.Select(_cloudflare.UploadObjectAsync));
                 return Ok(urls);
             }
             catch (ArgumentException e)
