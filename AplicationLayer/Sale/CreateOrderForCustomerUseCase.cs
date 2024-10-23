@@ -43,7 +43,7 @@ namespace AplicationLayer.Sale
                 product.Existence -= detail.Quantity;
                 await _productRepository.UpdateAsync(product.Id, product);
             }
-            order.StatusId = 4; // Estado: Entregado
+
             await _orderRepository.AddAsync(order);
         }
 

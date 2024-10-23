@@ -68,15 +68,15 @@ namespace Repository
                        on order.StatusId equals orderStatus.Id
                    join createdByUser in _dbContext.Users
                        on order.WorkerId equals createdByUser.Id
-                   select new Order(
-                       order.Id,
-                       order.CustomerDNI ?? "",
-                       createdByUser.UserName ?? "",
-                       orderStatus.Name,
-                       paymentMethod.Name,
-                       order.Total,
-                       order.CreatedAt
-                       )
+                   select new Order.Builder()
+                              .SetId(order.Id)
+                              .SetCustomerDNI(order.CustomerDNI ?? "")
+                              .SetUserName(createdByUser.UserName ?? "")
+                              .SetStatusName(orderStatus.Name)
+                              .SetPaymentMethodName(paymentMethod.Name)
+                              .SetTotal(order.Total)
+                              .SetCreatedAt(order.CreatedAt)
+                              .Build()
                       ).ToListAsync();
 
         public async Task<IEnumerable<Order>> GetAsync(Expression<Func<OrderModel, bool>> predicate)
@@ -88,15 +88,15 @@ namespace Repository
                             on order.StatusId equals orderStatus.Id
                         join createdByUser in _dbContext.Users
                             on order.WorkerId equals createdByUser.Id
-                        select new Order(
-                            order.Id,
-                            order.CustomerDNI ?? "",
-                            createdByUser.UserName ?? "",
-                            orderStatus.Name,
-                            paymentMethod.Name,
-                            order.Total,
-                            order.CreatedAt
-                        );
+                        select new Order.Builder()
+                            .SetId(order.Id)
+                            .SetCustomerDNI(order.CustomerDNI ?? "")
+                            .SetUserName(createdByUser.UserName ?? "")
+                            .SetStatusName(orderStatus.Name)
+                            .SetPaymentMethodName(paymentMethod.Name)
+                            .SetTotal(order.Total)
+                            .SetCreatedAt(order.CreatedAt)
+                            .Build();
 
             return await query.ToListAsync();
         }
@@ -107,22 +107,23 @@ namespace Repository
                 .Include(o => o.OrderDetails)
                 .FirstAsync(o => o.Id == id);
 
-            return new Order(
-                orderModel.Id,
-                orderModel.CustomerDNI,
-                orderModel.WorkerId,
-                orderModel.StatusId,
-                orderModel.PaymentMethodId,
-                orderModel.CreatedAt,
-                orderModel.OrderDetails
-                .Where(od => od.OrderId == orderModel.Id)
-                .Select(od => new OrderDetail(
-                    od.ProductId,
-                    od.Quantity,
-                    od.UnitPrice,
-                    od.TotalPrice
-                )).ToList()
-            );
+            var order = new Order.Builder()
+                .SetId(orderModel.Id)
+                .SetCustomerDNI(orderModel.CustomerDNI)
+                .SetCreatedByUserId(orderModel.WorkerId)
+                .SetStatusId(orderModel.StatusId)
+                .SetPaymentMethodId(orderModel.PaymentMethodId)
+                .SetCreatedAt(orderModel.CreatedAt)
+                .SetOrderDetails(orderModel.OrderDetails
+                    .Select(od => new OrderDetail(
+                        od.ProductId,
+                        od.Quantity,
+                        od.UnitPrice,
+                        od.TotalPrice
+                    )).ToList())
+                .Build();
+
+            return order;
         }
 
         public Task UpdateAsync(int id, Order entity)
