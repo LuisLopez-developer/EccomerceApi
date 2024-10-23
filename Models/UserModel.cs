@@ -11,6 +11,9 @@ namespace Models
         // Nueva propiedad para relacionar con People
         public int PeopleId { get; set; }
         public virtual PeopleModel People { get; set; }
+
+        // Nueva propiedad para relacionar con Cart
+        public virtual CartModel CartModel { get; set; }
     }
 
 }

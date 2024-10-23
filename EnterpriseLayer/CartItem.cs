@@ -22,5 +22,11 @@
             CreatedAt = createdAt;
         }
 
+        public CartItem(int productId, int quantity)
+        {
+            ProductId = productId;
+            Quantity = quantity;        
+        }
+
     }
 }

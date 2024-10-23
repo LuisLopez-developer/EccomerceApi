@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Repository
 {
-    public class CartRepository : IRepository<Cart>, IRepositorySearch<CartModel, Cart>
+    public class CartRepository : ICartRepository, IRepositorySearch<CartModel, Cart>
     {
 
         private readonly AppDbContext _dbContext;
@@ -111,6 +111,17 @@ namespace Repository
 
             _dbContext.Carts.Remove(cart);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Cart> GetByUserIdAsync(string userId)
+        {
+            var cartModel = await _dbContext.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+            return new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt,
+                                _dbContext.CartItems
+                                    .Where(ci => ci.CartId == cartModel.Id)
+                                    .Select(ci => new CartItem(ci.ProductId, ci.Quantity, ci.CreatedAt))
+                                    .ToList()
+                            );
         }
     }
 }

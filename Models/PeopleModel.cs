@@ -3,12 +3,13 @@
     public class PeopleModel
     {
         public int Id { get; set; }
+        public string DNI { get; set; }
         public required string Name { get; set; }
         public string? LastName { get; set; }
         public string? Address { get; set; }
 
         // Nueva colección de AppUsers
-        public virtual ICollection<UserModel> AppUsers { get; set; } = [];
+        public virtual ICollection<UserModel> Users { get; set; } = [];
 
     }
 }

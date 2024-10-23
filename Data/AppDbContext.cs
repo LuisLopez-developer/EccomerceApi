@@ -10,7 +10,6 @@ namespace Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        private DbSet<EntryModel> entries;
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -18,7 +17,9 @@ namespace Data
         }
 
         // Entidades existentes
-        public virtual DbSet<EntryModel> Entries { get => entries; set => entries = value; }
+
+        public new virtual DbSet<UserModel> Users { get; set; }
+        public virtual DbSet<EntryModel> Entries { get ; set; }
         public virtual DbSet<EntryDetailModel> EntryDetails { get; set; }
         public virtual DbSet<LossModel> Losses { get; set; }
         public virtual DbSet<LostDetailModel> LostDetails { get; set; }

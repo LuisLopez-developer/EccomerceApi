@@ -15,12 +15,6 @@ namespace Data.Entity.Configurations
                 .HasForeignKey(ci => ci.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Configuración de la clave foránea para UserId 
-            builder.HasOne<IdentityUser>()
-                .WithMany()  
-                .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.NoAction);  
-
         }
     }
 }
