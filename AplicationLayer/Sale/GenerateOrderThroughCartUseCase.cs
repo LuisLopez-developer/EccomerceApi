@@ -10,18 +10,21 @@ namespace AplicationLayer.Sale
         private readonly ICartRepository _cartRepository;
         private readonly IRepository<Order> _orderRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IPeopleRepository _peopleRepository;
 
         public GenerateOrderThroughCartUseCase(
 
             IRepository<Product> productRepository,
             ICartRepository cartRepository,
             IRepository<Order> orderRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IPeopleRepository peopleRepository)
         {
             _productRepository = productRepository;
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _userRepository = userRepository;
+            _peopleRepository = peopleRepository;
         }
 
         public async Task ExecuteAsync(int cartId, int paymentMethodId)
@@ -50,16 +53,18 @@ namespace AplicationLayer.Sale
             var user = await _userRepository.GetUserById(cart.UserId);
 
             var order = new Order.Builder()
-                                .SetCustomerDNI(user.People.DNI)
-                                .SetCustomerEmail(user.Email)
                                 .SetStatusId(4) // Procesado
                                 .SetPaymentMethodId(paymentMethodId)
+                                .SetCreatedByUserId(null)
                                 .SetOrderDetails(orderDetails)
+                                .SetCustomerId(user.People.Id)
                                 .SetCreatedAt(DateTime.Now)
-                                .SetCreatedByUserId(user.Id)
                                 .Build();
 
             await _orderRepository.AddAsync(order);
+
+            // Elimina el carrito
+            await _cartRepository.DeleteAsync(cartId);
 
         }
     }

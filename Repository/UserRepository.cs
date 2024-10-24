@@ -33,6 +33,7 @@ namespace Repository
                 throw new Exception("Usuario no encontrado.");
 
             var people = new People(
+                userModel.People.Id,
                 userModel.People.DNI,
                 userModel.People.Name,
                 userModel.People.LastName ?? "",

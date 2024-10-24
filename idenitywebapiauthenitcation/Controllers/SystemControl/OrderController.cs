@@ -12,13 +12,13 @@ namespace EccomerceApi.Controllers.SystemControl
     [Route("api/system/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly CreateOrderForCustomerUseCase<OrderRequestDTO> _orderForCustomerUseCase;
+        private readonly CreateOrderForCustomerUseCase<GenereteOrderPerWorkerDTO> _orderForCustomerUseCase;
         private readonly GetOrderDetailByIdUseCase<OrderViewModel> _orderDetailByIdUseCase;
         private readonly GetAllEntitiesUseCase<Order, OrdersViewModel> _getAllOrdersUseCase;
         private readonly GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel> _getEntitiesSearchUseCase;
 
         public OrderController(
-            CreateOrderForCustomerUseCase<OrderRequestDTO> orderForCustomerUseCase,
+            CreateOrderForCustomerUseCase<GenereteOrderPerWorkerDTO> orderForCustomerUseCase,
             GetOrderDetailByIdUseCase<OrderViewModel> getOrderDetailByIdUseCase,
             GetAllEntitiesUseCase<Order, OrdersViewModel> getAllOrdersUseCase,
             GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel> getEntitiesSearchUseCase)
@@ -30,7 +30,7 @@ namespace EccomerceApi.Controllers.SystemControl
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(OrderRequestDTO orderRequest)
+        public async Task<IActionResult> CreateOrder(GenereteOrderPerWorkerDTO orderRequest)
         {
             await _orderForCustomerUseCase.ExecuteAsync(orderRequest);
 
@@ -55,7 +55,7 @@ namespace EccomerceApi.Controllers.SystemControl
         public async Task<IActionResult> GetOrdersByCustomer([FromQuery] OrderFilterDTO filter)
         {
             var orders = await _getEntitiesSearchUseCase.ExecuteAsync(o =>
-                (string.IsNullOrEmpty(filter.CustomerDNI) || o.CustomerDNI.Contains(filter.CustomerDNI)) &&
+                //(string.IsNullOrEmpty(filter.CustomerDNI) || o.CustomerDNI.Contains(filter.CustomerDNI)) &&
                 (!filter.StatusId.HasValue || o.StatusId == filter.StatusId) &&
                 (!filter.PaymentMethodId.HasValue || o.PaymentMethodId == filter.PaymentMethodId) &&
                 (!filter.CreatedFrom.HasValue || o.CreatedAt >= filter.CreatedFrom.Value) &&

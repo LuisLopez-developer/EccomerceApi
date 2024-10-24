@@ -81,6 +81,13 @@ namespace Data
                 .Property(b => b.Cost)
                 .HasColumnType("decimal(18,2)");
 
+            modelBuilder.Entity<OrderModel>()
+                .HasOne(o => o.Worker)
+                .WithMany()
+                .HasForeignKey(o => o.WorkerId)
+                .IsRequired(false); // Esto indica que WorkerId es opcional
+
+
             //Configuraciones
             modelBuilder.ApplyConfiguration(new CartConfiguration());
 

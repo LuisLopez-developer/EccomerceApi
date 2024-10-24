@@ -21,13 +21,12 @@ namespace Repository
         {
             var orderModel = new OrderModel
             {
-                CustomerDNI = entity.CustomerDNI,
-                WorkerId = entity.CreatedByUserId,
                 StatusId = entity.StatusId,
                 PaymentMethodId = entity.PaymentMethodId,
                 Total = entity.Total,
-                Email = entity.CustomerEmail,
-                CreatedAt = entity.CreatedAt
+                WorkerId = entity.CreatedByUserId,
+                CustomerId = entity.CustomerId,
+                CreatedAt = entity.CreatedAt == default ? DateTime.Now : entity.CreatedAt
             };
 
             // Obtener detalles de productos
@@ -53,6 +52,7 @@ namespace Repository
 
             await _dbContext.Orders.AddAsync(orderModel);
             await _dbContext.SaveChangesAsync();
+
         }
 
         public Task DeleteAsync(int id)
@@ -61,69 +61,53 @@ namespace Repository
         }
 
         public async Task<IEnumerable<Order>> GetAllAsync()
-            => await (from order in _dbContext.Orders
-                   join paymentMethod in _dbContext.PaymentMethods
-                       on order.PaymentMethodId equals paymentMethod.Id
-                   join orderStatus in _dbContext.OrderStatuses
-                       on order.StatusId equals orderStatus.Id
-                   join createdByUser in _dbContext.Users
-                       on order.WorkerId equals createdByUser.Id
-                   select new Order.Builder()
-                              .SetId(order.Id)
-                              .SetCustomerDNI(order.CustomerDNI ?? "")
-                              .SetUserName(createdByUser.UserName ?? "")
-                              .SetStatusName(orderStatus.Name)
-                              .SetPaymentMethodName(paymentMethod.Name)
-                              .SetTotal(order.Total)
-                              .SetCreatedAt(order.CreatedAt)
-                              .Build()
-                      ).ToListAsync();
+        {
+            return await _dbContext.Orders
+                    .Include(o => o.Status)
+                    .Include(o => o.PaymentMethod)
+                    .Include(o => o.Worker)
+                    .ThenInclude(w => w.People)
+                    .Include(o => o.Customer)
+                    .ThenInclude(c => c.Users) // Asegúrate de que esta relación es correcta
+                    .Select(order => new Order.Builder()
+                        .SetId(order.Id)
+                        .SetCustomerDNI(order.Customer.DNI ?? "")
+                        .SetUserName(order.Worker.UserName ?? "")
+                        .SetStatusName(order.Status.Name)
+                        .SetPaymentMethodName(order.PaymentMethod.Name)
+                        .SetTotal(order.Total)
+                        .SetCreatedAt(order.CreatedAt)
+                        .Build())
+                    .ToListAsync();
+        }
+
 
         public async Task<IEnumerable<Order>> GetAsync(Expression<Func<OrderModel, bool>> predicate)
         {
-            var query = from order in _dbContext.Orders.Where(predicate)
-                        join paymentMethod in _dbContext.PaymentMethods
-                            on order.PaymentMethodId equals paymentMethod.Id
-                        join orderStatus in _dbContext.OrderStatuses
-                            on order.StatusId equals orderStatus.Id
-                        join createdByUser in _dbContext.Users
-                            on order.WorkerId equals createdByUser.Id
-                        select new Order.Builder()
-                            .SetId(order.Id)
-                            .SetCustomerDNI(order.CustomerDNI ?? "")
-                            .SetUserName(createdByUser.UserName ?? "")
-                            .SetStatusName(orderStatus.Name)
-                            .SetPaymentMethodName(paymentMethod.Name)
-                            .SetTotal(order.Total)
-                            .SetCreatedAt(order.CreatedAt)
-                            .Build();
-
-            return await query.ToListAsync();
+            return await _dbContext.Orders
+                    .Include(o => o.Status)
+                    .Include(o => o.PaymentMethod)
+                    .Include(o => o.Worker)
+                    .ThenInclude(w => w.People)
+                    .Include(o => o.Customer)
+                    .ThenInclude(c => c.Users) // Asegúrate de que esta relación es correcta
+                    .Select(order => new Order.Builder()
+                        .SetId(order.Id)
+                        .SetCustomerDNI(order.Customer.DNI ?? "")
+                        .SetUserName(order.Worker.UserName ?? "")
+                        .SetStatusName(order.Status.Name)
+                        .SetPaymentMethodName(order.PaymentMethod.Name)
+                        .SetTotal(order.Total)
+                        .SetCreatedAt(order.CreatedAt)
+                        .Build())
+                    .ToListAsync();
         }
 
         public async Task<Order> GetByIdAsync(int id)
         {
-            var orderModel = await _dbContext.Orders
-                .Include(o => o.OrderDetails)
-                .FirstAsync(o => o.Id == id);
 
-            var order = new Order.Builder()
-                .SetId(orderModel.Id)
-                .SetCustomerDNI(orderModel.CustomerDNI)
-                .SetCreatedByUserId(orderModel.WorkerId)
-                .SetStatusId(orderModel.StatusId)
-                .SetPaymentMethodId(orderModel.PaymentMethodId)
-                .SetCreatedAt(orderModel.CreatedAt)
-                .SetOrderDetails(orderModel.OrderDetails
-                    .Select(od => new OrderDetail(
-                        od.ProductId,
-                        od.Quantity,
-                        od.UnitPrice,
-                        od.TotalPrice
-                    )).ToList())
-                .Build();
 
-            return order;
+            return null;
         }
 
         public Task UpdateAsync(int id, Order entity)

@@ -20,6 +20,7 @@ using Microsoft.OpenApi.Models;
 using Models;
 using Presenters.SaleViewModel;
 using Repository;
+using Repository.ExternalServices;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,10 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+// Servicios externos
+builder.Services.AddHttpClient<IReniecService, ReniecServices>();
+builder.Services.AddScoped<IReniecService, ReniecServices>();
+
 // Nuevas API'S
 builder.Services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
 builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
@@ -67,13 +72,15 @@ builder.Services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
 builder.Services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
 builder.Services.AddScoped<DeleteCartUseCase>();
 
-builder.Services.AddScoped<IMapper<OrderRequestDTO, Order>, OrderMapper>();
+builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
+
+builder.Services.AddScoped<IMapper<GenereteOrderPerWorkerDTO, Order>, OrderMapper>();
 builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
 builder.Services.AddScoped<IOrderDetailPresenter<OrderViewModel>, OrderPresenter>(); 
 builder.Services.AddScoped<IPresenter<Order, OrdersViewModel>, OrdersPresenter>();
 builder.Services.AddScoped<IRepositorySearch<OrderModel, Order>, OrderRepository>();
 builder.Services.AddScoped<GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel>>();
-builder.Services.AddScoped<CreateOrderForCustomerUseCase<OrderRequestDTO>>();
+builder.Services.AddScoped<CreateOrderForCustomerUseCase<GenereteOrderPerWorkerDTO>>();
 builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
 builder.Services.AddScoped<GetAllEntitiesUseCase<Order, OrdersViewModel>>();
 

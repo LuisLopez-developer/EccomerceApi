@@ -15,21 +15,6 @@ namespace Data.Entity.Configurations
                 .WithOne()
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne<UserModel>()
-                .WithMany()
-                .HasForeignKey(o => o.WorkerId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne<OrderStatusModel>()
-                .WithMany()
-                .HasForeignKey(o => o.StatusId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne<PaymentMethodModel>()
-                .WithMany()
-                .HasForeignKey(o => o.PaymentMethodId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

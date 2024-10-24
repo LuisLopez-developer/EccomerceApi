@@ -4,9 +4,9 @@ using Mappers.Dtos.Requests;
 
 namespace Mappers
 {
-    public class OrderMapper : IMapper<OrderRequestDTO, Order>
+    public class OrderMapper : IMapper<GenereteOrderPerWorkerDTO, Order>
     {
-        public Order ToEntity(OrderRequestDTO dto)
+        public Order ToEntity(GenereteOrderPerWorkerDTO dto)
         {
             var orderDetail = new List<OrderDetail>();
             foreach (var item in dto.OrderItems)

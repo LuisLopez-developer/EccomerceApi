@@ -1,6 +1,6 @@
 ﻿namespace Mappers.Dtos.Requests
 {
-    public class OrderRequestDTO
+    public class GenereteOrderPerWorkerDTO
     {
         public string CustomerDNI { get; set; }
         public string CustomerEmail { get; set; }

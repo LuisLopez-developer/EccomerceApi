@@ -3,6 +3,7 @@
     public class Order
     {
         public int Id { get; private set; }
+        public int CustomerId { get; private set; }
         public string CustomerDNI { get; private set; } = string.Empty;
         public string UserName { get; private set; } = string.Empty;
         public string CustomerEmail { get; private set; } = string.Empty;
@@ -37,6 +38,11 @@
                 return this;
             }
 
+            public Builder SetCustomerId(int customerId)
+            {
+                _order.CustomerId = customerId;
+                return this;
+            }
             public Builder SetCustomerDNI(string customerDNI)
             {
                 _order.CustomerDNI = customerDNI;
