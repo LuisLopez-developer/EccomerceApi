@@ -1,7 +1,11 @@
 ﻿using EccomerceApi.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EccomerceApi.Controllers.Eccomerce
 {
@@ -12,16 +16,18 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly UserManager<UserModel> _userManager;
         private readonly SignInManager<UserModel> _signInManager;
         private readonly IRoleService _roleService;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             UserManager<UserModel> userManager,
             SignInManager<UserModel> signInManager,
             IRoleService roleService,
-            IUserService userService)
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleService = roleService;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -54,12 +60,75 @@ namespace EccomerceApi.Controllers.Eccomerce
 
             return BadRequest(ModelState);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByNameAsync(model.UserNameOrEmail)
+                        ?? await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "Usuario o contraseña incorrectos." });
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
+
+            if (result.Succeeded)
+            {
+                var token = GenerateJwtToken(user);
+                return Ok(new
+                {
+                    tokenType = "Bearer",
+                    accessToken = token,
+                    expiresIn = 3600 // 1 hora
+                });
+            }
+
+            return Unauthorized(new { Message = "Usuario o contraseña incorrectos." });
+        }
+
+        private string GenerateJwtToken(UserModel user)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? "");
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(
+                [
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email)
+                ]),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = jwtSettings["Issuer"],
+                Audience = jwtSettings["Audience"]
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
     }
 
     public class RegisterModel
     {
         public string UserName { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class LoginModel
+    {
+        public string UserNameOrEmail { get; set; }
         public string Password { get; set; }
     }
 }
