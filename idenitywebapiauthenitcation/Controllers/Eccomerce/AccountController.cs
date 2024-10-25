@@ -34,14 +34,18 @@ namespace EccomerceApi.Controllers.Eccomerce
 
             var user = new UserModel
             {
-                UserName = model.Email,
+                UserName = model.UserName,
                 Email = model.Email,
                 StateId = 1 // Activo
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            await _roleService.AddUserRoleAsync(model.Email, ["Customer"]);
+            if (result.Succeeded)
+            {
+                await _roleService.AddUserRoleAsync(model.Email, ["Customer"]);
+                return Ok(new { Message = "Usuario registrado exitosamente." });
+            }
 
             foreach (var error in result.Errors)
             {
@@ -54,8 +58,8 @@ namespace EccomerceApi.Controllers.Eccomerce
 
     public class RegisterModel
     {
+        public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
     }
 }
