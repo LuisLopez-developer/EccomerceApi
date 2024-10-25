@@ -1,4 +1,5 @@
 ﻿using EccomerceApi.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -115,6 +116,29 @@ namespace EccomerceApi.Controllers.Eccomerce
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        [Authorize]
+        [HttpGet("GetUserInfo")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var userInfo = new
+            {
+                user.Id,
+                user.UserName,
+                user.Email,
+                Roles = roles
+            };
+
+            return Ok(userInfo);
         }
 
     }
