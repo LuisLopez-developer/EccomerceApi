@@ -26,52 +26,23 @@ using Repository.ExternalServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Agrega las configuraciones desde los archivos appsettings
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
+ConfigureConfiguration(builder.Configuration, builder.Environment);
 
 // Configuración de JWT
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? "");
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(key)
-    };
-});
+ConfigureJwtAuthentication(builder.Services, builder.Configuration);
 
 // Determina si estás en un entorno de desarrollo
 var isDevelopment = builder.Environment.IsDevelopment();
 
 // Obtiene la cadena de conexión basada en el entorno
-var connectionString = isDevelopment ?
-    builder.Configuration.GetSection("ConnectionStrings")["idenitycs"] :
-    Environment.GetEnvironmentVariable("CONNECTION_STRING");
+var connectionString = GetConnectionString(builder.Configuration, isDevelopment);
 
 // Validaciones
-builder.Services.AddValidatorsFromAssemblyContaining<CartValidator>();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
+ConfigureValidations(builder.Services);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -87,53 +58,10 @@ builder.Services.AddHttpClient<IReniecService, ReniecServices>();
 builder.Services.AddScoped<IReniecService, ReniecServices>();
 
 // Nuevas API'S
-builder.Services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
-builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
-builder.Services.AddScoped<IRepositorySearch<CartModel, Cart>, CartRepository>();
-builder.Services.AddScoped<IPresenter<Cart, CartDetailViewModel>, CartDetailPresenter>();
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<GenerateOrderThroughCartUseCase>();
-builder.Services.AddScoped<GetCartSearchUseCase<CartModel>>();
-builder.Services.AddScoped<AddCartUseCase<CartRequestDTO>>();
-builder.Services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
-builder.Services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
-builder.Services.AddScoped<DeleteCartUseCase>();
-
-builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
-
-builder.Services.AddScoped<IMapper<GenereteOrderPerWorkerDTO, Order>, OrderMapper>();
-builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
-builder.Services.AddScoped<IOrderDetailPresenter<OrderViewModel>, OrderPresenter>(); 
-builder.Services.AddScoped<IPresenter<Order, OrdersViewModel>, OrdersPresenter>();
-builder.Services.AddScoped<IRepositorySearch<OrderModel, Order>, OrderRepository>();
-builder.Services.AddScoped<GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel>>();
-builder.Services.AddScoped<CreateOrderForCustomerUseCase<GenereteOrderPerWorkerDTO>>();
-builder.Services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
-builder.Services.AddScoped<GetAllEntitiesUseCase<Order, OrdersViewModel>>();
-
-builder.Services.AddScoped<IProductRepository<Product>, ProductRepository>();
-builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
-builder.Services.AddScoped<IRepositorySearch<ProductModel, Product>, ProductRepository>();
-
-builder.Services.AddScoped<IRepository<Status>, StatusRepository>();
-builder.Services.AddScoped<IPresenter<Status, StatusViewModel>, StatusPresenter>();
-builder.Services.AddScoped<GetAllEntitiesUseCase<Status, StatusViewModel>>();
+ConfigureNewApis(builder.Services);
 
 // Viejas API'S
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProduct, ProductService>();
-builder.Services.AddScoped<IProductCategory, ProductCategoryService>();
-builder.Services.AddScoped<IProductBrand, ProductBrandService>();
-builder.Services.AddScoped<IState, StateService>();
-builder.Services.AddScoped<IEntry, EntryService>();
-builder.Services.AddScoped<ILoss, LossService>();
-builder.Services.AddScoped<ILossReason, LossReasonService>();
-builder.Services.AddScoped<IProductPhoto, ProductPhotoService>();
-builder.Services.AddScoped<IProductSpecification, ProductSpecificationService>();
-builder.Services.AddScoped<IBatch, BatchService>();
-
+ConfigureOldApis(builder.Services);
 
 builder.Services.AddScoped<ICloudflare, CloudflareService>();
 builder.Services.AddControllers();
@@ -184,3 +112,105 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void ConfigureConfiguration(IConfigurationBuilder configuration, IWebHostEnvironment environment)
+{
+    configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
+}
+
+void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
+{
+    var jwtSettings = configuration.GetSection("JwtSettings");
+    var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? "");
+
+    services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+}
+
+string GetConnectionString(IConfiguration configuration, bool isDevelopment)
+{
+    return isDevelopment ?
+        configuration.GetSection("ConnectionStrings")["idenitycs"] :
+        Environment.GetEnvironmentVariable("CONNECTION_STRING");
+}
+
+void ConfigureValidations(IServiceCollection services)
+{
+    services.AddValidatorsFromAssemblyContaining<CartValidator>();
+    services.AddFluentValidationAutoValidation();
+    services.AddFluentValidationClientsideAdapters();
+}
+
+void ConfigureNewApis(IServiceCollection services)
+{
+    services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
+    services.AddScoped<IRepository<Cart>, CartRepository>();
+    services.AddScoped<IRepositorySearch<CartModel, Cart>, CartRepository>();
+    services.AddScoped<IPresenter<Cart, CartDetailViewModel>, CartDetailPresenter>();
+    services.AddScoped<ICartRepository, CartRepository>();
+    services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<GenerateOrderThroughCartUseCase>();
+    services.AddScoped<GetCartSearchUseCase<CartModel>>();
+    services.AddScoped<AddCartUseCase<CartRequestDTO>>();
+    services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
+    services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
+    services.AddScoped<DeleteCartUseCase>();
+
+    services.AddScoped<IPeopleRepository, PeopleRepository>();
+
+    services.AddScoped<IMapper<GenereteOrderPerWorkerDTO, Order>, OrderMapper>();
+    services.AddScoped<IRepository<Order>, OrderRepository>();
+    services.AddScoped<IOrderDetailPresenter<OrderViewModel>, OrderPresenter>();
+    services.AddScoped<IPresenter<Order, OrdersViewModel>, OrdersPresenter>();
+    services.AddScoped<IRepositorySearch<OrderModel, Order>, OrderRepository>();
+    services.AddScoped<GetEntitiesSearchUseCase<OrderModel, Order, OrdersViewModel>>();
+    services.AddScoped<CreateOrderForCustomerUseCase<GenereteOrderPerWorkerDTO>>();
+    services.AddScoped<GetOrderDetailByIdUseCase<OrderViewModel>>();
+    services.AddScoped<GetAllEntitiesUseCase<Order, OrdersViewModel>>();
+
+    services.AddScoped<IProductRepository<Product>, ProductRepository>();
+    services.AddScoped<IRepository<Product>, ProductRepository>();
+    services.AddScoped<IRepositorySearch<ProductModel, Product>, ProductRepository>();
+
+    services.AddScoped<IRepository<Status>, StatusRepository>();
+    services.AddScoped<IPresenter<Status, StatusViewModel>, StatusPresenter>();
+    services.AddScoped<GetAllEntitiesUseCase<Status, StatusViewModel>>();
+}
+
+void ConfigureOldApis(IServiceCollection services)
+{
+    services.AddScoped<IRoleService, RoleService>();
+    services.AddScoped<IUserService, UserService>();
+    services.AddScoped<IProduct, ProductService>();
+    services.AddScoped<IProductCategory, ProductCategoryService>();
+    services.AddScoped<IProductBrand, ProductBrandService>();
+    services.AddScoped<IState, StateService>();
+    services.AddScoped<IEntry, EntryService>();
+    services.AddScoped<ILoss, LossService>();
+    services.AddScoped<ILossReason, LossReasonService>();
+    services.AddScoped<IProductPhoto, ProductPhotoService>();
+    services.AddScoped<IProductSpecification, ProductSpecificationService>();
+    services.AddScoped<IBatch, BatchService>();
+}
