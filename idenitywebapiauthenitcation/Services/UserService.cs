@@ -1,15 +1,16 @@
 ﻿using EccomerceApi.Interfaces;
 using EccomerceApi.Model;
 using Microsoft.AspNetCore.Identity;
+using Models;
 
 namespace EccomerceApi.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<UserModel> _userManager;
         private readonly IRoleService _roleService;
 
-        public UserService(UserManager<IdentityUser> userManager, IRoleService roleService)
+        public UserService(UserManager<UserModel> userManager, IRoleService roleService)
         {
             _userManager = userManager;
             _roleService = roleService;

@@ -5,12 +5,12 @@ namespace Models
     public class UserModel : IdentityUser
     {
 
-        public required int StateId { get; set; }
+        public int StateId { get; set; }
         public virtual StateModel State { get; set; }
 
         // Nueva propiedad para relacionar con People
-        public int PeopleId { get; set; }
-        public virtual PeopleModel People { get; set; }
+        public int? PeopleId { get; set; }
+        public virtual PeopleModel? People { get; set; }
 
         // Nueva propiedad para relacionar con Cart
         public virtual CartModel CartModel { get; set; }

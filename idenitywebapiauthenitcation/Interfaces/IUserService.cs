@@ -1,4 +1,5 @@
 ﻿using EccomerceApi.Model;
+using Models;
 
 namespace EccomerceApi.Interfaces
 {
@@ -12,6 +13,6 @@ namespace EccomerceApi.Interfaces
 
         Task<bool> DeleteUserByEmail(string emailId);
 
-        Task<bool> BlockUserAsync(string emailId);
+        Task<bool> BlockUserAsync(string emailId)
     }
 }
