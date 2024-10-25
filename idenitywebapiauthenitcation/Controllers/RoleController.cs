@@ -26,7 +26,7 @@ namespace EccomerceApi.Controllers
             return Ok(list);
         }
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize]
         [HttpGet("GetUserRole")]
         public async Task<IActionResult> GetuserRole(string userEmail)
         {
