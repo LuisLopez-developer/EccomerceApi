@@ -140,7 +140,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<UserModel>();
 
 app.UseCors("AllowSpecificOrigin");
 
