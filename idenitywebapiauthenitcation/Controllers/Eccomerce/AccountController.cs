@@ -82,11 +82,12 @@ namespace EccomerceApi.Controllers.Eccomerce
 
             if (result.Succeeded)
             {
-                var token = GenerateJwtToken(user);
+                var accessToken = await GenerateJwtToken(user);
+
                 return Ok(new
                 {
                     tokenType = "Bearer",
-                    accessToken = token,
+                    accessToken = accessToken,
                     expiresIn = 3600 // 1 hora
                 });
             }
@@ -94,20 +95,26 @@ namespace EccomerceApi.Controllers.Eccomerce
             return Unauthorized(new { Message = "Usuario o contraseña incorrectos." });
         }
 
-        private string GenerateJwtToken(UserModel user)
+        private async Task<string> GenerateJwtToken(UserModel user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? "");
 
             var tokenHandler = new JwtSecurityTokenHandler();
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Email, user.Email)
+    };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(
-                [
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Email, user.Email)
-                ]),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = jwtSettings["Issuer"],
