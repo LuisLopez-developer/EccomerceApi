@@ -26,7 +26,6 @@ using Repository.ExternalServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Agrega las configuraciones desde los archivos appsettings
@@ -96,8 +95,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.MapIdentityApi<UserModel>();
-
 app.UseCors("AllowSpecificOrigin");
 
 app.UseSwagger();
@@ -107,9 +104,13 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Ajusta la llamada a MapIdentityApi
+app.MapIdentityApi<UserModel>();
 
 app.Run();
 
