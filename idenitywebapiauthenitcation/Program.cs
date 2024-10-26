@@ -178,6 +178,7 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<GetCartUseCase<Cart, CartDetailViewModel>>();
     services.AddScoped<UpdateCartUseCase<CartRequestDTO>>();
     services.AddScoped<DeleteCartUseCase>();
+    services.AddScoped<GetTotalProductQuantityByUserIdUseCase>();
 
     services.AddScoped<IPeopleRepository, PeopleRepository>();
 

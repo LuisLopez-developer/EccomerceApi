@@ -18,6 +18,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly GetCartSearchUseCase<CartModel> _cartSearchUseCase;
         private readonly UpdateCartUseCase<CartRequestDTO> _updateCartUseCase;
         private readonly DeleteCartUseCase _deleteCartUseCase;
+        private readonly GetTotalProductQuantityByUserIdUseCase _getTotalProductQuantityByUserIdUseCase;
 
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
@@ -25,7 +26,8 @@ namespace EccomerceApi.Controllers.Eccomerce
             GetCartUseCase<Cart, CartDetailViewModel> cartUseCase,
             GetCartSearchUseCase<CartModel> cartSearchUseCase,
             UpdateCartUseCase<CartRequestDTO> updateCartUseCase,
-            DeleteCartUseCase deleteCartUseCase)
+            DeleteCartUseCase deleteCartUseCase,
+            GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
@@ -33,6 +35,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _cartSearchUseCase = cartSearchUseCase;
             _updateCartUseCase = updateCartUseCase;
             _deleteCartUseCase = deleteCartUseCase;
+            _getTotalProductQuantityByUserIdUseCase = getTotalProductQuantityByUserIdUseCase;
         }
 
         [HttpPost]
@@ -102,6 +105,13 @@ namespace EccomerceApi.Controllers.Eccomerce
                 // Si no se encontró el carrito o hay otro error
                 return StatusCode(500, new { error = ex.Message });
             }
+        }
+
+        [HttpGet("total/{userId}")]
+        public async Task<IActionResult> GetTotalProductQuantityByUserId(string userId)
+        {
+            var result = await _getTotalProductQuantityByUserIdUseCase.ExecuteAsync(userId);
+            return Ok(result);
         }
 
     }
