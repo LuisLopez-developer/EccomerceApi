@@ -119,7 +119,7 @@ namespace Repository
             return new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt,
                                 _dbContext.CartItems
                                     .Where(ci => ci.CartId == cartModel.Id)
-                                    .Select(ci => new CartItem(ci.ProductId, ci.Quantity, ci.CreatedAt))
+                                    .Select(ci => new CartItem(ci.Id, ci.ProductId, ci.Quantity, ci.CreatedAt))
                                     .ToList()
                             );
         }

@@ -5,6 +5,7 @@
         public int Id { get; }
         public int ProductId { get; }
         public int Quantity { get; }
+        public Product Product { get; set; }
         public DateTime CreatedAt { get; }
 
         public CartItem(int productId, int quantity, DateTime createdAt)

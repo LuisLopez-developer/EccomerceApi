@@ -19,6 +19,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly UpdateCartUseCase<CartRequestDTO> _updateCartUseCase;
         private readonly DeleteCartUseCase _deleteCartUseCase;
         private readonly GetTotalProductQuantityByUserIdUseCase _getTotalProductQuantityByUserIdUseCase;
+        private readonly GetCartResumeUseCase<CartResumeViewModel> _getCartResumeUseCase;
 
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
@@ -27,7 +28,8 @@ namespace EccomerceApi.Controllers.Eccomerce
             GetCartSearchUseCase<CartModel> cartSearchUseCase,
             UpdateCartUseCase<CartRequestDTO> updateCartUseCase,
             DeleteCartUseCase deleteCartUseCase,
-            GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase)
+            GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase,
+            GetCartResumeUseCase<CartResumeViewModel> getCartResumeUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
@@ -36,6 +38,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _updateCartUseCase = updateCartUseCase;
             _deleteCartUseCase = deleteCartUseCase;
             _getTotalProductQuantityByUserIdUseCase = getTotalProductQuantityByUserIdUseCase;
+            _getCartResumeUseCase = getCartResumeUseCase;
         }
 
         [HttpPost]
@@ -112,6 +115,24 @@ namespace EccomerceApi.Controllers.Eccomerce
         {
             var result = await _getTotalProductQuantityByUserIdUseCase.ExecuteAsync(userId);
             return Ok(result);
+        }
+
+        [HttpGet("resume/{userId}")]
+        public async Task<IActionResult> GetCartResume(string userId)
+        {
+            try
+            {
+                var result = await _getCartResumeUseCase.ExecuteAsync(userId);
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
 
     }
