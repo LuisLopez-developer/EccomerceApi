@@ -123,5 +123,17 @@ namespace Repository
                                     .ToList()
                             );
         }
+
+        public async Task<int> GetTotalProductQuantityByUserIdAsync(string userId)
+        {
+            var cartModel = await _dbContext.Carts.Include(c => c.CartItems)
+                                                  .FirstOrDefaultAsync(c => c.UserId == userId) ?? throw new Exception($"Carrito para el usuario con ID {userId} no encontrado.");
+            return cartModel.CartItems.Sum(ci => ci.Quantity);
+        }
+
+        public async Task<bool> UserHasCartAsync(string userId)
+        {
+            return await _dbContext.Carts.AnyAsync(c => c.UserId == userId);
+        }
     }
 }
