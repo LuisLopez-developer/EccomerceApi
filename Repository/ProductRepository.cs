@@ -118,6 +118,13 @@ namespace Repository
                 productModel.ProductCategoryId));
         }
 
+        public async Task<int> GetProductQuantityAsync(int productId)
+            => await _context.Products
+                .Where(p => p.Id == productId)
+                .Select(p => p.Existence)
+                .FirstOrDefaultAsync();
+        
+
         public async Task UpdateAsync(int id, Product product)
         {
             var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id);
