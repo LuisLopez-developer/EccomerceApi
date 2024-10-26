@@ -24,7 +24,7 @@ namespace Presenters.SaleViewModel
                 var mainPhotoUrl = productPhotos.FirstOrDefault(photo => photo.IsMain)?.Url
                                    ?? string.Empty;  // Usa un valor predeterminado si no hay foto principal
 
-                return new CartItem
+                return new CartItemResumenViewModel
                 {
                     Id = item.Id,
                     ProductId = item.ProductId,

@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
         public decimal Total => CartItems.Sum(cartItem => cartItem.Total);
-        public List<CartItem> CartItems { get; set; }
+        public List<CartItemResumenViewModel> CartItems { get; set; }
     }
 
-    public class CartItem
+    public class CartItemResumenViewModel
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
