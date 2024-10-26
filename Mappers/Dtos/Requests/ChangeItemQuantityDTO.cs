@@ -10,7 +10,7 @@
 
     public enum ChangeAction
     {
+        decrease_quantity,
         increase_quantity,
-        decrease_quantity
     }
 }
