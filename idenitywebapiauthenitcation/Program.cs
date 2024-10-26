@@ -1,6 +1,7 @@
 using AplicationLayer;
 using AplicationLayer.GenericUseCases;
 using AplicationLayer.Sale;
+using AplicationLayer.UserPeople;
 using Data;
 using EccomerceApi.Interfaces;
 using EccomerceApi.Interfaces.ProductIntefaces;
@@ -185,6 +186,8 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<GetTotalProductQuantityByUserIdUseCase>();
 
     services.AddScoped<IPeopleRepository, PeopleRepository>();
+    services.AddScoped<IMapper<AddPeopleDTO, People>, AddPeopleMapper>();
+    services.AddScoped<AddPeopleUseCase<AddPeopleDTO>>();
 
     services.AddScoped<IMapper<GenereteOrderPerWorkerDTO, Order>, OrderMapper>();
     services.AddScoped<IRepository<Order>, OrderRepository>();

@@ -25,8 +25,17 @@ namespace Repository
                 Address = entity.Address
             };
 
-            await _dbContext.Peoples.AddAsync(peopleModel);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.Peoples.AddAsync(peopleModel);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                // Log del error para inspeccionar más detalles
+                Console.WriteLine($"Error: {e.Message}");
+                throw new Exception("Error al guardar la persona.", e);
+            }
 
             return peopleModel.Id;
         }
