@@ -135,5 +135,18 @@ namespace Repository
         {
             return await _dbContext.Carts.AnyAsync(c => c.UserId == userId);
         }
+
+        public async Task ChangeItemQuantityAsync(int itemId, int quantity)
+        {
+            var cartItem = await _dbContext.CartItems.FirstOrDefaultAsync(ci => ci.Id == itemId);
+
+            if (cartItem == null)
+            {
+                throw new Exception($"CartItem con ID {itemId} no encontrado.");
+            }
+
+            cartItem.Quantity = quantity;
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly DeleteCartUseCase _deleteCartUseCase;
         private readonly GetTotalProductQuantityByUserIdUseCase _getTotalProductQuantityByUserIdUseCase;
         private readonly GetCartResumeUseCase<CartResumeViewModel> _getCartResumeUseCase;
+        private readonly ChangeItemQuantityUseCase<ChangeItemQuantityDTO> _changeItemQuantityUseCase;
 
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
@@ -29,7 +30,8 @@ namespace EccomerceApi.Controllers.Eccomerce
             UpdateCartUseCase<CartRequestDTO> updateCartUseCase,
             DeleteCartUseCase deleteCartUseCase,
             GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase,
-            GetCartResumeUseCase<CartResumeViewModel> getCartResumeUseCase)
+            GetCartResumeUseCase<CartResumeViewModel> getCartResumeUseCase,
+            ChangeItemQuantityUseCase<ChangeItemQuantityDTO> changeItemQuantityUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
@@ -39,6 +41,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _deleteCartUseCase = deleteCartUseCase;
             _getTotalProductQuantityByUserIdUseCase = getTotalProductQuantityByUserIdUseCase;
             _getCartResumeUseCase = getCartResumeUseCase;
+            _changeItemQuantityUseCase = changeItemQuantityUseCase;
         }
 
         [HttpPost]
@@ -128,6 +131,20 @@ namespace EccomerceApi.Controllers.Eccomerce
             catch (ArgumentNullException ex)
             {
                 return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpPut("changeItemQuantity")]
+        public async Task<IActionResult> ChangeItemQuantity(ChangeItemQuantityDTO changeItemQuantityDTO)
+        {
+            try
+            {
+                await _changeItemQuantityUseCase.ExecuteAsync(changeItemQuantityDTO);
+                return NoContent();
             }
             catch (Exception ex)
             {

@@ -167,12 +167,14 @@ void ConfigureValidations(IServiceCollection services)
 void ConfigureNewApis(IServiceCollection services)
 {
     services.AddScoped<IMapper<CartRequestDTO, Cart>, CartMapper>();
+    services.AddScoped<IMapper<ChangeItemQuantityDTO, CartItem>, CartItemMapper>();
     services.AddScoped<IRepository<Cart>, CartRepository>();
     services.AddScoped<IRepositorySearch<CartModel, Cart>, CartRepository>();
     services.AddScoped<IPresenter<Cart, CartDetailViewModel>, CartDetailPresenter>();
     services.AddScoped<ICartResumePresenter<CartResumeViewModel>, CartResumePresenter>();
     services.AddScoped<ICartRepository, CartRepository>();
     services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<ChangeItemQuantityUseCase<ChangeItemQuantityDTO>>();
     services.AddScoped<GenerateOrderThroughCartUseCase>();
     services.AddScoped<GetCartSearchUseCase<CartModel>>();
     services.AddScoped<AddCartUseCase<CartRequestDTO>>();

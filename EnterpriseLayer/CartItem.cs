@@ -23,9 +23,10 @@
             CreatedAt = createdAt;
         }
 
-        public CartItem(int productId, int quantity)
+        // Para el cambio de cantidad de un item en el carrito
+        public CartItem(int id, int quantity)
         {
-            ProductId = productId;
+            Id = id;
             Quantity = quantity;        
         }
 
