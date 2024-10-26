@@ -21,7 +21,7 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly GetTotalProductQuantityByUserIdUseCase _getTotalProductQuantityByUserIdUseCase;
         private readonly GetCartResumeUseCase<CartResumeViewModel> _getCartResumeUseCase;
         private readonly ChangeItemQuantityUseCase<ChangeItemQuantityDTO> _changeItemQuantityUseCase;
-
+        private readonly GetTotalAmountCartUseCase _getTotalAmountCartUseCase;
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
             IValidator<CartRequestDTO> validator,
@@ -31,7 +31,8 @@ namespace EccomerceApi.Controllers.Eccomerce
             DeleteCartUseCase deleteCartUseCase,
             GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase,
             GetCartResumeUseCase<CartResumeViewModel> getCartResumeUseCase,
-            ChangeItemQuantityUseCase<ChangeItemQuantityDTO> changeItemQuantityUseCase)
+            ChangeItemQuantityUseCase<ChangeItemQuantityDTO> changeItemQuantityUseCase,
+            GetTotalAmountCartUseCase getTotalAmountCartUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
@@ -42,6 +43,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _getTotalProductQuantityByUserIdUseCase = getTotalProductQuantityByUserIdUseCase;
             _getCartResumeUseCase = getCartResumeUseCase;
             _changeItemQuantityUseCase = changeItemQuantityUseCase;
+            _getTotalAmountCartUseCase = getTotalAmountCartUseCase;
         }
 
         [HttpPost]
@@ -150,6 +152,13 @@ namespace EccomerceApi.Controllers.Eccomerce
             {
                 return StatusCode(500, new { error = ex.Message });
             }
+        }
+
+        [HttpGet("totalAmount/{userId}")]
+        public async Task<IActionResult> GetTotalAmountCart(string userId)
+        {
+            var result = await _getTotalAmountCartUseCase.ExecuteAsync(userId);
+            return Ok(result);
         }
 
     }
