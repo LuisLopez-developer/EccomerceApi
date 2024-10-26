@@ -62,7 +62,16 @@ namespace Repository
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            var productModel = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var productModel = await _context.Products
+                .Include(p => p.ProductPhotos)
+                .Include(p => p.ProductSpecifications)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (productModel == null)
+            {
+                return null; // Manejar el caso en que el producto no se encuentre
+            }
+
             return new Product(
                 productModel.Id,
                 productModel.Name,
@@ -77,7 +86,13 @@ namespace Repository
                 productModel.BarCode,
                 productModel.StateId,
                 productModel.ProductBrandId,
-                productModel.ProductCategoryId);
+                productModel.ProductCategoryId,
+                productModel.ProductPhotos.Select(pp => new ProductPhoto(
+                    pp.Id, 
+                    pp.FileName, 
+                    pp.Url,
+                    pp.IsMain)).ToList()
+            );
         }
 
         public async Task<IEnumerable<Product>> GetByIdsAsync(IEnumerable<int> ids)
