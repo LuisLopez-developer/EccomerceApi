@@ -7,5 +7,7 @@ namespace AplicationLayer
         Task<string> GetDNIByUserID(string userId);
 
         Task<User> GetUserById(string id);
+        Task<bool> IsUserLinkedToPersonAsync(string userId);
+        Task LinkUserToPersonAsync(string userId, int personId);
     }
 }

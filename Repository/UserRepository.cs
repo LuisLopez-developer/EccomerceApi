@@ -47,5 +47,23 @@ namespace Repository
                 people
             );
         }
+
+        public async Task<bool> IsUserLinkedToPersonAsync(string userId)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Id == userId && u.PeopleId != null);
+        }
+
+        public async Task LinkUserToPersonAsync(string userId, int personId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("Usuario no encontrado.");
+            }
+
+            user.PeopleId = personId;
+            await _context.SaveChangesAsync();
+        }
     }
 }
