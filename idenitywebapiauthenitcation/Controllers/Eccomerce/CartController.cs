@@ -122,8 +122,18 @@ namespace EccomerceApi.Controllers.Eccomerce
         [HttpGet("total/{userId}")]
         public async Task<IActionResult> GetTotalProductQuantityByUserId(string userId)
         {
-            var result = await _getTotalProductQuantityByUserIdUseCase.ExecuteAsync(userId);
-            return Ok(result);
+            try
+            {
+                var result = await _getTotalProductQuantityByUserIdUseCase.ExecuteAsync(userId);
+                return Ok(result);
+            }
+            catch
+            {
+                // logear el error
+
+                return Ok(0);
+            }
+            
         }
 
         [HttpGet("resume/{userId}")]
