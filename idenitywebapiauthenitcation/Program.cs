@@ -189,6 +189,7 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<IPeopleRepository, PeopleRepository>();
     services.AddScoped<IMapper<AddPeopleDTO, People>, AddPeopleMapper>();
     services.AddScoped<AddPeopleUseCase<AddPeopleDTO>>();
+    services.AddScoped<IsUserLinkedToPersonUseCase>();
 
     services.AddScoped<IMapper<GenereteOrderPerWorkerDTO, Order>, OrderMapper>();
     services.AddScoped<IRepository<Order>, OrderRepository>();
