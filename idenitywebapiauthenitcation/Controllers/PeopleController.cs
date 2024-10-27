@@ -20,7 +20,7 @@ namespace EccomerceApi.Controllers
         {
             try
             {
-                await _peopleUseCase.ExecuteAsync(addPeopleDTO);
+                await _peopleUseCase.ExecuteAsync(addPeopleDTO, addPeopleDTO.UserId);
                 return CreatedAtAction(nameof(Create), new { id = addPeopleDTO.DNI }, addPeopleDTO);
             }
             catch (Exception e)
