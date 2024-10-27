@@ -210,6 +210,9 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<IRepository<Status>, StatusRepository>();
     services.AddScoped<IPresenter<Status, StatusViewModel>, StatusPresenter>();
     services.AddScoped<GetAllEntitiesUseCase<Status, StatusViewModel>>();
+
+    services.AddScoped<IGetRepository<PaymentMethod>,  PaymentMethodRepository>();
+    services.AddScoped<GetAllPaymentMethodsUseCase>();
 }
 
 void ConfigureOldApis(IServiceCollection services)
