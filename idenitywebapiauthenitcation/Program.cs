@@ -173,6 +173,7 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<IRepositorySearch<CartModel, Cart>, CartRepository>();
     services.AddScoped<IPresenter<Cart, CartDetailViewModel>, CartDetailPresenter>();
     services.AddScoped<ICartResumePresenter<CartResumeViewModel>, CartResumePresenter>();
+    services.AddScoped<ICartResumePresenter<CartItemsPaymentViewModel>, CartItemsPaymentPresenter>();
     services.AddScoped<ICartRepository, CartRepository>();
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<ChangeItemQuantityUseCase<ChangeItemQuantityDTO>>();
@@ -185,6 +186,7 @@ void ConfigureNewApis(IServiceCollection services)
     services.AddScoped<GetCartResumeUseCase<CartResumeViewModel>>();
     services.AddScoped<GetTotalProductQuantityByUserIdUseCase>();
     services.AddScoped<GetTotalAmountCartUseCase>();
+    services.AddScoped<GetCartItemsPaymentUseCase<CartItemsPaymentViewModel>>();
 
     services.AddScoped<IPeopleRepository, PeopleRepository>();
     services.AddScoped<IMapper<AddPeopleDTO, People>, AddPeopleMapper>();

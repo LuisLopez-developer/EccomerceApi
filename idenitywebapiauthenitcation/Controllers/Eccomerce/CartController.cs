@@ -22,6 +22,8 @@ namespace EccomerceApi.Controllers.Eccomerce
         private readonly GetCartResumeUseCase<CartResumeViewModel> _getCartResumeUseCase;
         private readonly ChangeItemQuantityUseCase<ChangeItemQuantityDTO> _changeItemQuantityUseCase;
         private readonly GetTotalAmountCartUseCase _getTotalAmountCartUseCase;
+        private readonly GetCartItemsPaymentUseCase<CartItemsPaymentViewModel> _getCartItemsPaymentUseCase;
+
         public CartController(
             AddCartUseCase<CartRequestDTO> addCartUseCase,
             IValidator<CartRequestDTO> validator,
@@ -32,7 +34,8 @@ namespace EccomerceApi.Controllers.Eccomerce
             GetTotalProductQuantityByUserIdUseCase getTotalProductQuantityByUserIdUseCase,
             GetCartResumeUseCase<CartResumeViewModel> getCartResumeUseCase,
             ChangeItemQuantityUseCase<ChangeItemQuantityDTO> changeItemQuantityUseCase,
-            GetTotalAmountCartUseCase getTotalAmountCartUseCase)
+            GetTotalAmountCartUseCase getTotalAmountCartUseCase,
+            GetCartItemsPaymentUseCase<CartItemsPaymentViewModel> getCartItemsPaymentUseCase)
         {
             _addCartUseCase = addCartUseCase;
             _validator = validator;
@@ -44,6 +47,7 @@ namespace EccomerceApi.Controllers.Eccomerce
             _getCartResumeUseCase = getCartResumeUseCase;
             _changeItemQuantityUseCase = changeItemQuantityUseCase;
             _getTotalAmountCartUseCase = getTotalAmountCartUseCase;
+            _getCartItemsPaymentUseCase = getCartItemsPaymentUseCase;
         }
 
         [HttpPost]
@@ -158,6 +162,13 @@ namespace EccomerceApi.Controllers.Eccomerce
         public async Task<IActionResult> GetTotalAmountCart(string userId)
         {
             var result = await _getTotalAmountCartUseCase.ExecuteAsync(userId);
+            return Ok(result);
+        }
+
+        [HttpGet("itemsPayment/{userId}")]
+        public async Task<IActionResult> GetCartItemsPayment(string userId)
+        {
+            var result = await _getCartItemsPaymentUseCase.ExecuteAsync(userId);
             return Ok(result);
         }
 
