@@ -30,7 +30,7 @@ namespace EccomerceApi.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("IsUserLinkedToPerson/{userId}")]
         public async Task<IActionResult> IsUserLinkedToPerson(string userId)
         {
             try
