@@ -9,8 +9,8 @@
         public string? Address { get; set; }
 
         // Nueva colección de AppUsers
-        public virtual IEnumerable<UserModel> Users { get; set; } = [];
-        public virtual IEnumerable<OrderModel> Orders { get; set; } = [];
+        public virtual List<UserModel> Users { get; set; } = new List<UserModel>();
+        public virtual List<OrderModel> Orders { get; set; } = new List<OrderModel>();
 
     }
 }
