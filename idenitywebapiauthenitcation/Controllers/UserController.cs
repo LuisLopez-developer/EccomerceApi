@@ -1,9 +1,9 @@
 ﻿using EccomerceApi.Interfaces;
 using EccomerceApi.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace EccomerceApi.Controllers
 {
@@ -12,10 +12,10 @@ namespace EccomerceApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<UserModel> _signInManager;
         private readonly IUserService _userService;
 
-        public UserController(SignInManager<IdentityUser> signInManager, IUserService userService)
+        public UserController(SignInManager<UserModel> signInManager, IUserService userService)
         {
             _signInManager = signInManager;
             _userService = userService;
@@ -67,8 +67,9 @@ namespace EccomerceApi.Controllers
         {
             //{}
             if (empty is not null)
-            {
-                await _signInManager.SignOutAsync();
+        {
+
+            await _signInManager.SignOutAsync();
             }
             return Ok();
         }
