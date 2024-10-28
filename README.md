@@ -38,7 +38,7 @@ Update-Database
 > 
 > ![image](https://github.com/LuisLopez-developer/EccomerceApi/assets/156825396/e67c0399-dc85-4ae0-8e2f-8d097fa115c7)
 
-6. Publicación del Proyecto:
+7. Publicación del Proyecto:
 ```bash
 https://eccomerceapi.fly.dev/
 ```
