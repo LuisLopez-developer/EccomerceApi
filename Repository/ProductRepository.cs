@@ -95,27 +95,37 @@ namespace Repository
             );
         }
 
-        public async Task<IEnumerable<Product>> GetByIdsAsync(IEnumerable<int> ids)
+        public async Task<List<Product>> GetByIdsAsync(IEnumerable<int> ids)
         {
+            // recuperar los productos con sus fotos
             var productModels = await _context.Products
+                .Include(p => p.ProductPhotos)
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
 
-            return productModels.Select(productModel => new Product(
-                productModel.Id,
-                productModel.Name,
-                productModel.SKU,
-                productModel.Date,
-                productModel.UpdateAt,
-                productModel.Price,
-                productModel.Cost,
-                productModel.Existence,
-                productModel.IsVisible,
-                productModel.Description ?? "",
-                productModel.BarCode,
-                productModel.StateId,
-                productModel.ProductBrandId,
-                productModel.ProductCategoryId));
+            var products =  productModels.Select(p => new Product(
+                p.Id,
+                p.Name,
+                p.SKU,
+                p.Date,
+                p.UpdateAt,
+                p.Price,
+                p.Cost,
+                p.Existence,
+                p.IsVisible,
+                p.Description ?? "",
+                p.BarCode,
+                p.StateId,
+                p.ProductBrandId,
+                p.ProductCategoryId,
+                p.ProductPhotos.Select(pp => new ProductPhoto(
+                    pp.Id,
+                    pp.FileName,
+                    pp.Url,
+                    pp.IsMain)).ToList()
+            )).ToList();
+
+            return products;
         }
 
         public async Task<int> GetProductQuantityAsync(int productId)

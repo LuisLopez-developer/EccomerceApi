@@ -2,8 +2,6 @@
 {
     public class Product
     {
-        private List<ProductPhoto> productPhotos;
-
         public int Id { get; }
         public string Name { get; set; }
         public string SKU { get; }
@@ -40,7 +38,7 @@
 
         public Product(int id, string name, string SKU, DateTime createAt, DateTime updateAt, decimal cost, decimal price, int existence, bool isVisible, string description, string barCode, int stateId, int productBrandId, int productCategoryId, List<ProductPhoto> productPhotos) : this(id, name, SKU, createAt, updateAt, cost, price, existence, isVisible, description, barCode, stateId, productBrandId, productCategoryId)
         {
-            this.productPhotos = productPhotos;
+            ProductPhotos = productPhotos;
         }
     }
 
