@@ -116,12 +116,16 @@ namespace Repository
         public async Task<Cart> GetByUserIdAsync(string userId)
         {
             var cartModel = await _dbContext.Carts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+            if (cartModel == null)
+            {
+                return null; // Or handle the case when the cart is not found
+            }
             return new Cart(cartModel.Id, cartModel.UserId, cartModel.CreatedAt,
-                                _dbContext.CartItems
-                                    .Where(ci => ci.CartId == cartModel.Id)
-                                    .Select(ci => new CartItem(ci.Id, ci.ProductId, ci.Quantity, ci.CreatedAt))
-                                    .ToList()
-                            );
+                            _dbContext.CartItems
+                                .Where(ci => ci.CartId == cartModel.Id)
+                                .Select(ci => new CartItem(ci.Id, ci.ProductId, ci.Quantity, ci.CreatedAt))
+                                .ToList()
+                        );
         }
 
         public async Task<int> GetTotalProductQuantityByUserIdAsync(string userId)
